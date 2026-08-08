@@ -1,0 +1,8 @@
+---
+title: Syllabus
+nav_order: 3
+---
+
+# Syllabus
+
+Coming soon.
