@@ -19,3 +19,6 @@ Gemfile.lock
 
 # Local bundler config (bundle config set --local path vendor/bundle)
 .bundle/
+
+# Built on demand by ./build-pdf.sh; not checked in
+syllabus.pdf

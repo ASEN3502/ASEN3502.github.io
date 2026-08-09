@@ -38,5 +38,6 @@ exclude:
   - .bundle
   - Gemfile
   - Gemfile.lock
+  - build-pdf.sh
   - README.md
   - LICENSE
