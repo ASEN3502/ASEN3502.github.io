@@ -1,43 +1,129 @@
-// CU accent overrides.
+// Layout and chrome modeled on colorado.edu.
 //
 // This file is compiled into every color scheme the theme builds, including
 // the stock light/dark ones that never import cu.scss, so these need
 // !default fallbacks or those builds fail with "Undefined variable".
 $cu-gold: #cfb87c !default;
+$cu-black: #000 !default;
+$cu-light-gray: #a2a4a3 !default;
 
-// Site title: black on CU Gold (10.8:1, AAA). White on CU Gold is only
-// 1.94:1 and must not be used.
+$cu-body-font: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+// ---------------------------------------------------------------- typography
+// colorado.edu uses Roboto for prose and Roboto Condensed for nav and chrome;
+// the condensed face reads as squished at these sizes, so Roboto is used
+// throughout instead.
+
+body {
+  font-family: $cu-body-font;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $cu-body-font;
+  font-weight: 700;
+}
+
+// ---------------------------------------------------------------- header bar
+// One continuous black bar across the top: .site-header sits in the sidebar
+// column and holds the title, .main-header sits over the content column and
+// holds search. Both are styled so the bar reads as a single element, with a
+// gold rule beneath it.
+
 .site-header {
-  background-color: $cu-gold;
+  background-color: $cu-black;
+  border-bottom: 4px solid $cu-gold;
 }
 
 .site-title {
-  color: #000 !important;
-  font-weight: 600;
+  color: #fff !important; // 21:1 on black
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
-// The theme gives the title a fade-to-transparent gradient on hover, which
-// clashes with the solid gold header behind it.
+// The theme fades a light gradient in on hover, which clashes with the solid
+// black bar.
 .site-title:hover {
   background-image: none;
 }
 
-// Sidebar nav links in black rather than gray/blue.
-.nav-list .nav-list-item .nav-list-link {
-  color: #000;
+// Only extend the black bar across the content column at the breakpoint where
+// the sidebar becomes fixed. Below it, .main-header is the expanding mobile
+// menu panel and should stay light.
+@media (min-width: 50rem) {
+  .side-bar + .main .main-header {
+    background-color: $cu-black;
+    border-bottom: 4px solid $cu-gold;
+  }
+
+  // Search sits on the black bar, so its text and icon have to invert.
+  // .search-active is included because the theme repaints the input white
+  // while a query is open, which would leave white text on white.
+  .main-header .search-input,
+  .search-active .main-header .search-input {
+    background-color: transparent;
+    color: #fff;
+  }
+
+  .main-header .search-input::placeholder {
+    color: #c8c8c8; // 11.4:1 on black
+  }
+
+  .main-header .search-label .search-icon {
+    color: #c8c8c8;
+  }
+
+  // Aux links (Canvas, GitHub) in the bar.
+  .main-header .aux-nav .aux-nav-list-item a {
+    color: $cu-gold; // CU's own idiom: gold links on dark, 10.8:1
+  }
 }
 
-// Active page highlighted in CU Gold. Black on it is AAA, and the item stays
-// bold, so color is not the only signal for the active state.
+// The search results panel drops below the black bar onto the page, so it
+// keeps light styling and needs its text forced back to a dark color.
+.search-results {
+  color: #111;
+}
+
+// ------------------------------------------------------------------ side nav
+
+// Nav deliberately stays on the body font. colorado.edu uses Roboto Condensed
+// here, but at sidebar sizes it reads as squished.
+
+.nav-list .nav-list-item .nav-list-link {
+  color: #111;
+}
+
+// Active page and hover: solid CU Gold block, no gradient. Black on gold is
+// 10.8:1, and the active item stays bold so color is not the only signal.
 .nav-list .nav-list-item .nav-list-link:hover,
 .nav-list .nav-list-item .nav-list-link.active {
-  // The theme's default is a fade-to-transparent gradient; `none` is needed
-  // to clear it, since background-color alone would sit behind it.
   background-image: none;
   background-color: $cu-gold;
 }
 
 .nav-list .nav-list-item .nav-list-link.active {
   color: #000;
-  font-weight: 600;
+  font-weight: 700;
+}
+
+// ------------------------------------------------------------------- content
+
+// CU uses square corners and gold fills for buttons.
+.btn {
+  border-radius: 0;
+}
+
+thead th {
+  border-bottom: 2px solid $cu-gold !important;
+}
+
+blockquote {
+  border-left: 4px solid $cu-gold;
+  padding-left: 1em;
+  margin-left: 0;
 }
