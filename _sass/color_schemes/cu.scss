@@ -1,0 +1,44 @@
+// CU Boulder color scheme for just-the-docs.
+//
+// Hex values from the official brand page:
+//   https://www.colorado.edu/imc/cu-boulder-brand/visual-identity#colors
+// Foreground/background pairings follow CU's 2025 color accessibility chart;
+// every pair used below is one that chart marks AA or AAA.
+//
+// Note CU Gold on white is only 1.94:1 -- it fails WCAG badly and is never
+// used for text. Use $accessible-cu-gold when gold-colored text is wanted.
+
+// Primary palette
+$cu-gold: #cfb87c;
+$cu-black: #000;
+$cu-light-gray: #a2a4a3;
+$cu-dark-gray: #565a5c;
+
+// Secondary palette
+$accessible-cu-gold: #8d7334;
+$cub-sky-blue: #096fae;
+$cub-light-gold: #f3f0e9;
+$cub-dark-blue: #0a3758;
+$cub-light-blue: #eef5f8;
+
+$body-background-color: #fff;
+$body-text-color: #1a1a1a; // 17.4:1 on white
+$body-heading-color: $cu-black;
+
+// CUB Dark Blue on white is AAA -- the chart's recommended link color.
+$link-color: $cub-dark-blue;
+$nav-child-link-color: $cu-dark-gray; // 7.0:1 on white
+
+// CUB Light Gold sidebar with black text (AAA).
+$sidebar-color: $cub-light-gold;
+$border-color: $cu-light-gray;
+
+$search-background-color: #fff;
+$search-result-preview-color: $cu-dark-gray;
+
+// Kept distinct from the sidebar so code blocks still read as code.
+$code-background-color: $cub-light-blue;
+
+$btn-primary-color: $cub-dark-blue;
+
+$table-background-color: #fff;

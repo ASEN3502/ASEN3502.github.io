@@ -17,7 +17,7 @@ search:
   tokenizer_separator: /[\s/]+/
 
 heading_anchors: true
-color_scheme: light
+color_scheme: cu # defined in _sass/color_schemes/cu.scss
 
 aux_links:
   "GitHub": https://github.com/ASEN3502/ASEN3502.github.io

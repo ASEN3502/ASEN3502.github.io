@@ -1,0 +1,43 @@
+// CU accent overrides.
+//
+// This file is compiled into every color scheme the theme builds, including
+// the stock light/dark ones that never import cu.scss, so these need
+// !default fallbacks or those builds fail with "Undefined variable".
+$cu-gold: #cfb87c !default;
+
+// Site title: black on CU Gold (10.8:1, AAA). White on CU Gold is only
+// 1.94:1 and must not be used.
+.site-header {
+  background-color: $cu-gold;
+}
+
+.site-title {
+  color: #000 !important;
+  font-weight: 600;
+}
+
+// The theme gives the title a fade-to-transparent gradient on hover, which
+// clashes with the solid gold header behind it.
+.site-title:hover {
+  background-image: none;
+}
+
+// Sidebar nav links in black rather than gray/blue.
+.nav-list .nav-list-item .nav-list-link {
+  color: #000;
+}
+
+// Active page highlighted in CU Gold. Black on it is AAA, and the item stays
+// bold, so color is not the only signal for the active state.
+.nav-list .nav-list-item .nav-list-link:hover,
+.nav-list .nav-list-item .nav-list-link.active {
+  // The theme's default is a fade-to-transparent gradient; `none` is needed
+  // to clear it, since background-color alone would sit behind it.
+  background-image: none;
+  background-color: $cu-gold;
+}
+
+.nav-list .nav-list-item .nav-list-link.active {
+  color: #000;
+  font-weight: 600;
+}
