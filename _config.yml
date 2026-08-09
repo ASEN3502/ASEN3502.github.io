@@ -25,7 +25,8 @@ aux_links:
 back_to_top: true
 back_to_top_text: "Back to top"
 
-footer_content: 'ASEN 3502, CU Boulder. Last built {{ site.time | date: "%b %-d, %Y" }}.'
+# Footer text lives in _includes/footer_custom.html -- Liquid in _config.yml
+# values is not evaluated, so a date has to be rendered from an include.
 
 plugins:
   - jekyll-remote-theme
