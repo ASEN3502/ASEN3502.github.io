@@ -111,6 +111,47 @@ h6 {
   font-weight: 700;
 }
 
+// ---------------------------------------------------------- no gradients
+// The theme fades a light gradient in on several hover states and ships
+// vertical gradients on its buttons. Both clash with the flat CU look, so
+// every gradient is cleared here.
+//
+// The .btn-* rules each set a matching background-color alongside their
+// gradient, so clearing the image alone leaves them a correct solid color.
+
+.site-button:hover,
+.nav-list .nav-list-item .nav-list-expander:hover,
+.btn-primary,
+.btn-primary:hover,
+.btn-primary.zeroclipboard-is-hover,
+.btn-purple,
+.btn-purple:hover,
+.btn-purple.zeroclipboard-is-hover,
+.btn-blue,
+.btn-blue:hover,
+.btn-blue.zeroclipboard-is-hover,
+.btn-green,
+.btn-green:hover,
+.btn-green.zeroclipboard-is-hover {
+  background-image: none;
+}
+
+// The mobile menu button sits on the black bar, so its hover needs to be a
+// light wash rather than the theme's near-white block.
+.site-button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+// Its icon defaults to link blue, which is only 3.9:1 against the black bar.
+.site-header .site-button .icon {
+  color: #fff;
+}
+
+// Nav expander (used if a page ever gets child pages).
+.nav-list .nav-list-item .nav-list-expander:hover {
+  background-color: rgba(207, 184, 124, 0.35);
+}
+
 // ------------------------------------------------------------------- content
 
 // CU uses square corners and gold fills for buttons.
