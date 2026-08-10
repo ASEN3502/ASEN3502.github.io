@@ -4,5 +4,5 @@ config values are plain strings -- Liquid inside them is printed verbatim
 rather than evaluated. Includes are rendered, so site.time works here.
 {%- endcomment -%}
 <p class="text-small text-grey-dk-100 mb-0">
-  ASEN 3502, CU Boulder. Last built {{ site.time | date: "%b %-d, %Y" }}.
+  ASEN 3502, CU Boulder. Last built {{ site.time | date: "%b %-d, %Y at %-I:%M %p %Z" }}.
 </p>
