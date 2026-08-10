@@ -19,4 +19,3 @@ The most important two principles of the AI policy are:
 4. AI **may** be used to translate starter code or infrastructure for use in another programming language.
 5. AI **may** be used to get feedback or hints or get unstuck on code. Prompts for this should include an explanation that you are a student trying to understand that it not to give away the answer.
 6. AI **may** be used to suggest *auxiliary* code (input/output, plotting, instrumentation, etc.), however students should plug the actual data into these functions to make sure they understand it.
-
