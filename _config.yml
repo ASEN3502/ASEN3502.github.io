@@ -1,6 +1,7 @@
 title: ASEN 3502
 description: Aerospace Computational Methods — University of Colorado Boulder
 url: https://asen3502.com
+timezone: America/Denver
 
 remote_theme: just-the-docs/just-the-docs@v0.10.1
 
