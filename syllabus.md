@@ -15,58 +15,33 @@ nav_order: 3
 
 - *(TBD)*
 
-## Rough Schedule and List of Topics
+## Course Learning Outcome and Topics
+
+- *(TBD)*
 
 (See the [schedule](schedule) for the detailed and updated version.)
-
-1. **Topic area one:**
-   - *(fill in)*
-2. **Topic area two:**
-   - *(fill in)*
 
 ## Websites
 
 - **[asen3502.com](https://asen3502.com)** is the course hub — schedule, syllabus, and assignments.
-- **Canvas** is used for grades and assignment submission.
+- Announcements will be posted on **Canvas**
+- All assignments will be submitted on **Gradescope** 
 - *(discussion tool TBD — Ed or Slack)*
-
-## Meetings
-
-*(days, times, room)*
-
-## Attendance and Participation
-
-*(fill in)*
 
 ## Textbook
 
-*(fill in)*
+*Applied Numerical Methods with MATLAB for Engineers and Scientists* by Steven C. Chapra. Electronic version available on Canvas.
 
 ### Additional References
 
-- *(fill in)*
 
 ## Assignments and Grading
 
-- **40% Homework.** *(fill in)*
-- **20% Labs.** *(fill in)*
-- **40% Exams.** *(fill in)*
-
 ### Late Policy
-
-*(fill in)*
 
 ### AI Policy
 
-I approach the class with the assumption that all students have a strong desire
-to learn rather than just to complete the assignments. In this course, you are
-highly encouraged to use AI (specifically large language models such as Claude)
-as a *learning tool*. You can ask it questions or have it assist in writing some
-code, but any prose or mathematical work that you turn in must be written by
-you, and any code must be written by or closely directed by you. You must
-understand everything that you turn in. This policy is difficult to enforce in
-homework, however, you will have to complete the exams without AI, so we trust
-that you will not violate it on the homework.
+See [asen3502.com/ai-policy](https://asen3502.com/ai-policy)
 
 ## Course Staff
 
@@ -74,7 +49,7 @@ that you will not violate it on the homework.
 <zachary.sunberg@colorado.edu>
 **Office Hours:** Posted on Canvas
 
-**Teaching Assistants:** *(TBD)*
+**Teaching Assistants:** *(TBA)*
 
 ## Additional Policies
 
