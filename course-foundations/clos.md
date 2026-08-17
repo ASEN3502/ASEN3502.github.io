@@ -16,7 +16,7 @@ After taking the course, students should be able to:
 
 ## CLO to PLO Mapping Matrix
 
-According to the new curriculum plan, 3502 should map to PLOs 1, 2, 3, 5, and 7. (Email: "Undergraduate Curriculum Committee Homework Assignment" 9/18/25)
+According to the new curriculum plan, 3502 should map to PLOs 1, 2, 3, 5, and 7.[^plo-email]
 
 | CLO | PLO 1: Problem Solving | PLO 2: Engineering Design | PLO 3: Communication | PLO 4: Ethics | PLO 5: Teams | PLO 6: Experimentation | PLO 7: Lifelong Learning |
 |-----|------------------------|---------------------------|----------------------|---------------|--------------|------------------------|--------------------------|
@@ -25,3 +25,5 @@ According to the new curriculum plan, 3502 should map to PLOs 1, 2, 3, 5, and 7.
 | 3   |                        |             X             |          X           |               |              |                        |                          |
 | 4   |           X            |             X             |                      |               |      X       |                        |                          |
 | 5   |                        |                           |                      |               |              |                        |            X             |
+
+[^plo-email]: Email, "Undergraduate Curriculum Committee Homework Assignment," 9/18/25.

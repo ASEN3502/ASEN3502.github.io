@@ -11,6 +11,7 @@ students should achieve, and the topics, concepts, and skills that support them.
 
 - [Course Learning Outcomes](clos) — the five CLOs and their mapping to program learning outcomes
 - [Topics, Concepts, and Skills](topics-concepts-and-skills) — the scope of the course, organized by CLO
+- [List of Algorithms](algorithms) — candidate algorithms, tagged by how essential they are
 
 These documents were developed through open planning in the
 [CU-Computational-Methods-Planning](https://github.com/zsunberg/CU-Computational-Methods-Planning)

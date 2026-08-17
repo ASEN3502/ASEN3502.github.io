@@ -14,7 +14,7 @@ The scope of ASEN 3502, organized by [Course Learning Outcome](clos).
 - A *concept* is a fundamental idea, principle, or relationship that helps explain how things work within a topic. It builds understanding of the theory behind engineering phenomena.
 - A *skill* is a practical ability to apply concepts to solve problems, analyze systems, or design solutions. It focuses on application — what a student can do with their knowledge attained in a class.
 
-> **Note:** The concept definition seems to imply that concepts should be grouped by topic, but based on John's comments in Issue #7, I have abandoned this hierarchy.
+> **Note:** The concept definition seems to imply that concepts should be grouped by topic, but based on John's comments,[^issue-7] I have abandoned this hierarchy.
 
 ## CLO 1: Numerical Methods
 
@@ -27,7 +27,7 @@ The scope of ASEN 3502, organized by [Course Learning Outcome](clos).
 - Regression
 - Visualizing and interpreting computed results
 
-> **Note:** A list of algorithms for these topics is maintained in the planning repository, in [algorithms.md](https://github.com/zsunberg/CU-Computational-Methods-Planning/blob/main/algorithms.md).
+> **Note:** A list of algorithms for these topics is maintained on the [List of Algorithms](algorithms) page.
 
 ### Concepts
 
@@ -138,3 +138,5 @@ The scope of ASEN 3502, organized by [Course Learning Outcome](clos).
 ### Skills
 
 - Finding and implementing an algorithm to solve an engineering problem without previous exposure to the algorithm
+
+[^issue-7]: [Issue #7](https://github.com/zsunberg/CU-Computational-Methods-Planning/issues/7) in the CU-Computational-Methods-Planning repository.
