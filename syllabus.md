@@ -8,35 +8,96 @@ nav_order: 1
 # ({:target="_blank"}) -- or it will leak into the PDF.
 ---
 
-# ASEN 3502: Aerospace Computational Methods
+# Syllabus -- ASEN 3502: Aerospace Computational Methods
 
 **Zachary Sunberg — Fall 2026**
 
 ## Prerequisites
 
-- *(TBD)*
+- Requisites: Requires prerequisite courses of ASEN 2402, ASEN 2403, APPM 2350, and APPM 2360 (all minimum grade C-).
+- Recommended: Prerequisites ASEN 2501 and ASEN 2502.
 
-## Course Learning Outcome and Topics
+See [the CU catalog](https://catalog.colorado.edu/courses-a-z/asen/) for additional information and alternative courses.
 
-- *(TBD)*
+## Course Learning Objectives
 
-(See the [schedule](schedule) for the detailed and updated version.)
+After taking the course, students should be able to:
+
+1. [**Numerical Methods**] Apply and interpret numerical methods for solving computational problems typically encountered in aerospace engineering, including algebraic systems, differential equations, optimization, and regression.
+2. [**Problem Formulation**] Formulate aerospace engineering problems as mathematical problems appropriate for computational solution.
+3. [**Evaluation**] Evaluate and communicate about the appropriateness of computational methods for a particular task in terms of computational cost, order of accuracy, implementation complexity, and stability.
+4. [**Implementation**] Implement algorithms in an efficient and maintainable manner as an individual and as part of a team.
+5. [**Self-Learning**] Discover, implement, verify, and apply self-taught computational methods not covered in class.
+
+See the [Schedule](https://asen3502.com/schedule) for an up-to-date list of topics and the [Course Foundations page](https://asen3502.com/course-foundations/) for additional information, including the topics, concepts, and skills supporting each outcome.
 
 ## Websites
 
-- **[asen3502.com](https://asen3502.com)** is the course hub — schedule, syllabus, and assignments.
+- **[asen3502.com](https://asen3502.com)** is the course hub — schedule, syllabus, and materials.
 - Announcements will be posted on **Canvas**
 - All assignments will be submitted on **Gradescope** 
-- *(discussion tool TBD — Ed or Slack)*
+- Students should communicate with course staff via slack and post questions 
 
 ## Textbook
 
 *Applied Numerical Methods with MATLAB for Engineers and Scientists* by Steven C. Chapra. Electronic version available on Canvas.
 
-### Additional References
+## Attendance and Participation
 
+Learning is a collaborative effort between the instructor and students. Students
+are expected to attend all lectures and labs, ask questions, and participate in
+discussions. The course staff will encourage attendance through in-class
+assignments. **If a student needs to miss class occasionally, please do NOT notify
+the course staff.** Several of the lowest in-class quiz scores will be dropped
+to accommodate absences (see the grade breakdown below).
 
 ## Assignments and Grading
+
+### Grading Philosophy
+
+Grades are assigned according to an absolute standard designed to indicate your
+level of competence in the course material. The final grade indicates your
+readiness to continue to the next level in the curriculum. The AES faculty have
+set these standards based on our education, experience, interactions with
+industry, government laboratories, others in academy, and according to the
+criteria established by the ABET accreditation board.
+
+The course grade is primarily dependent on individual summative measures of competency,
+i.e., exams. The other course assignments are designed to enrich the learning
+experience and to enhance individual performance, not to substitute for
+sub-standard individual competency. This policy makes it important to use the
+assignments to enhance your learning.
+
+Grades for the course are earned based on the following criteria:
+
+> - **A, A-** Demonstrates mastery of the course material in both conceptual and
+> quantitative aspects.
+>
+> - **B+, B** Demonstrates comprehensive understanding of the material, with a
+> solid conceptual grasp of key concepts and strong quantitative work.
+>
+> - **B-, C+** Demonstrates good understanding of most key concepts, with few
+> major quantitative errors.
+>
+> - **C** Demonstrates satisfying understanding of the material with sufficient
+> quantitative work.
+>
+> - **C-** Demonstrates adequate understanding of the material to proceed to the
+> next level; sufficient quantitative work.
+>
+> - **D** Very little understanding is evident, consistently poor quantitative
+> work.
+>
+> - **F** Unsatisfactory performance.
+
+### Grade Breakdown
+
+- **50% Exams** (Lowest midterm: 8%, Other midterms: 13%, Final: 16%)
+- **30% Labs**
+- **10% Homework** (Completion only, lowest dropped)
+- **10% In-Class Assignments** (Lowest 20% dropped)
+
+*In order to receive a C- or better in the class, you must receive a C- or better on the individual summative assessments, i.e. the Exam portion of the grade.*
 
 ### Late Policy
 
