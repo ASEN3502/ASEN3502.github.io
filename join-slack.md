@@ -1,7 +1,6 @@
 ---
 title: Join Slack
-parent: Links
-nav_order: 1
+nav_order: 4
 ---
 
 # Join Slack
