@@ -12,6 +12,7 @@ to find anything quickly.
 
 - [Schedule](schedule) — topics, readings, and due dates
 - [Syllabus](syllabus) — policies, grading, office hours
+- [Course Foundations](course-foundations/) — learning outcomes, topics, concepts, and skills
 
 ## This week
 
