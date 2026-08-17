@@ -101,6 +101,13 @@ Grades for the course are earned based on the following criteria:
 
 ### Late Policy
 
+To ensure proper progression through the course, students are expected to begin
+assignments early and submit homework and labs on time. However, in order to
+provide for minor unforeseen events or responsibilities, students may turn in
+late homework and labs within 72 hours of the due date with a 10% penalty. No
+homework or labs will be accepted after 72 hours beyond the due date. The lowest
+homework score will be dropped to account for missed assignments.
+
 ### AI Policy
 
 See [asen3502.com/ai-policy](https://asen3502.com/ai-policy)
