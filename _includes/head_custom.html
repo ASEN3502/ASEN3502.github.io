@@ -10,3 +10,15 @@ back to Helvetica/Arial, which is visually close.
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+{%- comment -%}
+A page with `redirect_to:` in its front matter bounces to that URL. This is how
+an off-site resource (Canvas, Gradescope, ...) gets a nav entry: just-the-docs
+only renders `nav_external_links` at the top level, so anything external that
+needs to sit inside a section has to be a real page. Each such page also shows
+a plain link in its body, so the destination is reachable if the redirect is
+blocked.
+{%- endcomment -%}
+{%- if page.redirect_to %}
+<meta http-equiv="refresh" content="0; url={{ page.redirect_to }}">
+<link rel="canonical" href="{{ page.redirect_to }}">
+{%- endif %}

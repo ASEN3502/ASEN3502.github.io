@@ -12,6 +12,9 @@ to find anything quickly.
 
 - [Schedule](schedule) — topics, readings, and due dates
 - [Syllabus](syllabus) — policies, grading, office hours
+- [Assignments](assignments) — labs, homework, and projects
+- [Gradescope](gradescope) — submit your work
+- [Announcements](announcements) — posted on Canvas
 - [Course Foundations](course-foundations/) — learning outcomes, topics, concepts, and skills
 
 ## This week

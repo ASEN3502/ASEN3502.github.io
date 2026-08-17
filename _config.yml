@@ -6,9 +6,11 @@ timezone: America/Denver
 remote_theme: just-the-docs/just-the-docs@v0.10.1
 
 # Sidebar / nav
-nav_external_links:
-  - title: Canvas
-    url: https://canvas.colorado.edu
+#
+# Off-site destinations are pages with `redirect_to:` in their front matter
+# rather than `nav_external_links` entries, because just-the-docs renders
+# external links only at the top level, after every section. See
+# _includes/head_custom.html.
 
 # Search bar (client-side, no external service)
 search_enabled: true

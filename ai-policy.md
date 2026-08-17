@@ -1,5 +1,6 @@
 ---
 title: AI Policy
+parent: Logistics
 nav_order: 4
 ---
 

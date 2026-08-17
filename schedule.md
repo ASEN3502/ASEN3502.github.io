@@ -1,5 +1,6 @@
 ---
 title: Schedule
+parent: Logistics
 nav_order: 2
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: Syllabus
-nav_order: 3
+parent: Logistics
+nav_order: 1
 # This file is the single source for both the web syllabus and the PDF the
 # department archives. ./build-pdf.sh strips this front matter and runs pandoc.
 # Keep the body to plain Markdown -- no Liquid, no kramdown attribute lists
