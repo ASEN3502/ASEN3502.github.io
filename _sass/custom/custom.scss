@@ -168,3 +168,23 @@ blockquote {
   padding-left: 1em;
   margin-left: 0;
 }
+
+// -------------------------------------------------------------- cover image
+// The home page hero. Full width of the content column, square-ish corners to
+// match the flat CU look, and a caption small enough to stay subordinate to
+// the page title above it.
+
+.cover-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.cover-caption {
+  margin-top: 0;
+  color: #5c5c5c; // 7:1 on white
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
