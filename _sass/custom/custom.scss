@@ -188,3 +188,24 @@ blockquote {
   font-size: 0.75rem;
   line-height: 1.5;
 }
+
+// ------------------------------------------------------------------ callouts
+// The theme's callout palette is tuned for a dark background: the yellow
+// callout puts #ffeb82 text on a pale yellow panel, which is unreadable here.
+// Repaint it in CU gold with a dark label.
+//
+// The generic blockquote rule above would also drop a gold bar on callouts, so
+// the border is restated here rather than left to cascade order.
+
+.construction,
+blockquote.construction {
+  background: rgba(207, 184, 124, 0.18);
+  border-left: 4px solid $cu-gold;
+  padding: 0.8rem 0.8rem 0.8rem 1rem;
+}
+
+.construction::before,
+blockquote.construction::before {
+  color: #6b5312; // 8.5:1 on the panel
+  letter-spacing: 0.04em;
+}

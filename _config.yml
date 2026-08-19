@@ -29,6 +29,15 @@ search:
   previews: 2
   tokenizer_separator: /[\s/]+/
 
+# Callouts. Used as:
+#     {: .construction }
+#     > text of the callout
+callouts_level: loud
+callouts:
+  construction:
+    title: Under construction
+    color: yellow
+
 heading_anchors: true
 color_scheme: cu # defined in _sass/color_schemes/cu.scss
 
