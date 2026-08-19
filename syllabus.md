@@ -33,7 +33,7 @@ See the [Schedule](https://asen3502.com/schedule) for an up-to-date list of topi
 
 ## Course Components
 
-- **Labs**: Labs are the primary formative activity for the class. In the labs, you will work in teams . The purpose of the labs is to put you in a semi-realistic setting to prepare you to use computational methods in senior design and beyond.
+- **Labs**: Labs are the primary formative activity for the class. In the labs, you will work in teams in a semi-realistic setting to prepare you to use computational methods in senior design and beyond.
 - **Lectures**
 - **Homework**
 - **Exams**
