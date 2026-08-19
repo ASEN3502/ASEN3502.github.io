@@ -11,12 +11,11 @@ Gradient descent with momentum on the Rosenbrock function -- overshooting the
 valley walls before converging on the minimum at (1, 1).
 {: .cover-caption }
 
-{: .construction }
-> This site is being built for Fall 2026. Details on this page may change
-> before the first day of class.
-
 Welcome! Everything for this course lives here. Use the search bar at the top
 to find anything quickly.
+
+{: .construction }
+> This site is being built for Fall 2026. Important details on the site may change before the first lecture!
 
 ## Quick links
 
@@ -25,8 +24,3 @@ to find anything quickly.
 - [Assignments](assignments) — labs, homework, and projects
 - [Gradescope](https://www.gradescope.com/courses/1345824) — submit your work
 - [Announcements](https://canvas.colorado.edu/courses/143236/announcements) — posted on Canvas
-- [Course Foundations](course-foundations/) — learning outcomes, topics, concepts, and skills
-
-## This week
-
-*(update me)*

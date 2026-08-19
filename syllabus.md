@@ -31,6 +31,13 @@ After taking the course, students should be able to:
 
 See the [Schedule](https://asen3502.com/schedule) for an up-to-date list of topics and the [Course Foundations page](https://asen3502.com/course-foundations/) for additional information, including the topics, concepts, and skills supporting each outcome.
 
+## Course Components
+
+- **Labs**
+- **Lectures**
+- **Homework**
+- **Exams**
+
 ## Websites
 
 - **[asen3502.com](https://asen3502.com)** is the course hub — schedule, syllabus, and materials.
