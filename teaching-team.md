@@ -1,6 +1,6 @@
 ---
 title: Teaching Team
-parent: Logistics
+parent: Policy and Logistics
 nav_order: 3
 ---
 

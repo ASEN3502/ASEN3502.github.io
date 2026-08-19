@@ -1,6 +1,6 @@
 ---
 title: Syllabus
-parent: Logistics
+parent: Policy and Logistics
 nav_order: 1
 # This file is the single source for both the web syllabus and the PDF the
 # department archives. ./build-pdf.sh strips this front matter and runs pandoc.
@@ -33,7 +33,7 @@ See the [Schedule](https://asen3502.com/schedule) for an up-to-date list of topi
 
 ## Course Components
 
-- **Labs**
+- **Labs**: Labs are the primary formative activity for the class. In the labs, you will work in teams . The purpose of the labs is to put you in a semi-realistic setting to prepare you to use computational methods in senior design and beyond.
 - **Lectures**
 - **Homework**
 - **Exams**

@@ -1,6 +1,6 @@
 ---
 title: Schedule
-parent: Logistics
+parent: Policy and Logistics
 nav_order: 2
 ---
 
