@@ -20,3 +20,8 @@ The most important two principles of the AI policy are:
 4. AI **may** be used to translate starter code or infrastructure for use in another programming language.
 5. AI **may** be used to get feedback or hints or get unstuck on code. Prompts for this should include an explanation that you are a student trying to understand that it not to give away the answer.
 6. AI **may** be used to suggest *auxiliary* code (input/output, plotting, instrumentation, etc.), however students should plug the actual data into these functions to make sure they understand it.
+
+# How to think about AI
+
+- Don't bring a forklift to the gym! Empirical evidence clearly shows that students who use AI to do their homework faster do worse on exams (but students who use AI wisely to learn may do just as well or better). ["Does AI stop children from learning?", *The Economist*, 18 August 2026](https://colorado.idm.oclc.org/login?url=https://www.economist.com/graphic-detail/2026/08/18/does-ai-stop-children-from-learning) (sign in with your IdentiKey for CU Libraries access); [paper preprint](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6868618)
+- One way to think of AI is 
