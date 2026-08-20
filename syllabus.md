@@ -33,17 +33,18 @@ See the [Schedule](https://asen3502.com/schedule) for an up-to-date list of topi
 
 ## Course Components
 
-- **Labs**: Labs are the primary formative activity for the class. In the labs, you will work in teams in a semi-realistic setting to prepare you to use computational methods in senior design and beyond.
-- **Lectures**
-- **Homework**
-- **Exams**
+- **Labs**: Labs are the primary formative activity for the class. In the labs, you will work in teams in a semi-realistic setting to prepare you to use computational methods in senior design and beyond. During labs, as in senior design and industry, you may be required to propose solutions to problems that go beyond what is strictly taught in the class.
+- **Lectures**: Lectures will introduce the important concepts in the course and engage students through in-class formative assignments. Students will be encouraged to take hand-written notes along with the instructor. Classroom recordings will be made available if students miss lectures.
+- **Textbook and Other Materials**: Most of the material in the course is contained in the textbook below. Students are highly encouraged to read the relevant sections of the book as they encounter the material in lectures and lab. Occasionally, the class will go beyond the material in the book and additional resources will be posted on the course website.
+- **Homework**: As a supplement to the labs, short individual homeworks will be assigned to build particular skills.
+- **Exams**: The primary 
 
-## Websites
+## Communication and Websites
 
 - **[asen3502.com](https://asen3502.com)** is the course hub — schedule, syllabus, and materials.
 - Announcements will be posted on **Canvas**
 - All assignments will be submitted on **Gradescope** 
-- Students should communicate with course staff via slack and post questions 
+- Students should communicate with course staff and post questions on Slack. Please ask questions in the appropriate Slack channel rather than emailing the course staff. Email is still OK to use in exceptional circumstances if there is a reason to not post on Slack.
 
 ## Textbook
 
@@ -52,10 +53,10 @@ See the [Schedule](https://asen3502.com/schedule) for an up-to-date list of topi
 ## Attendance and Participation
 
 Learning is a collaborative effort between the instructor and students. Students
-are expected to attend all lectures and labs, ask questions, and participate in
+are expected to attend all lectures and labs except in cases of illness or important travel, ask questions, and participate in
 discussions. The course staff will encourage attendance through in-class
 assignments. **If a student needs to miss class occasionally, please do NOT notify
-the course staff.** Several of the lowest in-class quiz scores will be dropped
+the course staff.** Several of the lowest in-class assignment scores will be dropped
 to accommodate absences (see the grade breakdown below).
 
 ## Assignments and Grading
@@ -70,10 +71,7 @@ industry, government laboratories, others in academy, and according to the
 criteria established by the ABET accreditation board.
 
 The course grade is primarily dependent on individual summative measures of competency,
-i.e., exams. The other course assignments are designed to enrich the learning
-experience and to enhance individual performance, not to substitute for
-sub-standard individual competency. This policy makes it important to use the
-assignments to enhance your learning.
+i.e., written exams. In order to receive a passing grade, you must attain a passing weighted average grade on the exams. The additional assignments are both formative and summative and factor into a passing grade with the percentages below.
 
 Grades for the course are earned based on the following criteria:
 
@@ -99,8 +97,8 @@ Grades for the course are earned based on the following criteria:
 
 ### Grade Breakdown
 
-- **50% Exams** (Lowest midterm: 8%, Other midterms: 13%, Final: 16%)
-- **30% Labs**
+- **55% Exams** (Lowest midterm: 10%, Other midterms: 14%, Final: 17%)
+- **25% Labs**
 - **10% Homework** (Completion only, lowest dropped)
 - **10% In-Class Assignments** (Lowest 20% dropped)
 
@@ -119,13 +117,9 @@ homework score will be dropped to account for missed assignments.
 
 See [asen3502.com/ai-policy](https://asen3502.com/ai-policy)
 
-## Course Staff
+## Instructor
 
-**Instructor:** Zachary Sunberg
-<zachary.sunberg@colorado.edu>
-**Office Hours:** Posted on Canvas
-
-**Teaching Assistants:** *(TBA)*
+Zachary Sunberg <zachary.sunberg@colorado.edu>
 
 ## Additional Policies
 
@@ -165,6 +159,8 @@ Contact Disability Services at 303-492-8671 or <DSinfo@colorado.edu> for further
 assistance. If you have a temporary medical condition, see
 [Temporary Medical Conditions](https://www.colorado.edu/disabilityservices/students/temporary-medical-conditions)
 on the Disability Services website.
+
+Students should expect to receive accommodations for a timed assessment (e.g., exam) only if their faculty instructor(s) receive the student's accommodations letter at least 5 business days before the assessment, as a departmental policy, in order to facilitate administering the assessment.
 
 If you have a temporary illness, injury or required medical isolation for which
 you require adjustment, please contact the instructor via email. You do not need
