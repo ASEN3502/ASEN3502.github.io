@@ -19,8 +19,8 @@ to find anything quickly.
 
 ## Quick links
 
-- [Schedule](schedule) — topics, readings, and due dates
-- [Syllabus](syllabus) — policies, grading, office hours
-- [Assignments](assignments) — labs, homework, and projects
-- [Gradescope](https://www.gradescope.com/courses/1345824) — submit your work
-- [Announcements](https://canvas.colorado.edu/courses/143236/announcements) — posted on Canvas
+- [Schedule](schedule)
+- [Syllabus](syllabus)
+- [Assignments](assignments)
+- [Gradescope](https://www.gradescope.com/courses/1345824)
+- [Announcements (Canvas)](https://canvas.colorado.edu/courses/143236/announcements)

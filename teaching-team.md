@@ -6,5 +6,17 @@ nav_order: 3
 
 # Teaching Team
 
-*Coming soon.* Instructor and course staff, office hours, and how to reach us
-will be posted here before the semester starts.
+## Instructor
+
+- Zachary Sunberg
+- Email (please use Slack rather than email when possible): <zachary.sunberg@colorado.edu>
+- Office Hours: Wednesdays, 10:40-11:40
+
+## Teaching Assistants
+
+(Please contact through Slack)
+
+- Kawther Rouabhi
+- Quinn Levinson
+- Parker Graham
+- Jacob Nelson

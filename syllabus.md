@@ -119,7 +119,7 @@ See [asen3502.com/ai-policy](https://asen3502.com/ai-policy)
 
 ## Instructor
 
-Zachary Sunberg <zachary.sunberg@colorado.edu>
+Zachary Sunberg <zachary.sunberg@colorado.edu> (Please ask questions on Slack when possible.)
 
 ## Additional Policies
 
