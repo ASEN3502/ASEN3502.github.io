@@ -14,9 +14,6 @@ valley walls before converging on the minimum at (1, 1).
 Welcome! Everything for this course lives here. Use the search bar at the top
 to find anything quickly.
 
-{: .construction }
-> This site is being built for Fall 2026. Important details on the site may change before the first lecture!
-
 ## Quick links
 
 - [Schedule](schedule)
