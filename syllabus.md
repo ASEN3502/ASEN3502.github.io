@@ -53,8 +53,9 @@ See the [Schedule](https://asen3502.com/schedule) for an up-to-date list of topi
 ## Attendance and Participation
 
 Learning is a collaborative effort between the instructor and students. Students
-are expected to attend all lectures and labs except in cases of illness or important travel, ask questions, and participate in
-discussions. The course staff will encourage attendance through in-class
+are expected to attend all lectures and labs (except in cases of illness,
+important travel, or when specifically noted in a Canvas announcement), ask
+questions, and participate in discussions. The course staff will encourage attendance through in-class
 assignments. **If a student needs to miss class occasionally, please do NOT notify
 the course staff.** Several of the lowest in-class assignment scores will be dropped
 to accommodate absences (see the grade breakdown below).
