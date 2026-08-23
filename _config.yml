@@ -19,8 +19,6 @@ nav_external_links:
     url: https://www.gradescope.com/courses/1345824
   - title: Lecture Videos
     url: https://cu-classcapture.colorado.edu/Mediasite/Channel/683983461e524a1caa59bbba71598c8e5f/browse/null/most-recent/null/0/null
-  - title: Canvas
-    url: https://canvas.colorado.edu/courses/143236
 
 # Search bar (client-side, no external service)
 search_enabled: true
