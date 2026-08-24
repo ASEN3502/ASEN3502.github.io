@@ -6,4 +6,6 @@ nav_order: 1
 
 # Lecture Notes
 
-*Coming soon.* Notes and slides will be posted here as the semester goes on.
+Slides and notes will be posted here as the semester goes on.
+
+- Lecture 0 -- Introduction: [slides](/lectures/000-intro/intro.pdf)

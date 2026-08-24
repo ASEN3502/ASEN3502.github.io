@@ -22,3 +22,14 @@ Gemfile.lock
 
 # Built on demand by ./build-pdf.sh; not checked in
 syllabus.pdf
+
+# LaTeX build artifacts from the lecture slide decks
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
