@@ -37,18 +37,20 @@ See the [Schedule](https://asen3502.com/schedule) for an up-to-date list of topi
 - **Lectures**: Lectures will introduce the important concepts in the course and engage students through in-class formative assignments. Students will be encouraged to take hand-written notes along with the instructor. Classroom recordings will be made available if students miss lectures.
 - **Textbook and Other Materials**: Most of the material in the course is contained in the textbook below. Students are highly encouraged to read the relevant sections of the book as they encounter the material in lectures and lab. Occasionally, the class will go beyond the material in the book and additional resources will be posted on the course website.
 - **Homework**: As a supplement to the labs, short individual homeworks will be assigned to build particular skills.
-- **Exams**: The primary 
+- **Exams**: The primary summative assessment for this course are exams. These will be hand-written and will require a **scientific calculator** (has exponential, sin, cos, log, but not a graphing calculator, e.g. TI-30). Questions may include multiple choice, working out mathematical problems, writing pseudocode or Matlab.
 
 ## Communication and Websites
 
 - **[asen3502.com](https://asen3502.com)** is the course hub — schedule, syllabus, and materials.
 - Announcements will be posted on **Canvas**
 - All assignments will be submitted on **Gradescope** 
-- Students should communicate with course staff and post questions on Slack. Please ask questions in the appropriate Slack channel rather than emailing the course staff. Email is still OK to use in exceptional circumstances if there is a reason to not post on Slack.
+- Students should communicate with course staff and post questions on **Slack**. Please ask questions in the appropriate Slack channel rather than emailing the course staff. Email is still OK to use in exceptional circumstances if there is a reason to not post on Slack. The Slack invite link is in a Canvas announcement.
 
 ## Textbook
 
-*Applied Numerical Methods with MATLAB for Engineers and Scientists* by Steven C. Chapra. Electronic version available on Canvas.
+*Applied Numerical Methods with MATLAB for Engineers and Scientists*, 5th Edition, by Steven C. Chapra. Electronic version available at the link in the website menu.
+
+Some of the optimization content will come from *Engineering Design Optimization* by Joaquim R. R. A. Martins and Andrew Ning (Cambridge University Press, 2022), which is available for free at [mdobook.github.io](https://mdobook.github.io/).
 
 ## Attendance and Participation
 
@@ -98,9 +100,9 @@ Grades for the course are earned based on the following criteria:
 
 ### Grade Breakdown
 
-- **55% Exams** (Lowest midterm: 10%, Other midterms: 14%, Final: 17%)
+- **60% Exams** (Lowest midterm: 10%, Other midterms: 15%, Final: 20%)
 - **25% Labs**
-- **10% Homework** (Completion only, lowest dropped)
+- **5% Homework** (Lowest dropped)
 - **10% In-Class Assignments** (Lowest 20% dropped)
 
 *In order to receive a C- or better in the class, you must receive a C- or better on the individual summative assessments, i.e. the Exam portion of the grade.*
