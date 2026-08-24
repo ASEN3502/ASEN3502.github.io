@@ -102,10 +102,12 @@ Grades for the course are earned based on the following criteria:
 
 - **60% Exams** (Lowest midterm: 10%, Other midterms: 15%, Final: 20%)
 - **25% Labs**
-- **5% Homework** (Lowest dropped)
-- **10% In-Class Assignments** (Lowest 20% dropped)
+- **7% Homework** (Lowest dropped)
+- **8% In-Class Assignments** (Lowest 20% dropped)
 
 *In order to receive a C- or better in the class, you must receive a C- or better on the individual summative assessments, i.e. the Exam portion of the grade.*
+
+*Since this is a new course, this grade breakdown is subject to changes or additions during the semester. Students will be given advance notice of changes.*
 
 ### Late Policy
 
