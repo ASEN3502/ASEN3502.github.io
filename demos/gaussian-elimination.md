@@ -6,10 +6,6 @@ nav_order: 2
 
 # Gaussian elimination, one step at a time
 
-Drag the two sliders to move through the two loops of the forward elimination
-phase. `c` is the outer loop (which column we are clearing), `r` is the inner
-loop (which row we are clearing it from).
-
 {::nomarkdown}
 <div id="ge-demo">
   <details class="ge-prompt">
@@ -27,6 +23,11 @@ loop (which row we are clearing it from).
       internet to see if something like this already exists)</p>
     </blockquote>
   </details>
+
+  <p class="ge-intro">Drag the two sliders to move through the two loops of
+  the forward elimination phase. <code>c</code> is the outer loop (which column
+  we are clearing), <code>r</code> is the inner loop (which row we are clearing
+  it from).</p>
 
   <div class="ge-controls">
     <label>
@@ -85,6 +86,7 @@ loop (which row we are clearing it from).
   border-left: 3px solid #ccc;
   color: #555;
 }
+#ge-demo .ge-intro { margin: 1.25rem 0; }
 #ge-demo .ge-controls {
   display: flex;
   flex-wrap: wrap;
