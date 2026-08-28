@@ -1,7 +1,9 @@
 ---
 title: Gaussian Elimination
-parent: Materials
-nav_order: 2
+parent: Demos
+grand_parent: Materials
+nav_order: 1
+lecture: 010-gauss-elimination
 ---
 
 # Gaussian elimination, one step at a time
@@ -33,11 +35,11 @@ nav_order: 2
   <div class="ge-controls">
     <label>
       <span class="ge-lbl">Outer loop <code>c</code> = <b id="ge-cval">1</b></span>
-      <input type="range" id="ge-c" min="1" max="4" value="1" step="1">
+      <input type="range" id="ge-c" min="1" max="5" value="1" step="1">
     </label>
     <label>
       <span class="ge-lbl">Inner loop <code>r</code> = <b id="ge-rval">2</b></span>
-      <input type="range" id="ge-r" min="2" max="5" value="2" step="1">
+      <input type="range" id="ge-r" min="2" max="6" value="2" step="1">
     </label>
     <span class="ge-steps">
       <button type="button" id="ge-prev" aria-label="previous step">&#9664; step</button>
@@ -174,7 +176,7 @@ nav_order: 2
 
 <script>
 (function () {
-  var n = 5;
+  var n = 6;
   var A = document.getElementById('ge-A'),
       bEl = document.getElementById('ge-b'),
       cIn = document.getElementById('ge-c'),
@@ -297,8 +299,8 @@ no reason to compute on it.
 
   <div class="ge-controls">
     <label>
-      <span class="ge-lbl">Loop <code>r</code> = <b id="bs-rval">5</b></span>
-      <input type="range" id="bs-r" min="1" max="5" value="1" step="1">
+      <span class="ge-lbl">Loop <code>r</code> = <b id="bs-rval">6</b></span>
+      <input type="range" id="bs-r" min="1" max="6" value="1" step="1">
     </label>
     <span class="ge-steps">
       <button type="button" id="bs-prev" aria-label="previous step">&#9664; step</button>
@@ -328,7 +330,7 @@ no reason to compute on it.
 
 <script>
 (function () {
-  var n = 5;
+  var n = 6;
   var A = document.getElementById('bs-A'),
       xEl = document.getElementById('bs-x'),
       bEl = document.getElementById('bs-b'),

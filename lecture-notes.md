@@ -18,6 +18,10 @@ slides, code, figures) is under **Materials**.
     lectures/<id>.pdf         exported by ./build-lectures.sh
     lectures/<id>/            optional directory of supporting material
 
+  The Demos column is built from the demo pages themselves: a page under
+  demos/ with `lecture: <id>` in its front matter shows up in that lecture's
+  row.
+
   site.static_files only contains files Jekyll copied into the site, so
   anything that is gitignored is absent on the deployed site. The extension
   blacklist below hides the LaTeX build junk during a local `jekyll serve`,
@@ -44,7 +48,7 @@ slides, code, figures) is under **Materials**.
 {::nomarkdown}
 <table>
   <thead>
-    <tr><th>Lecture</th><th>Annotated PDF</th><th>Materials</th></tr>
+    <tr><th>Lecture</th><th>Annotated PDF</th><th>Materials</th><th>Demos</th></tr>
   </thead>
   <tbody>
   {%- for id in ids -%}
@@ -72,6 +76,15 @@ slides, code, figures) is under **Materials**.
           {%- endfor -%}
           </ul>
         </details>
+        {%- else -%}&mdash;{%- endif -%}
+      </td>
+      <td>
+        {%- assign demos = site.pages | where: "lecture", id | sort: "title" -%}
+        {%- if demos.size > 0 -%}
+          {%- for d in demos -%}
+            {%- unless forloop.first %}<br>{% endunless -%}
+            <a href="{{ d.url | relative_url }}">{{ d.title }}</a>
+          {%- endfor -%}
         {%- else -%}&mdash;{%- endif -%}
       </td>
     </tr>
