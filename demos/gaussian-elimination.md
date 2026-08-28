@@ -172,6 +172,11 @@ lecture: 010-gauss-elimination
   overflow-x: auto;
 }
 .ge-demo .ge-code .hl { background: #fff3bf; border-radius: 3px; }
+.ge-demo .ge-code .g  { color: var(--ge-green);  font-weight: 700; }
+.ge-demo .ge-code .b  { color: var(--ge-blue);   font-weight: 700; }
+.ge-demo .ge-code .p  { color: var(--ge-purple); font-weight: 700; }
+.ge-demo .ge-code .o  { color: var(--ge-orange); font-weight: 700; }
+.ge-demo .ge-code .pv { color: #5f6368; font-weight: 700; }
 </style>
 
 <script>
@@ -245,9 +250,9 @@ lecture: 010-gauss-elimination
     code.innerHTML =
       'for c = 1 &hellip; n-1          <span class="hl">c = ' + c + '</span>\n' +
       '    for r = c+1 &hellip; n      <span class="hl">r = ' + r + '</span>\n' +
-      '        f = A[r,c] / A[c,c]\n' +
-      '        A[r,c:n] -= f * A[c,c:n]\n' +
-      '        b[r]     -= f * b[c]';
+      '        f = <span class="p">A[r,c]</span> / <span class="g">A[c,c]</span>\n' +
+      '        <span class="b">A[r,c:n]</span> -= f * <span class="g">A[c,c:n]</span>\n' +
+      '        <span class="b">b[r]</span>     -= f * <span class="g">b[c]</span>';
   }
 
   function stepBy(d) {
@@ -400,7 +405,9 @@ no reason to compute on it.
 
     code.innerHTML =
       'for r = n &hellip; 1                      <span class="hl">r = ' + r + '</span>\n' +
-      '    x[r] = (b[r] - A[r,r+1:n] &middot; x[r+1:n]) / A[r,r]';
+      '    <span class="p">x[r]</span> = (<span class="o">b[r]</span> - ' +
+      '<span class="b">A[r,r+1:n]</span> &middot; <span class="g">x[r+1:n]</span>)' +
+      ' / <span class="pv">A[r,r]</span>';
   }
 
   rIn.addEventListener('input', render);
