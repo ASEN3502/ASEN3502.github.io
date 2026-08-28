@@ -253,8 +253,8 @@ lecture: 010-gauss-elimination
       'where <i>f</i> = a<sub>' + r + c + '</sub> / a<sub>' + c + c + '</sub>.';
 
     code.innerHTML =
-      'for c = 1 &hellip; n-1          <span class="hl">c = ' + c + '</span>\n' +
-      '    for r = c+1 &hellip; n      <span class="hl">r = ' + r + '</span>\n' +
+      'for c = 1 &hellip; n-1                       <span class="hl">// c = ' + c + '</span>\n' +
+      '    for r = c+1 &hellip; n                   <span class="hl">// r = ' + r + '</span>\n' +
       '        f = <span class="p">A[r,c]</span> / <span class="g">A[c,c]</span>\n' +
       '        <span class="b">A[r,c:n]</span> -= f * <span class="g">A[c,c:n]</span>\n' +
       '        <span class="b">b[r]</span>     -= f * <span class="g">b[c]</span>';
@@ -409,7 +409,7 @@ no reason to compute on it.
       'then dividing by a<sub>' + r + r + '</sub>.';
 
     code.innerHTML =
-      'for r = n &hellip; 1                      <span class="hl">r = ' + r + '</span>\n' +
+      'for r = n &hellip; 1                                          <span class="hl">// r = ' + r + '</span>\n' +
       '    <span class="p">x[r]</span> = (<span class="o">b[r]</span> - ' +
       '<span class="b">A[r,r+1:n]</span> &middot; <span class="g">x[r+1:n]</span>)' +
       ' / <span class="pv">A[r,r]</span>';
