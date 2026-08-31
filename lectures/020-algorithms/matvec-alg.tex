@@ -1,0 +1,13 @@
+% Shared body: \input by matvec-pseudocode.tex (standalone PDF) and by
+% algorithms.tex (the slides).  Edit here, both follow.
+\begin{algorithm}[H]
+  \Input{$n \times n$ matrix $[A]$, vector $\{x\}$}
+  \Output{$\{b\} = [A]\{x\}$}
+  \BlankLine
+  \For{$r \leftarrow 1$ \KwTo $n$}{
+    $b[r] \leftarrow 0$\;
+    \For{$c \leftarrow 1$ \KwTo $n$}{
+      $b[r] \leftarrow b[r] + A[r,c] \cdot x[c]$\;
+    }
+  }
+\end{algorithm}

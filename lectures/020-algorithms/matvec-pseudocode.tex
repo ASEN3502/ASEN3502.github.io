@@ -1,0 +1,21 @@
+% Simple pseudocode for matrix-vector multiplication, cropped to its own
+% bounding box so it can be dropped onto a slide (or a Xournal++ page).
+% Companion to gauss-pseudocode.tex -- keep the two in the same style.
+%
+%   latexmk -pdf matvec-pseudocode.tex
+\documentclass[border=6pt,varwidth=10cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\input{matvec-alg}
+\end{minipage}
+\end{document}

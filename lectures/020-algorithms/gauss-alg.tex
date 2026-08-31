@@ -1,0 +1,26 @@
+% Shared body: \input by gauss-pseudocode.tex (standalone PDF) and by
+% algorithms.tex (the slides).  Edit here, both follow.
+\begin{algorithm}[H]
+  \Input{$n \times n$ matrix $[A]$, right-hand side $\{b\}$}
+  \Output{solution $\{x\}$ of $[A]\{x\} = \{b\}$}
+  \BlankLine
+  \tcp{forward elimination}
+  \For{$c \leftarrow 1$ \KwTo $n-1$}{
+    \For{$r \leftarrow c+1$ \KwTo $n$}{
+      $f \leftarrow A[r,c] \,/\, A[c,c]$\;
+      \For{$j \leftarrow c$ \KwTo $n$}{
+        $A[r,j] \leftarrow A[r,j] - f \cdot A[c,j]$\;
+      }
+      $b[r] \leftarrow b[r] - f \cdot b[c]$\;
+    }
+  }
+  \BlankLine
+  \tcp{back substitution}
+  \For{$r \leftarrow n, n-1, \ldots, 1$}{
+    $s \leftarrow b[r]$\;
+    \For{$j \leftarrow r+1$ \KwTo $n$}{
+      $s \leftarrow s - A[r,j] \cdot x[j]$\;
+    }
+    $x[r] \leftarrow s \,/\, A[r,r]$\;
+  }
+\end{algorithm}
