@@ -64,6 +64,8 @@ lecture: 020-algorithms
     </label>
   </div>
 
+  <p class="bo-title" id="bo-title"></p>
+
   <div class="bo-stage">
     <svg id="bo-plot" viewBox="0 0 640 380" role="img"
          aria-label="Plot of f(n) against c times g(n)"></svg>
@@ -140,6 +142,12 @@ lecture: 020-algorithms
   background: #fff;
 }
 
+.bo-demo .bo-title {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0 0 .4rem;
+}
 .bo-demo .bo-stage { margin-bottom: 1rem; }
 .bo-demo svg { width: 100%; height: auto; display: block; }
 .bo-demo .bo-axis { stroke: #333; stroke-width: 1.5; fill: none; }
@@ -177,14 +185,14 @@ lecture: 020-algorithms
   function f(n) { return n * n + 12 * n * Math.sin(n) + 50; }
 
   var GS = {
-    one:   { fn: function (n) { return 1; } },
-    n:     { fn: function (n) { return n; } },
-    nlogn: { fn: function (n) { return n > 1 ? n * Math.log(n) / Math.LN2 : 0; } },
-    n2:    { fn: function (n) { return n * n; } },
-    n3:    { fn: function (n) { return n * n * n; } },
+    one:   { label: '1',           fn: function (n) { return 1; } },
+    n:     { label: 'n',           fn: function (n) { return n; } },
+    nlogn: { label: 'n \\log_2 n', fn: function (n) { return n > 1 ? n * Math.log(n) / Math.LN2 : 0; } },
+    n2:    { label: 'n^2',         fn: function (n) { return n * n; } },
+    n3:    { label: 'n^3',         fn: function (n) { return n * n * n; } },
     // Math.exp overflows past n = 709; the plot only ever reaches 200, and
     // py() clamps whatever comes back anyway.
-    exp:   { fn: function (n) { return Math.exp(n); } }
+    exp:   { label: 'e^n',         fn: function (n) { return Math.exp(n); } }
   };
 
   // The c slider runs on a log scale: 0.1 at the left, 200 at the right, so
@@ -204,7 +212,8 @@ lecture: 020-algorithms
       mIn   = document.getElementById('bo-nmax'),
       mOut  = document.getElementById('bo-mval'),
       cOut  = document.getElementById('bo-cval'),
-      n0Out = document.getElementById('bo-nval');
+      n0Out = document.getElementById('bo-nval'),
+      title = document.getElementById('bo-title');
 
   var ML = 64, MR = 18, MT = 24, MB = 52, W = 640, H = 380;
   var PW = W - ML - MR, PH = H - MT - MB;
@@ -298,6 +307,10 @@ lecture: 020-algorithms
     if (n0 > NMAX) { n0 = NMAX; n0In.value = n0; }
 
     YMAX = yScale();
+
+    // The question the picture answers, restated for whichever g is chosen.
+    title.innerHTML = 'Is \\(f(n) = O(' + g.label + ')\\)?';
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([title]);
 
     cOut.textContent  = fmtC(c);
     n0Out.textContent = n0;
