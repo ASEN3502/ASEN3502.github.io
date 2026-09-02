@@ -21,13 +21,15 @@ lecture: 020-algorithms
     </blockquote>
   </details>
 
-  <p class="bo-intro">The definition says \(f(n) = O(g(n))\) if you can
-  produce <b>two constants</b>, \(c\) and \(n_0\), such that
-  \(0 \le f(n) \le c\,g(n)\) for every \(n \ge n_0\). Here \(f\) is
-  fixed at \(f(n) = n^2 + 12 n \sin n + 50\). The sine term only wobbles by
-  \(O(n)\), so \(f\) is still quadratic --- but it crosses back and forth,
-  so a pair of constants has to survive every crossing, not just the first
-  one.</p>
+  <div class="bo-def">
+    <p><b>Definition</b>: \(f(n) = O(g(n))\) as \(n \to \infty\) if
+    there exist positive constants \(c\) and \(n_0\) such that
+    \[ 0 \le f(n) \le c\,g(n) \quad\text{for all } n \ge n_0 \]</p>
+  </div>
+
+  <p class="bo-intro">In other words, if we can choose \(c\) and \(n_0\)
+  to <b>eliminate all red</b> (including to the right beyond the edge of the
+  plot), then \(f(n) = O(g(n))\).</p>
 
   <div class="bo-controls">
     <span class="bo-fixed">
@@ -46,6 +48,13 @@ lecture: 020-algorithms
       </select>
     </label>
     <label>
+      <span class="bo-lbl">max \(n\) = <b id="bo-mval">20</b></span>
+      <input type="range" id="bo-nmax" min="10" max="200" value="20" step="5">
+    </label>
+  </div>
+
+  <div class="bo-controls">
+    <label>
       <span class="bo-lbl">\(c\) = <b id="bo-cval">2</b></span>
       <input type="range" id="bo-c" min="0" max="1000" value="394" step="1">
     </label>
@@ -53,19 +62,12 @@ lecture: 020-algorithms
       <span class="bo-lbl">\(n_0\) = <b id="bo-nval">1</b></span>
       <input type="range" id="bo-n0" min="1" max="20" value="1" step="1">
     </label>
-    <label>
-      <span class="bo-lbl">max \(n\) = <b id="bo-mval">20</b></span>
-      <input type="range" id="bo-nmax" min="10" max="200" value="20" step="5">
-    </label>
   </div>
 
   <div class="bo-stage">
     <svg id="bo-plot" viewBox="0 0 640 380" role="img"
          aria-label="Plot of f(n) against c times g(n)"></svg>
   </div>
-
-  <p class="bo-verdict" id="bo-verdict"></p>
-  <p class="bo-note" id="bo-note"></p>
 </div>
 
 <style>
@@ -77,11 +79,12 @@ lecture: 020-algorithms
   --bo-f-bg:   #dde8f1;
   --bo-g-bg:   #f6e6c9;
   /* Fills stay desaturated so the curves read on top of them. */
-  --bo-ok:     #1f7a45;
   --bo-ok-bg:  #dcefdf;
-  --bo-bad:    #b03227;
   --bo-bad-bg: #f7dfdb;
   --bo-math: Georgia, "Times New Roman", serif;
+  /* CUB light blue / sky blue, from _sass/color_schemes/cu.scss */
+  --bo-def-bg: #eef5f8;
+  --bo-def-edge: #096fae;
   margin: 1.5rem 0 2rem;
 }
 .bo-demo .bo-prompt {
@@ -100,14 +103,23 @@ lecture: 020-algorithms
   border-left: 3px solid #ccc;
   color: #555;
 }
+.bo-demo .bo-def {
+  background: var(--bo-def-bg);
+  border-left: 4px solid var(--bo-def-edge);
+  border-radius: 4px;
+  padding: .9rem 1.1rem;
+  margin: 1.25rem 0;
+}
+.bo-demo .bo-def p { margin: 0; }
 .bo-demo .bo-intro { margin: 1.25rem 0; }
 .bo-demo .bo-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem 2rem;
   align-items: flex-end;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
+.bo-demo .bo-controls + .bo-controls { margin-bottom: 1.25rem; }
 .bo-demo .bo-controls label { display: block; }
 .bo-demo .bo-fixed {
   display: block;
@@ -152,20 +164,6 @@ lecture: 020-algorithms
 .bo-demo .bo-lbl-f { fill: var(--bo-f); }
 .bo-demo .bo-lbl-g { fill: var(--bo-g); }
 
-.bo-demo .bo-verdict {
-  margin-top: 1rem;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  padding: .6rem .9rem;
-  border-radius: 4px;
-}
-.bo-demo .bo-verdict.ok   { background: var(--bo-ok-bg);  }
-.bo-demo .bo-verdict.bad  { background: var(--bo-bad-bg); }
-.bo-demo .bo-verdict b.ok  { color: var(--bo-ok); }
-.bo-demo .bo-verdict b.bad { color: var(--bo-bad); }
-.bo-demo .bo-note { font-size: .9rem; color: #555; line-height: 1.6; }
-.bo-demo .bo-f-swatch { background: var(--bo-f-bg); padding: .1rem .35rem; border-radius: 4px; }
-.bo-demo .bo-g-swatch { background: var(--bo-g-bg); padding: .1rem .35rem; border-radius: 4px; }
 </style>
 
 <script>
@@ -179,20 +177,14 @@ lecture: 020-algorithms
   function f(n) { return n * n + 12 * n * Math.sin(n) + 50; }
 
   var GS = {
-    one:   { label: '1',           fn: function (n) { return 1; },
-             beats: false },
-    n:     { label: 'n',           fn: function (n) { return n; },
-             beats: false },
-    nlogn: { label: 'n \\log_2 n', fn: function (n) { return n > 1 ? n * Math.log(n) / Math.LN2 : 0; },
-             beats: false },
-    n2:    { label: 'n^2',         fn: function (n) { return n * n; },
-             beats: 'tie' },
-    n3:    { label: 'n^3',         fn: function (n) { return n * n * n; },
-             beats: true },
+    one:   { fn: function (n) { return 1; } },
+    n:     { fn: function (n) { return n; } },
+    nlogn: { fn: function (n) { return n > 1 ? n * Math.log(n) / Math.LN2 : 0; } },
+    n2:    { fn: function (n) { return n * n; } },
+    n3:    { fn: function (n) { return n * n * n; } },
     // Math.exp overflows past n = 709; the plot only ever reaches 200, and
     // py() clamps whatever comes back anyway.
-    exp:   { label: 'e^n',         fn: function (n) { return Math.exp(n); },
-             beats: true }
+    exp:   { fn: function (n) { return Math.exp(n); } }
   };
 
   // The c slider runs on a log scale: 0.1 at the left, 200 at the right, so
@@ -212,9 +204,7 @@ lecture: 020-algorithms
       mIn   = document.getElementById('bo-nmax'),
       mOut  = document.getElementById('bo-mval'),
       cOut  = document.getElementById('bo-cval'),
-      n0Out = document.getElementById('bo-nval'),
-      verd  = document.getElementById('bo-verdict'),
-      note  = document.getElementById('bo-note');
+      n0Out = document.getElementById('bo-nval');
 
   var ML = 64, MR = 18, MT = 24, MB = 52, W = 640, H = 380;
   var PW = W - ML - MR, PH = H - MT - MB;
@@ -273,15 +263,6 @@ lecture: 020-algorithms
       pts.push(px(n).toFixed(1) + ',' + py(fn(n)).toFixed(1));
     }
     return pts.join(' ');
-  }
-
-  // Integer n in [lo, hi] where the inequality is violated.
-  function violations(g, c, n0, hi) {
-    var bad = [];
-    for (var n = Math.max(1, n0); n <= hi; n++) {
-      if (f(n) > c * g.fn(n)) bad.push(n);
-    }
-    return bad;
   }
 
   // Filled bands between f and c*g, from n0 to the right edge: green where
@@ -400,49 +381,6 @@ lecture: 020-algorithms
                                'text-anchor': 'end',
                                class: 'bo-curve-lbl bo-lbl-g' },
                              ['', 'c', ' ', 'g', '(', 'n', ')']));
-
-
-    // Verdict.
-    var bad = violations(g, c, n0, NMAX);
-    var gl = g.label;
-    if (bad.length === 0) {
-      verd.className = 'bo-verdict ok';
-      verd.innerHTML = '<b class="ok">&#10003;</b> With \\(c = ' + fmtC(c) +
-        '\\) and \\(n_0 = ' + n0 + '\\), \\(f(n) \\le c\\,g(n)\\) ' +
-        'holds for every integer \\(n\\) from ' + n0 + ' to ' + NMAX + '.';
-    } else {
-      verd.className = 'bo-verdict bad';
-      var k = bad[0];
-      verd.innerHTML = '<b class="bad">&#10007;</b> Fails first at ' +
-        '\\(n = ' + k + '\\): \\(f(' + k + ') = ' + f(k).toFixed(0) +
-        ' > c\\,g(' + k + ') = ' + (c * g.fn(k)).toFixed(1) + '\\).';
-    }
-
-    // What is true beyond the right edge of the plot, which no amount of
-    // dragging can show.
-    var msg;
-    if (g.beats === true) {
-      msg = '\\(g(n) = ' + gl + '\\) grows faster than \\(f\\), so ' +
-            '<i>some</i> pair of constants always works &mdash; shrink ' +
-            '\\(c\\) and you just push \\(n_0\\) further right.';
-    } else if (g.beats === 'tie') {
-      msg = '\\(f\\) and \\(g\\) are both quadratic, so this comes ' +
-            'down to \\(c\\) alone: any \\(c > 1\\) works if you push ' +
-            '\\(n_0\\) far enough, and no \\(c \\le 1\\) ever works. ' +
-            'Try \\(c = 1.1\\), then hunt for its \\(n_0\\).';
-    } else {
-      msg = '\\(f\\) grows faster than \\(g(n) = ' + gl + '\\), so no ' +
-            '\\(c\\) and \\(n_0\\) can work &mdash; the curves must ' +
-            'cross again somewhere to the right, even when the visible ' +
-            'window looks fine.';
-    }
-    note.innerHTML = 'Only \\(n \\le ' + NMAX + '\\) is on screen. ' + msg;
-
-    // The verdict and note are rewritten on every slider move, so MathJax
-    // has to be asked to typeset them again.
-    if (window.MathJax && MathJax.typesetPromise) {
-      MathJax.typesetPromise([verd, note]);
-    }
   }
 
   mIn.addEventListener('input', function () {
@@ -457,10 +395,3 @@ lecture: 020-algorithms
 })();
 </script>
 {:/}
-
-Two different pairs of constants can witness the same claim: for
-$$g(n) = n^2$$, $$c = 10$$ works from $$n_0 = 3$$ on, and so does $$c = 2$$
-from $$n_0 = 15$$. Neither is more correct than the other --- the definition
-only asks that *some* pair exist. Note that a smaller $$c$$ buys a larger
-$$n_0$$, and that with a wobbling $$f$$ you have to clear the *last*
-crossing, not the first.
