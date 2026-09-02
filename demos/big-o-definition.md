@@ -21,40 +21,42 @@ lecture: 020-algorithms
     </blockquote>
   </details>
 
-  <p class="bo-intro">The definition says <i>f</i>(<i>n</i>) =
-  <i>O</i>(<i>g</i>(<i>n</i>)) if you can produce <b>two constants</b>,
-  <i>c</i> and <i>n</i><sub>0</sub>, such that 0 &le; <i>f</i>(<i>n</i>)
-  &le; <i>c</i>&thinsp;<i>g</i>(<i>n</i>) for every <i>n</i> &ge;
-  <i>n</i><sub>0</sub>. Here <i>f</i> is fixed at
-  <b>3<i>n</i>&sup2; + 5<i>n</i> + 2</b> --- pick a <i>g</i>, then hunt for
-  constants that work.</p>
+  <p class="bo-intro">The definition says \(f(n) = O(g(n))\) if you can
+  produce <b>two constants</b>, \(c\) and \(n_0\), such that
+  \(0 \le f(n) \le c\,g(n)\) for every \(n \ge n_0\). Here \(f\) is
+  fixed at \(f(n) = n^2 + 12 n \sin n + 50\). The sine term only wobbles by
+  \(O(n)\), so \(f\) is still quadratic --- but it crosses back and forth,
+  so a pair of constants has to survive every crossing, not just the first
+  one.</p>
 
   <div class="bo-controls">
     <span class="bo-fixed">
       <span class="bo-lbl">fixed</span>
-      <i>f</i>(<i>n</i>) = 3<i>n</i>&sup2; + 5<i>n</i> + 2
+      \(f(n) = n^2 + 12 n \sin n + 50\)
     </span>
     <label>
-      <span class="bo-lbl bo-sel-lbl"><i>g</i>(<i>n</i>) =</span>
+      <span class="bo-lbl bo-sel-lbl">\(g(n) =\)</span>
       <select id="bo-g">
         <option value="one">1</option>
         <option value="n">n</option>
         <option value="nlogn">n log n</option>
         <option value="n2" selected>n&sup2;</option>
         <option value="n3">n&sup3;</option>
+        <option value="exp">e&#8319;</option>
       </select>
     </label>
     <label>
-      <span class="bo-lbl">c = <b id="bo-cval">4</b></span>
-      <input type="range" id="bo-c" min="0.1" max="20" value="4" step="0.1">
+      <span class="bo-lbl">\(c\) = <b id="bo-cval">2</b></span>
+      <input type="range" id="bo-c" min="0" max="1000" value="394" step="1">
     </label>
     <label>
-      <span class="bo-lbl"><i>n</i><sub>0</sub> = <b id="bo-nval">1</b></span>
+      <span class="bo-lbl">\(n_0\) = <b id="bo-nval">1</b></span>
       <input type="range" id="bo-n0" min="1" max="20" value="1" step="1">
     </label>
-    <span class="bo-steps">
-      <button type="button" id="bo-fit">find smallest n&#8320;</button>
-    </span>
+    <label>
+      <span class="bo-lbl">max \(n\) = <b id="bo-mval">20</b></span>
+      <input type="range" id="bo-nmax" min="10" max="200" value="20" step="5">
+    </label>
   </div>
 
   <div class="bo-stage">
@@ -68,14 +70,18 @@ lecture: 020-algorithms
 
 <style>
 .bo-demo {
-  --bo-f:    #1667c8;
-  --bo-g:    #8b3fc4;
-  --bo-bad:  #c0392b;
-  --bo-f-bg:   #d6e6fb;
-  --bo-g-bg:   #ecdcfa;
-  --bo-bad-bg: #fbe0dc;
-  --bo-ok:     #1a8f4c;
-  --bo-ok-bg:  #d8f2e2;
+  /* The two curves are a blue/amber pair: complementary, far apart in hue
+     from the green and red fills, and still distinct in grayscale. */
+  --bo-f:    #123f63;   /* f(n): deep blue */
+  --bo-g:    #b06a00;   /* c g(n): dark amber */
+  --bo-f-bg:   #dde8f1;
+  --bo-g-bg:   #f6e6c9;
+  /* Fills stay desaturated so the curves read on top of them. */
+  --bo-ok:     #1f7a45;
+  --bo-ok-bg:  #dcefdf;
+  --bo-bad:    #b03227;
+  --bo-bad-bg: #f7dfdb;
+  --bo-math: Georgia, "Times New Roman", serif;
   margin: 1.5rem 0 2rem;
 }
 .bo-demo .bo-prompt {
@@ -121,31 +127,28 @@ lecture: 020-algorithms
   border-radius: 4px;
   background: #fff;
 }
-.bo-demo .bo-steps button {
-  font: inherit;
-  font-size: .8rem;
-  padding: .25rem .6rem;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #f7f7f7;
-}
-.bo-demo .bo-steps button:hover { background: #ececec; }
 
 .bo-demo .bo-stage { margin-bottom: 1rem; }
 .bo-demo svg { width: 100%; height: auto; display: block; }
 .bo-demo .bo-axis { stroke: #333; stroke-width: 1.5; fill: none; }
 .bo-demo .bo-tick { stroke: #ccc; stroke-width: 1; }
 .bo-demo .bo-ticklbl { font-size: 15px; fill: #777; }
-.bo-demo .bo-axlbl { font-size: 19px; fill: #444; font-style: italic; }
+.bo-demo .bo-axlbl { font-size: 19px; fill: #444; font-family: var(--bo-math);
+                     font-style: italic; }
 .bo-demo .bo-exempt { fill: #f0f1f2; }
-.bo-demo .bo-exempt-lbl { font-size: 19px; font-weight: 600; fill: #666; }
+.bo-demo .bo-exempt-lbl { font-size: 19px; font-weight: 600; fill: #666;
+                          font-family: var(--bo-math); }
 .bo-demo .bo-n0line { stroke: #666; stroke-width: 1.5; stroke-dasharray: 5 4; }
 .bo-demo .bo-curve-f { stroke: var(--bo-f); stroke-width: 2.5; fill: none; }
 .bo-demo .bo-curve-g { stroke: var(--bo-g); stroke-width: 2.5; fill: none; }
-.bo-demo .bo-gap { fill: var(--bo-bad-bg); }
-.bo-demo .bo-dot { fill: var(--bo-bad); }
-.bo-demo .bo-curve-lbl { font-size: 22px; font-weight: 700; }
+.bo-demo .bo-band-ok  { fill: var(--bo-ok-bg); }
+.bo-demo .bo-band-bad { fill: var(--bo-bad-bg); }
+/* MathJax cannot reach text inside the SVG, so the plot labels are set in a
+   serif face by hand, with the variables italicised, to match the math in
+   the prose. */
+.bo-demo .bo-curve-lbl { font-size: 23px; font-weight: 700;
+                         font-family: var(--bo-math); }
+.bo-demo .bo-var { font-style: italic; }
 .bo-demo .bo-lbl-f { fill: var(--bo-f); }
 .bo-demo .bo-lbl-g { fill: var(--bo-g); }
 
@@ -167,29 +170,47 @@ lecture: 020-algorithms
 
 <script>
 (function () {
-  var NMAX = 20;          // right edge of the plot
-  var SEARCH = 300000;    // how far out "find smallest n0" is willing to look
+  var NMAX = 20;          // right edge of the plot; the max-n slider sets it
 
-  // f is fixed; only g, c and n0 are up to the user.
-  function f(n) { return 3 * n * n + 5 * n + 2; }
+  // f is fixed; only g, c and n0 are up to the user.  The sine term is
+  // O(n), so f is still quadratic, but it makes f cross c*g repeatedly
+  // instead of settling under it the first time.  The +50 keeps f positive:
+  // n^2 - 12n + 50 has no real roots.
+  function f(n) { return n * n + 12 * n * Math.sin(n) + 50; }
 
   var GS = {
-    one:   { label: '1',       fn: function (n) { return 1; },
+    one:   { label: '1',           fn: function (n) { return 1; },
              beats: false },
-    n:     { label: 'n',       fn: function (n) { return n; },
+    n:     { label: 'n',           fn: function (n) { return n; },
              beats: false },
-    nlogn: { label: 'n log n', fn: function (n) { return n > 1 ? n * Math.log(n) / Math.LN2 : 0; },
+    nlogn: { label: 'n \\log_2 n', fn: function (n) { return n > 1 ? n * Math.log(n) / Math.LN2 : 0; },
              beats: false },
-    n2:    { label: 'n²', fn: function (n) { return n * n; },
+    n2:    { label: 'n^2',         fn: function (n) { return n * n; },
              beats: 'tie' },
-    n3:    { label: 'n³', fn: function (n) { return n * n * n; },
+    n3:    { label: 'n^3',         fn: function (n) { return n * n * n; },
+             beats: true },
+    // Math.exp overflows past n = 709; the plot only ever reaches 200, and
+    // py() clamps whatever comes back anyway.
+    exp:   { label: 'e^n',         fn: function (n) { return Math.exp(n); },
              beats: true }
   };
+
+  // The c slider runs on a log scale: 0.1 at the left, 200 at the right, so
+  // the interesting region just above c = 1 stays draggable even though the
+  // range spans three decades.
+  var CMIN = 0.1, CMAX = 200, CSTEPS = 1000;
+  function cFromSlider(v) {
+    var lo = Math.log(CMIN), hi = Math.log(CMAX);
+    return Math.exp(lo + (v / CSTEPS) * (hi - lo));
+  }
+  function fmtC(c) { return c < 10 ? c.toFixed(1) : c.toFixed(0); }
 
   var svg   = document.getElementById('bo-plot'),
       gSel  = document.getElementById('bo-g'),
       cIn   = document.getElementById('bo-c'),
       n0In  = document.getElementById('bo-n0'),
+      mIn   = document.getElementById('bo-nmax'),
+      mOut  = document.getElementById('bo-mval'),
       cOut  = document.getElementById('bo-cval'),
       n0Out = document.getElementById('bo-nval'),
       verd  = document.getElementById('bo-verdict'),
@@ -197,7 +218,23 @@ lecture: 020-algorithms
 
   var ML = 64, MR = 18, MT = 24, MB = 52, W = 640, H = 380;
   var PW = W - ML - MR, PH = H - MT - MB;
-  var YMAX = f(NMAX) * 1.12;
+  var YMAX = 1;           // recomputed from f whenever NMAX changes
+
+  // Tallest f on screen, with headroom.  f wobbles, so its peak is not
+  // always at the right edge.
+  function yScale() {
+    var mx = 0;
+    for (var i = 0; i <= 400; i++) mx = Math.max(mx, f(i * NMAX / 400));
+    return mx * 1.12;
+  }
+
+  // A round gridline spacing (1, 2 or 5 times a power of ten) giving
+  // roughly `want` lines across the given span.
+  function niceStep(span, want) {
+    var raw = span / want, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10));
+    var k = raw / mag;
+    return (k < 1.5 ? 1 : k < 3 ? 2 : k < 7 ? 5 : 10) * mag;
+  }
 
   function px(n) { return ML + (n / NMAX) * PW; }
   function py(v) {
@@ -207,6 +244,18 @@ lecture: 020-algorithms
 
   // Keep a curve label inside the plot even when its curve has left the top.
   function labelY(y) { return Math.min(Math.max(y, MT + 22), MT + PH - 8); }
+
+  // A <text> whose parts alternate upright / italic-variable, starting
+  // upright: mathText({...}, ['', 'f', '(', 'n', ')']) renders f(n) with the
+  // letters in math italic.
+  function mathText(attrs, parts) {
+    var t = el('text', attrs);
+    for (var i = 0; i < parts.length; i++) {
+      if (parts[i] === '') continue;
+      t.appendChild(el('tspan', i % 2 ? { class: 'bo-var' } : {}, parts[i]));
+    }
+    return t;
+  }
 
   function el(name, attrs, text) {
     var e = document.createElementNS('http://www.w3.org/2000/svg', name);
@@ -235,24 +284,43 @@ lecture: 020-algorithms
     return bad;
   }
 
-  // Smallest n0 that works for this c and g, or null if no such n0 exists
-  // within the search range.
-  function smallestN0(g, c) {
-    var last = 0;
-    for (var n = 1; n <= SEARCH; n++) {
-      if (f(n) > c * g.fn(n)) last = n;
+  // Filled bands between f and c*g, from n0 to the right edge: green where
+  // c*g is on top (the inequality holds), red where f is.
+  function bands(cg, n0) {
+    var steps = 400, out = [], run = null;
+    var pt = function (n, v) { return px(n).toFixed(1) + ',' + py(v).toFixed(1); };
+    for (var i = 0; i <= steps; i++) {
+      var n = n0 + i * (NMAX - n0) / steps;
+      var d = cg(n) - f(n);
+      var sign = d >= 0;
+      if (run === null || sign !== run.ok) {
+        if (run) { run.hi.push(pt(n, f(n))); run.lo.push(pt(n, cg(n))); out.push(run); }
+        run = { ok: sign, hi: [], lo: [] };
+      }
+      run.hi.push(pt(n, f(n)));
+      run.lo.push(pt(n, cg(n)));
     }
-    if (last >= SEARCH) return null;
-    return last + 1;
+    if (run) out.push(run);
+    return out.map(function (r) {
+      return { ok: r.ok, points: r.hi.concat(r.lo.reverse()).join(' ') };
+    });
   }
 
   function render() {
     var g  = GS[gSel.value],
-        c  = +cIn.value,
+        c  = cFromSlider(+cIn.value),
         n0 = +n0In.value;
 
-    cOut.textContent  = c.toFixed(1);
+    // The n0 slider follows the window, so n0 can always be placed anywhere
+    // on screen.
+    if (+n0In.max !== NMAX) n0In.max = NMAX;
+    if (n0 > NMAX) { n0 = NMAX; n0In.value = n0; }
+
+    YMAX = yScale();
+
+    cOut.textContent  = fmtC(c);
     n0Out.textContent = n0;
+    mOut.textContent  = NMAX;
 
     while (svg.firstChild) svg.removeChild(svg.firstChild);
 
@@ -269,7 +337,8 @@ lecture: 020-algorithms
                                 height: PH, class: 'bo-exempt' }));
 
     // Gridlines and x ticks.
-    for (var t = 0; t <= NMAX; t += 5) {
+    var xs = niceStep(NMAX, 5);
+    for (var t = 0; t <= NMAX + 1e-9; t += xs) {
       if (t > 0) {
         svg.appendChild(el('line', { x1: px(t), y1: MT, x2: px(t),
                                      y2: MT + PH, class: 'bo-tick' }));
@@ -278,13 +347,15 @@ lecture: 020-algorithms
                                    'text-anchor': 'middle',
                                    class: 'bo-ticklbl' }, t));
     }
-    for (var yv = 0; yv <= YMAX; yv += 250) {
+    var ys = niceStep(YMAX, 4);
+    for (var yv = 0; yv <= YMAX; yv += ys) {
       if (yv > 0) {
         svg.appendChild(el('line', { x1: ML, y1: py(yv), x2: ML + PW,
                                      y2: py(yv), class: 'bo-tick' }));
         svg.appendChild(el('text', { x: ML - 9, y: py(yv) + 5,
                                      'text-anchor': 'end',
-                                     class: 'bo-ticklbl' }, yv));
+                                     class: 'bo-ticklbl' },
+                                   yv >= 10000 ? (yv / 1000) + 'k' : yv));
       }
     }
 
@@ -293,7 +364,17 @@ lecture: 020-algorithms
                                     ' H' + (ML + PW), class: 'bo-axis' }));
     svg.appendChild(el('text', { x: ML + PW, y: MT + PH + 38,
                                  'text-anchor': 'end',
-                                 class: 'bo-axlbl' }, 'n'));
+                                 class: 'bo-axlbl' }, 'n'));   // already italic
+
+    // Shaded gap between the curves, drawn under them.
+    var shade = el('g', { 'clip-path': 'url(#bo-clip)' });
+    var bs = bands(cg, n0);
+    for (var bi = 0; bi < bs.length; bi++) {
+      shade.appendChild(el('polygon', {
+        points: bs[bi].points,
+        class: bs[bi].ok ? 'bo-band-ok' : 'bo-band-bad' }));
+    }
+    svg.appendChild(shade);
 
     // The two curves.
     var curves = el('g', { 'clip-path': 'url(#bo-clip)' });
@@ -304,83 +385,70 @@ lecture: 020-algorithms
     // n0 marker.
     svg.appendChild(el('line', { x1: px(n0), y1: MT, x2: px(n0),
                                  y2: MT + PH, class: 'bo-n0line' }));
-    svg.appendChild(el('text', { x: Math.min(px(n0) + 7, ML + PW - 26),
-                                 y: MT + 20,
-                                 class: 'bo-exempt-lbl' }, 'n₀'));
+    svg.appendChild(mathText({ x: Math.min(px(n0) + 7, ML + PW - 26),
+                               y: MT + 20,
+                               class: 'bo-exempt-lbl' }, ['', 'n', '₀']));
 
     // Curve labels, parked at the right edge at whatever height they end at.
     var yf = labelY(py(f(NMAX))), yg = labelY(py(cg(NMAX)));
     if (Math.abs(yf - yg) < 26) yg = yf - 26;   // keep them from colliding
-    svg.appendChild(el('text', { x: ML + PW - 4, y: yf - 8,
-                                 'text-anchor': 'end',
-                                 class: 'bo-curve-lbl bo-lbl-f' }, 'f(n)'));
-    svg.appendChild(el('text', { x: ML + PW - 4, y: yg - 8,
-                                 'text-anchor': 'end', fill: 'var(--bo-g)',
-                                 class: 'bo-curve-lbl' },
-                                'c g(n)'));
+    svg.appendChild(mathText({ x: ML + PW - 4, y: yf - 8,
+                               'text-anchor': 'end',
+                               class: 'bo-curve-lbl bo-lbl-f' },
+                             ['', 'f', '(', 'n', ')']));
+    svg.appendChild(mathText({ x: ML + PW - 4, y: yg - 8,
+                               'text-anchor': 'end',
+                               class: 'bo-curve-lbl bo-lbl-g' },
+                             ['', 'c', ' ', 'g', '(', 'n', ')']));
 
-    // Every integer n >= n0 where f pokes above c*g.
-    var bad = violations(g, c, n0, NMAX);
-    for (var i = 0; i < bad.length; i++) {
-      svg.appendChild(el('circle', { cx: px(bad[i]), cy: py(f(bad[i])),
-                                     r: 3.5, class: 'bo-dot' }));
-    }
 
     // Verdict.
+    var bad = violations(g, c, n0, NMAX);
     var gl = g.label;
     if (bad.length === 0) {
       verd.className = 'bo-verdict ok';
-      verd.innerHTML = '<b class="ok">&#10003;</b> With c = ' + c.toFixed(1) +
-        ' and n<sub>0</sub> = ' + n0 + ', f(n) &le; c g(n) holds for ' +
-        'every integer n from ' + n0 + ' to ' + NMAX + '.';
+      verd.innerHTML = '<b class="ok">&#10003;</b> With \\(c = ' + fmtC(c) +
+        '\\) and \\(n_0 = ' + n0 + '\\), \\(f(n) \\le c\\,g(n)\\) ' +
+        'holds for every integer \\(n\\) from ' + n0 + ' to ' + NMAX + '.';
     } else {
       verd.className = 'bo-verdict bad';
       var k = bad[0];
-      verd.innerHTML = '<b class="bad">&#10007;</b> Fails first at n = ' + k +
-        ': f(' + k + ') = ' + f(k).toFixed(0) + ' &gt; c g(' + k +
-        ') = ' + (c * g.fn(k)).toFixed(1) + '.' +
-        (bad.length > 1 ? ' (' + bad.length + ' violations in view.)' : '');
+      verd.innerHTML = '<b class="bad">&#10007;</b> Fails first at ' +
+        '\\(n = ' + k + '\\): \\(f(' + k + ') = ' + f(k).toFixed(0) +
+        ' > c\\,g(' + k + ') = ' + (c * g.fn(k)).toFixed(1) + '\\).';
     }
 
     // What is true beyond the right edge of the plot, which no amount of
     // dragging can show.
     var msg;
     if (g.beats === true) {
-      msg = 'g(n) = ' + gl + ' grows faster than f, so <i>some</i> pair of ' +
-            'constants always works &mdash; shrink c and you just push ' +
-            'n<sub>0</sub> further right.';
+      msg = '\\(g(n) = ' + gl + '\\) grows faster than \\(f\\), so ' +
+            '<i>some</i> pair of constants always works &mdash; shrink ' +
+            '\\(c\\) and you just push \\(n_0\\) further right.';
     } else if (g.beats === 'tie') {
-      msg = 'f and g are both quadratic, so this comes down to c alone: any ' +
-            'c &gt; 3 works if you push n<sub>0</sub> far enough, and no ' +
-            'c &le; 3 ever works. Try c = 3.1.';
+      msg = '\\(f\\) and \\(g\\) are both quadratic, so this comes ' +
+            'down to \\(c\\) alone: any \\(c > 1\\) works if you push ' +
+            '\\(n_0\\) far enough, and no \\(c \\le 1\\) ever works. ' +
+            'Try \\(c = 1.1\\), then hunt for its \\(n_0\\).';
     } else {
-      msg = 'f grows faster than g(n) = ' + gl + ', so no c and n<sub>0</sub> ' +
-            'can work &mdash; the curves must cross again somewhere to the ' +
-            'right, even when the visible window looks fine.';
+      msg = '\\(f\\) grows faster than \\(g(n) = ' + gl + '\\), so no ' +
+            '\\(c\\) and \\(n_0\\) can work &mdash; the curves must ' +
+            'cross again somewhere to the right, even when the visible ' +
+            'window looks fine.';
     }
-    note.innerHTML = 'Only n ≤ ' + NMAX + ' is on screen. ' + msg;
+    note.innerHTML = 'Only \\(n \\le ' + NMAX + '\\) is on screen. ' + msg;
+
+    // The verdict and note are rewritten on every slider move, so MathJax
+    // has to be asked to typeset them again.
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([verd, note]);
+    }
   }
 
-  document.getElementById('bo-fit').addEventListener('click', function () {
-    var g = GS[gSel.value], c = +cIn.value;
-    var best = smallestN0(g, c);
-    if (best === null || best > NMAX) {
-      n0In.value = NMAX;
-      render();
-      note.innerHTML = best === null
-        ? 'No n<sub>0</sub> works for c = ' + c.toFixed(1) + ' with g(n) = ' +
-          GS[gSel.value].label + ' &mdash; f(n) overtakes c g(n) again ' +
-          'no matter how far out you look.'
-        : 'The smallest n<sub>0</sub> that works is ' + best +
-          ', which is off the right edge of this plot.';
-    } else {
-      n0In.value = best;
-      render();
-      note.innerHTML = 'Smallest n<sub>0</sub> that works for c = ' +
-        c.toFixed(1) + ' is <b>' + best + '</b>.';
-    }
+  mIn.addEventListener('input', function () {
+    NMAX = +mIn.value;
+    render();
   });
-
   gSel.addEventListener('change', render);
   cIn.addEventListener('input', render);
   n0In.addEventListener('input', render);
@@ -390,7 +458,9 @@ lecture: 020-algorithms
 </script>
 {:/}
 
-Two different pairs of constants can witness the same claim: <i>c</i> = 10
-with <i>n</i><sub>0</sub> = 1 works, and so does <i>c</i> = 4 with
-<i>n</i><sub>0</sub> = 6. Neither is more correct than the other --- the
-definition only asks that *some* pair exist.
+Two different pairs of constants can witness the same claim: for
+$$g(n) = n^2$$, $$c = 10$$ works from $$n_0 = 3$$ on, and so does $$c = 2$$
+from $$n_0 = 15$$. Neither is more correct than the other --- the definition
+only asks that *some* pair exist. Note that a smaller $$c$$ buys a larger
+$$n_0$$, and that with a wobbling $$f$$ you have to clear the *last*
+crossing, not the first.
