@@ -34,3 +34,6 @@ syllabus.pdf
 *.synctex.gz
 *.toc
 *.vrb
+
+# Xournal++ autosaves
+.*.autosave.xopp

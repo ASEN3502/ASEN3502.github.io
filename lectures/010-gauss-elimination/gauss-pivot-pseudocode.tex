@@ -1,0 +1,48 @@
+% Gaussian elimination with partial pivoting (the pivoting steps are in red),
+% innermost for loop collapsed into a whole-row operation.  Cropped to its own
+% bounding box so it can be dropped onto a Xournal++ page as an image.
+%
+%   latexmk -pdf gauss-pivot-pseudocode.tex
+\documentclass[border=6pt,varwidth=10cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \Input{$n \times n$ matrix $[A]$, right-hand side $\{b\}$}
+  \Output{solution $\{x\}$ of $[A]\{x\} = \{b\}$}
+  \BlankLine
+  \tcp{forward elimination}
+  \For{$c \leftarrow 1$ \KwTo $n-1$}{
+    \textcolor{red}{\tcp{find the largest entry in column $c$}}
+    \textcolor{red}{$p \leftarrow \operatorname*{arg\,max}_{r \,\in\, c \ldots n} |A[r,c]|$}\;
+    \textcolor{red}{\tcp{swap that row into the pivot position}}
+    \textcolor{red}{$A[c,\,:] \leftrightarrow A[p,\,:]$}\;
+    \textcolor{red}{$b[c] \leftrightarrow b[p]$}\;
+    \For{$r \leftarrow c+1$ \KwTo $n$}{
+      $f \leftarrow A[r,c] \,/\, A[c,c]$\;
+      $A[r,c\!:\!n] \leftarrow A[r,c\!:\!n] - f \cdot A[c,c\!:\!n]$\;
+      $b[r] \leftarrow b[r] - f \cdot b[c]$\;
+    }
+  }
+  \BlankLine
+  \tcp{back substitution}
+  \For{$r \leftarrow n, n-1, \ldots, 1$}{
+    $s \leftarrow b[r]$\;
+    \For{$j \leftarrow r+1$ \KwTo $n$}{
+      $s \leftarrow s - A[r,j] \cdot x[j]$\;
+    }
+    $x[r] \leftarrow s \,/\, A[r,r]$\;
+  }
+\end{algorithm}
+\end{minipage}
+\end{document}
