@@ -1,0 +1,173 @@
+% Step-by-step derivation of the operation count for Gaussian elimination.
+% Companion notes for the 020-algorithms lecture, where this was done quickly
+% on the board.
+%
+%   latexmk -pdf flop-count.tex
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[linesnumbered]{algorithm2e}
+\usepackage{hyperref}
+
+\RestyleAlgo{plain}
+\DontPrintSemicolon
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\title{Counting the Operations in Gaussian Elimination: Detailed Derivation}
+\author{ASEN 3502 --- Computational Methods}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent
+In class we counted the floating point operations (``flops'') required by
+Gaussian elimination and found that $\frac{2 n^3}{3} + O(n^2)$. That
+derivation moved quickly. These notes provide a step-by step derivation of the trickiest line (5).
+
+\section{The algorithm}
+
+Here is the same Gaussian elimination algorithm from the slides. Every
+\texttt{for} loop is written out, and each line is numbered so
+we can refer to it below.
+
+\vspace{0.5em}
+\begin{algorithm}[H]
+  \Input{$n \times n$ matrix $[A]$, right-hand side $\{b\}$}
+  \Output{solution $\{x\}$ of $[A]\{x\} = \{b\}$}
+  \BlankLine
+  \tcp{forward elimination}
+  \For{$c \leftarrow 1$ \KwTo $n-1$}{
+    \For{$r \leftarrow c+1$ \KwTo $n$}{
+      $f \leftarrow A[r,c] \,/\, A[c,c]$\;
+      \For{$j \leftarrow c$ \KwTo $n$}{
+        $A[r,j] \leftarrow A[r,j] - f \cdot A[c,j]$\;
+      }
+      $b[r] \leftarrow b[r] - f \cdot b[c]$\;
+    }
+  }
+  \BlankLine
+  \tcp{back substitution}
+  \For{$r \leftarrow n, n-1, \ldots, 1$}{
+    $s \leftarrow b[r]$\;
+    \For{$j \leftarrow r+1$ \KwTo $n$}{
+      $s \leftarrow s - A[r,j] \cdot x[j]$\;
+    }
+    $x[r] \leftarrow s \,/\, A[r,r]$\;
+  }
+\end{algorithm}
+\vspace{0.5em}
+
+\section{Number of executions of line 5}
+
+This derivation will focus on finding the \textbf{number of times line 5 is executed}. We'll call this number $N_5$.
+
+Since line 5 is within three nested for loops. We need to evaluate the triple sum 
+\begin{equation}
+  \label{eq:triple}
+  N_5 = \sum_{c=1}^{n-1} \; \sum_{r=c+1}^{n} \; \sum_{j=c}^{n} 1 .
+\end{equation}
+The summand is $1$ because we are counting executions: each combination of
+$(c, r, j)$ contributes one execution of line 5.
+
+\subsection{Sum identities}
+
+The following sum identities are used in the derivation:
+
+\begin{align}
+  \sum_{i=k}^m a\,f(i) &= a \sum_{i=k}^m f(i)
+    \tag{ID1} \label{id:const} \\[0.3em]
+  \sum_{i=k}^m \left[ f(i) + g(i) \right] &= \sum_{i=k}^m f(i) + \sum_{i=k}^m g(i)
+    \tag{ID2} \label{id:split} \\[0.3em]
+  \sum_{i=1}^m 1 &= m
+    \tag{ID3} \label{id:ones} \\[0.3em]
+  \sum_{i=k}^{m} 1 &= m - k + 1
+    \tag{ID4} \label{id:count} \\[0.3em]
+  \sum_{i=1}^m i &= \frac{m(m+1)}{2}
+    \tag{ID5} \label{id:lin} \\[0.3em]
+  \sum_{i=1}^m i^2 &= \frac{m(m+1)(2m+1)}{6}
+    \tag{ID6} \label{id:sq}
+\end{align}
+
+The proofs of these are not a focus of the class, but I encourage you to look them up if you are curious! Asking an LLM is the easiest way to do this.
+
+\subsection{Step-by-step derivation}
+
+\begin{align}
+    \sum_{c=1}^{n-1} \; \sum_{r=c+1}^{n} \; \sum_{j=c}^{n} 1 &= \sum_{c=1}^{n-1} \; \sum_{r=c+1}^{n} (n - c + 1) \tag{using \ref{id:count}} \\
+                                                             &= \sum_{c=1}^{n-1} (n - c + 1) \sum_{r=c+1}^{n} 1 \tag{using \ref{id:const}. Note: $n$ and $c$ are constants within the $r$ sum.} \\
+                                                             &= \sum_{c=1}^{n-1} (n - c + 1)(n - c) \tag{using \ref{id:count} again} \\
+                                                             &= \sum_{c=1}^{n-1} \left[ n^2 - cn - cn + c^2 + n - c \right] \tag{multiplying terms}\\
+                                                             &= \sum_{c=1}^{n-1} \left[ c^2 - c(2n+1) + n^2 + n \right] \tag{collecting terms by the sum counter, $c$} \\
+                                                             &= \sum_{c=1}^{n-1} c^2 + \sum_{c=1}^{n-1} \left[ - c(2n+1) \right] + \sum_{c=1}^{n-1} \left[ n^2 + n \right] \tag{using \ref{id:split}}\\
+                                                             &= \sum_{c=1}^{n-1} c^2 - (2n+1) \sum_{c=1}^{n-1} c + (n^2 + n) \sum_{c=1}^{n-1} 1  \tag{using \ref{id:const}. Note: $n$ is a constant within the sum.}\\
+                                                             \notag\\
+                                                             &= \frac{(n-1)(n-1+1)(2(n-1) + 1)}{6} - (2n+1) \frac{(n-1)(n-1+1)}{2} + (n^2 + n)(n-1)
+                                                             \tag{using \ref{id:sq}, \ref{id:lin}, and \ref{id:ones}} \\
+                                                             \notag\\
+                                                             &= \frac{2n^3 - 3n^2 + n}{6} - \frac{2n^3 - n^2 - n}{2} + n^3-n \notag\\
+    N_5 &= \frac{n^3}{3} - \frac{n}{3} \notag
+\end{align}
+
+\section{Adding up all of the flops}
+
+The following table shows the number of flops for each line and number of times each line is executed:
+\begin{center}
+  \begin{tabular}{clcc}
+    \toprule
+    Line & Operation & Flops & Times executed \\
+    \midrule
+    1 & \textbf{for} $c \leftarrow 1$ \textbf{to} $n-1$ & 0 & $n-1$ \\[0.5em]
+    2 & \hspace{1.2em}\textbf{for} $r \leftarrow c+1$ \textbf{to} $n$ & 0 & $\dfrac{n(n-1)}{2}$ \\[1.1em]
+    3 & \hspace{2.4em}$f \leftarrow A[r,c] \,/\, A[c,c]$ & 1 & $\dfrac{n(n-1)}{2}$ \\[1.1em]
+    4 & \hspace{2.4em}\textbf{for} $j \leftarrow c$ \textbf{to} $n$ & 0 & $\dfrac{n^3-n}{3}$ \\[1.1em]
+    5 & \hspace{3.6em}$A[r,j] \leftarrow A[r,j] - f \cdot A[c,j]$ & 2 & $\dfrac{n^3-n}{3}$ \\[1.1em]
+    % 6 & \hspace{2.4em}\textbf{end} & 0 & $\dfrac{n(n-1)}{2}$ \\[1.1em]
+    7 & \hspace{2.4em}$b[r] \leftarrow b[r] - f \cdot b[c]$ & 2 & $\dfrac{n(n-1)}{2}$ \\[1.1em]
+    % 8 & \hspace{1.2em}\textbf{end} & 0 & $n-1$ \\[0.5em]
+    % 9 & \textbf{end} & 0 & 1 \\[0.5em]
+    10 & \textbf{for} $r \leftarrow n, n-1, \ldots, 1$ & 0 & $n$ \\[0.5em]
+    11 & \hspace{1.2em}$s \leftarrow b[r]$ & 0 & $n$ \\[0.5em]
+    12 & \hspace{1.2em}\textbf{for} $j \leftarrow r+1$ \textbf{to} $n$ & 0 & $\dfrac{n(n-1)}{2}$ \\[1.1em]
+    13 & \hspace{2.4em}$s \leftarrow s - A[r,j] \cdot x[j]$ & 2 & $\dfrac{n(n-1)}{2}$ \\[1.1em]
+    % 14 & \hspace{1.2em}\textbf{end} & 0 & $n$ \\[0.5em]
+    15 & \hspace{1.2em}$x[r] \leftarrow s \,/\, A[r,r]$ & 1 & $n$ \\[0.5em]
+    % 16 & \textbf{end} & 0 & 1 \\[0.5em]
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+Multiplying the number of flops by the number of times executed and adding them all up results in 
+$$\frac{2}{3}n^3 + \frac{5}{2}n^2 - \frac{13}{6}n = \frac{2}{3}n^3 + O(n^2)$$ total flops.
+
+% \noindent
+% The execution counts come from the same kind of nested
+% sum used for line 5:
+% \begin{align*}
+%   N_3 = N_7 &= \sum_{c=1}^{n-1} \sum_{r=c+1}^{n} 1
+%              = \sum_{c=1}^{n-1} (n-c)
+%              = \frac{n(n-1)}{2} , \\
+%   N_{13}    &= \sum_{r=1}^{n} \sum_{j=r+1}^{n} 1
+%              = \sum_{r=1}^{n} (n-r)
+%              = \frac{n(n-1)}{2} , \\
+%   N_{11} = N_{15} &= \sum_{r=1}^{n} 1 = n .
+% \end{align*}
+% (Each of these uses \ref{id:count} to collapse the inner sum, then the same
+% identities on what is left as the derivation above.)
+% 
+% Multiplying the last two columns together and adding up the rows,
+% \[
+%   \frac{2(n^3-n)}{3} + \frac{n(n-1)}{2} + 2n(n-1) + n
+%   = \frac{2}{3}n^3 + \frac{5}{2}n^2 - \frac{13}{6}n
+%   = \frac{2}{3}n^3 + O(n^2) .
+% \]
+% Only line 5 sits inside three nested loops, so it is the only line that can
+% produce an $n^3$ term; everything else contributes at most $O(n^2)$. This is
+% why the $n^3$ behavior of Gaussian elimination is decided entirely by that one
+% line.
+
+\end{document}
