@@ -24,7 +24,7 @@
   \tcp{forward elimination}
   \For{$c \leftarrow 1$ \KwTo $n-1$}{
     \textcolor{red}{\tcp{find the largest entry in column $c$}}
-    \textcolor{red}{$p \leftarrow \operatorname*{arg\,max}_{r \,\in\, c \ldots n} |A[r,c]|$}\;
+    \textcolor{red}{$p \leftarrow \operatorname{argmax}(\operatorname{abs}(A[c\!:\!n,\, c])) + c - 1$}\;
     \textcolor{red}{\tcp{swap that row into the pivot position}}
     \textcolor{red}{$A[c,\,:] \leftrightarrow A[p,\,:]$}\;
     \textcolor{red}{$b[c] \leftrightarrow b[p]$}\;
