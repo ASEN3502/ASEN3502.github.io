@@ -7,9 +7,7 @@ has_children: true
 
 # Demos
 
-Interactive widgets that go with the lectures. They run entirely in your
-browser --- nothing to install, and you can leave one open next to the notes
-while you work through an algorithm by hand.
+Interactive widgets that go with the lectures.
 
 {%- assign demo_pages = site.pages | where: "parent", "Demos" | sort: "nav_order" %}
 
