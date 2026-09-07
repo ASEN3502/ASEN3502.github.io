@@ -8,9 +8,9 @@ nav_order: 4
 
 The purpose of this course is to give students an understanding of computational methods and assess that understanding. Artificial intelligence can be an extremely powerful tool toward that end, however, it can also present a pitfall. Whenever we use a powerful tool such as AI, it is important to ask not only how the tool can help us accomplish something, but also how the tool is forming and affecting us.
 
-The most important two principles of the AI policy are:
-1. Students should be curious and may use AI to improve their understanding (the entire course can be completed without AI use).
-2. Students should not use AI to do the formative work in assignments for them or to falsely demonstrate understanding in summative assessments such as exams.
+The two core principles of the ASEN 3502 AI policy are:
+1. Students should be curious and may **use AI to improve your understanding** (though the entire course can be completed without AI use).
+2. Students should **not use AI to do the formative work** in assignments for you **or on summative assessments such as exams** to falsely demonstrate understanding that you do not have.
 
 ## Specific AI use policies for this course
 
