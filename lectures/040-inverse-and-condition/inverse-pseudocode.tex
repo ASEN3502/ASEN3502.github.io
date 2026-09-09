@@ -1,0 +1,33 @@
+% Matrix inverse: one LU factorization, then one solve per column of the
+% identity.  Cropped to its own bounding box so it can be dropped onto a
+% Xournal++ page as an image.  Same style as gauss-pseudocode.tex.
+%
+%   latexmk -pdf inverse-pseudocode.tex
+\documentclass[border=6pt,varwidth=11cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Matrix Inverse via LU factorization}
+  \BlankLine
+  \Input{$n \times n$ matrix $[A]$}
+  \Output{$[A]^{-1}$}
+  \BlankLine
+  $[L], [U] \leftarrow \texttt{lu\_decompose}([A])$\;
+  \For{$k \leftarrow 1$ \KwTo $n$}{
+    \tcp{$\{e_k\}$ is the $k$th column of $[I]$:}
+    \tcp{all zeros, with a 1 in row $k$}
+    $A^{-1}[:,k] \leftarrow \texttt{lu\_solve}([L], [U], \{e_k\})$\;
+  }
+\end{algorithm}
+\end{minipage}
+\end{document}
