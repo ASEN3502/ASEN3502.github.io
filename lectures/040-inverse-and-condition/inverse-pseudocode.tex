@@ -24,8 +24,9 @@
   \BlankLine
   $[L], [U] \leftarrow \texttt{lu\_decompose}([A])$\;
   \For{$k \leftarrow 1$ \KwTo $n$}{
-    \tcp{$\{e_k\}$ is the $k$th column of $[I]$:}
-    \tcp{all zeros, with a 1 in row $k$}
+    $\{e_k\} \gets \text{unit vector with 1 at element $k$; 0 elsewhere}$
+    % \tcp{$\{e_k\}$ is the $k$th column of $[I]$:}
+    % \tcp{all zeros, with a 1 in row $k$}
     $A^{-1}[:,k] \leftarrow \texttt{lu\_solve}([L], [U], \{e_k\})$\;
   }
 \end{algorithm}
