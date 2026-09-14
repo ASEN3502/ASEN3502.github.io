@@ -1,0 +1,46 @@
+% False position (regula falsi): same bracketing loop as bisection, but x_r is
+% where the straight line through (x_l, f(x_l)) and (x_u, f(x_u)) crosses zero.
+% Cropped to its own bounding box so it can be dropped onto a Xournal++ page as
+% an image.
+%
+%   latexmk -pdf false-position-pseudocode.tex
+\documentclass[border=6pt,varwidth=11cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{False Position}
+  \BlankLine
+  \Input{function $f$, bracket $[x_l, x_u]$ with $f(x_l) \cdot f(x_u) < 0$,
+         tolerance $\varepsilon_s$}
+  \Output{estimate $x_r$ of the root}
+  \BlankLine
+  $x_r \leftarrow x_l$\;
+  \Repeat{$\varepsilon_a < \varepsilon_s$}{
+    $x_{r,\text{old}} \leftarrow x_r$\;
+    $x_r \leftarrow x_u - \dfrac{f(x_u) \, (x_l - x_u)}{f(x_l) - f(x_u)}$\;
+    \tcp{keep the side that still brackets the root}
+    \uIf{$f(x_l) \cdot f(x_r) < 0$}{
+      $x_u \leftarrow x_r$\;
+    }
+    \uElseIf{$f(x_l) \cdot f(x_r) > 0$}{
+      $x_l \leftarrow x_r$\;
+    }
+    \Else{
+      \Return $x_r$ \tcp*{exact root}
+    }
+    $\varepsilon_a \leftarrow \left| \dfrac{x_r - x_{r,\text{old}}}{x_r} \right| \cdot 100\%$\;
+  }
+  \Return $x_r$\;
+\end{algorithm}
+\end{minipage}
+\end{document}

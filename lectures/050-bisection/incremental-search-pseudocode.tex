@@ -1,0 +1,41 @@
+% Incremental search: walk a fixed step across the search range and report
+% every subinterval [x_l, x_u] where f changes sign (a bracket for a root).
+% Cropped to its own bounding box so it can be dropped onto a Xournal++ page
+% as an image.
+%
+%   latexmk -pdf incremental-search-pseudocode.tex
+\documentclass[border=6pt,varwidth=11cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Incremental Search}
+  \BlankLine
+  \Input{function $f$, search range $[x_\text{min}, x_\text{max}]$,
+         number of steps $n$}
+  \Output{list of brackets $[x_l, x_u]$, each containing a root}
+  \BlankLine
+  $\Delta x \leftarrow (x_\text{max} - x_\text{min}) \,/\, n$\;
+  $\texttt{brackets} \leftarrow \{\,\}$\;
+  $x_l \leftarrow x_\text{min}$\;
+  \For{$k \leftarrow 1$ \KwTo $n$}{
+    $x_u \leftarrow x_l + \Delta x$\;
+    \If{$f(x_l) \cdot f(x_u) < 0$}{
+      \tcp{sign change $\Rightarrow$ a root lies in $[x_l, x_u]$}
+      append $[x_l, x_u]$ to \texttt{brackets}\;
+    }
+    $x_l \leftarrow x_u$\;
+  }
+  \Return \texttt{brackets}\;
+\end{algorithm}
+\end{minipage}
+\end{document}
