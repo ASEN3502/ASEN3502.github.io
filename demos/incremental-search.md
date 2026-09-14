@@ -66,7 +66,7 @@ lecture: 050-bisection
 
   <div class="is-result">
     <p class="is-summary" id="is-summary"></p>
-    <table class="is-table" id="is-table"></table>
+    <pre class="is-code" id="is-code"></pre>
   </div>
 </div>
 
@@ -75,6 +75,8 @@ lecture: 050-bisection
   --is-f:    #123f63;   /* deep blue, matching the other demos */
   --is-brk:  #b06a00;   /* dark amber for brackets */
   --is-brk-fill: rgba(230, 150, 30, .28);
+  --is-cand: #7b3fa0;   /* purple for candidate boundaries */
+  --is-cand-bg: #eee3f7;
   --is-miss: #c02a2a;
   --is-math: Georgia, "Times New Roman", serif;
   margin: 1.5rem 0 2rem;
@@ -127,7 +129,7 @@ lecture: 050-bisection
 .is-demo .is-sw-f    { height: 0; border-top: 3px solid var(--is-f); vertical-align: .2rem; }
 .is-demo .is-sw-pt   { width: .7rem; height: .7rem; border-radius: 50%;
                        background: var(--is-f); vertical-align: -.05rem; }
-.is-demo .is-sw-cand { width: 0; border-left: 2px dotted #888; }
+.is-demo .is-sw-cand { width: 0; border-left: 2px dotted var(--is-cand); }
 .is-demo .is-sw-brk  { background: var(--is-brk-fill);
                        border: 1px solid var(--is-brk); }
 
@@ -137,7 +139,8 @@ lecture: 050-bisection
 .is-demo .is-ticklbl { font-size: 12px; fill: #777; }
 .is-demo .is-axlbl { font-size: 17px; fill: #444; font-family: var(--is-math);
                      font-style: italic; }
-.is-demo .is-cand { stroke: #999; stroke-width: 1.2; stroke-dasharray: 3 4; }
+.is-demo .is-cand { stroke: var(--is-cand); stroke-width: 1.4;
+                    stroke-dasharray: 3 4; }
 .is-demo .is-bracket { fill: var(--is-brk-fill); stroke: var(--is-brk);
                        stroke-width: 1.5; }
 .is-demo .is-curve { stroke: var(--is-f); stroke-width: 3; fill: none; }
@@ -147,18 +150,19 @@ lecture: 050-bisection
 .is-demo .is-summary { font-size: 1.05rem; margin: 0 0 .6rem; }
 .is-demo .is-summary b { color: var(--is-brk); }
 .is-demo .is-summary .is-missed { color: var(--is-miss); font-weight: 600; }
-.is-demo .is-table {
-  border-collapse: collapse;
-  font-family: var(--is-math);
-  font-variant-numeric: tabular-nums;
+.is-demo .is-code {
+  margin-top: 1rem;
+  padding: .75rem 1rem;
+  background: #f5f6f7;
+  border-radius: 4px;
+  font-size: .85rem;
+  line-height: 1.6;
+  overflow-x: auto;
 }
-.is-demo .is-table th, .is-demo .is-table td {
-  padding: .25rem .8rem; border-bottom: 1px solid #ddd;
-  text-align: right; font-weight: 400;
-}
-.is-demo .is-table th { font-weight: 600; color: #333; }
-.is-demo .is-table td.is-neg { color: var(--is-miss); }
-.is-demo .is-table td.is-pos { color: #1a8f4c; }
+.is-demo .is-code .hl { background: #fff3bf; border-radius: 3px; }
+.is-demo .is-code .c, .is-demo .is-code .r { padding: .15rem 0; border-radius: 3px; }
+.is-demo .is-code .c { background: var(--is-cand-bg); }
+.is-demo .is-code .r { background: var(--is-brk-fill); }
 </style>
 
 <script>
@@ -188,7 +192,7 @@ lecture: 050-bisection
       nOut = document.getElementById('is-nval'),
       dxOut = document.getElementById('is-dx'),
       sumOut = document.getElementById('is-summary'),
-      tbl  = document.getElementById('is-table');
+      code = document.getElementById('is-code');
 
   var W = 640, H = 400, ML = 52, MR = 16, MT = 14, MB = 44;
   var PW = W - ML - MR, PH = H - MT - MB;
@@ -201,7 +205,6 @@ lecture: 050-bisection
     if (text !== undefined) e.textContent = text;
     return e;
   }
-  function fmt(x, d) { return (x < 0 ? '−' : '+') + Math.abs(x).toFixed(d); }
 
   // The algorithm, exactly as in the pseudocode.
   function incrementalSearch(f, xmin, xmax, n) {
@@ -303,16 +306,17 @@ lecture: 050-bisection
     }
     sumOut.innerHTML = s;
 
-    var h = '<tr><th></th><th>x<sub>l</sub></th><th>x<sub>u</sub></th>' +
-            '<th>f(x<sub>l</sub>)</th><th>f(x<sub>u</sub>)</th></tr>';
-    brackets.forEach(function (b, i) {
-      var fl = f(b[0]), fu = f(b[1]);
-      h += '<tr><th>' + (i + 1) + '</th><td>' + b[0].toFixed(4) + '</td><td>' +
-           b[1].toFixed(4) + '</td><td class="' + (fl < 0 ? 'is-neg' : 'is-pos') +
-           '">' + fmt(fl, 4) + '</td><td class="' + (fu < 0 ? 'is-neg' : 'is-pos') +
-           '">' + fmt(fu, 4) + '</td></tr>';
-    });
-    tbl.innerHTML = h;
+    code.innerHTML =
+      'dx = (x_max - x_min) / n                <span class="hl">// dx = ' + dx.toFixed(3) + '</span>\n' +
+      'brackets = {}\n' +
+      '<span class="c">x_l = x_min</span>\n' +
+      'for k = 1 &hellip; n                            <span class="hl">// n = ' + n + '</span>\n' +
+      '    <span class="c">x_u = x_l + dx</span>\n' +
+      '    if f(x_l) * f(x_u) < 0                <span class="hl">// sign change</span>\n' +
+      '        <span class="r">append [x_l, x_u] to brackets</span>\n' +
+      '    <span class="c">x_l = x_u</span>\n' +
+      'return brackets                         <span class="hl">// ' + brackets.length + ' bracket' +
+      (brackets.length === 1 ? '' : 's') + '</span>';
   }
 
   nIn.addEventListener('input', render);
