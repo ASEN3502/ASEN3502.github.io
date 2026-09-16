@@ -27,7 +27,6 @@
   $x_r \leftarrow x_0$\;
   \For{$i \leftarrow 1$ \KwTo $N$}{
     $x_{r,\text{old}} \leftarrow x_r$\;
-    \tcp{zero of the tangent line at $x_{r,\text{old}}$}
     $x_r \leftarrow x_{r,\text{old}} - \dfrac{f(x_{r,\text{old}})}{f'(x_{r,\text{old}})}$\;
     $\varepsilon_a \leftarrow \left| \dfrac{x_r - x_{r,\text{old}}}{x_r} \right| \cdot 100\%$\;
     \If{$\varepsilon_a < \varepsilon_s$}{
