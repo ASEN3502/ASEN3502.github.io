@@ -1,0 +1,38 @@
+% Fixed-point iteration: rewrite f(x) = 0 as x = g(x) and iterate x <- g(x).
+% Converges when |g'(x)| < 1 near the root.  Cropped to its own bounding box so
+% it can be dropped onto a Xournal++ page as an image.
+%
+%   latexmk -pdf fixed-point-pseudocode.tex
+\documentclass[border=6pt,varwidth=11cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Fixed-Point Iteration}
+  \BlankLine
+  \Input{function $g$ with $f(x) = 0 \iff x = g(x)$, initial guess $x_0$,
+         tolerance $\varepsilon_s$, maximum iterations $N$}
+  \Output{estimate $x_r$ of the root}
+  \BlankLine
+  $x_r \leftarrow x_0$\;
+  \For{$i \leftarrow 1$ \KwTo $N$}{
+    $x_{r,\text{old}} \leftarrow x_r$\;
+    $x_r \leftarrow g(x_{r,\text{old}})$\;
+    $\varepsilon_a \leftarrow \left| \dfrac{x_r - x_{r,\text{old}}}{x_r} \right| \cdot 100\%$\;
+    \If{$\varepsilon_a < \varepsilon_s$}{
+      \Return $x_r$\;
+    }
+  }
+  \Return $x_r$ \tcp*{did not converge in $N$ iterations}
+\end{algorithm}
+\end{minipage}
+\end{document}

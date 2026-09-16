@@ -1,0 +1,77 @@
+% Brent's method: keeps a bracket [b, c] at all times (so it is as reliable as
+% bisection) but tries a secant or inverse-quadratic-interpolation step first and
+% falls back to bisection only when the interpolated step is not making enough
+% progress.  This is the structure of MATLAB's fzero.  Cropped to its own
+% bounding box so it can be dropped onto a Xournal++ page as an image.
+%
+%   latexmk -pdf brent-pseudocode.tex
+\documentclass[border=6pt,varwidth=13cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKw{KwAnd}{and}
+\SetKw{KwOr}{or}
+\SetKw{KwSwap}{swap}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Brent's Method}
+  \BlankLine
+  \Input{function $f$, bracket $[a, b]$ with $f(a) \cdot f(b) < 0$,
+         tolerance $\varepsilon_s$}
+  \Output{estimate $b$ of the root}
+  \BlankLine
+  \tcp{$b$ is the best estimate, $c$ is on the other side of the root, $a$ is the previous $b$}
+  $c \leftarrow a$; \quad $d \leftarrow b - a$; \quad $e \leftarrow d$\;
+  \Repeat{\upshape converged}{
+    \If{$f(b) \cdot f(c) > 0$}{
+      \tcp{$b$ and $c$ no longer bracket the root; $a$ does}
+      $c \leftarrow a$; \quad $d \leftarrow b - a$; \quad $e \leftarrow d$\;
+    }
+    \If{$|f(c)| < |f(b)|$}{
+      \tcp{make $b$ the point with the smallest $|f|$}
+      $a \leftarrow b$; \quad $b \leftarrow c$; \quad $c \leftarrow a$\;
+    }
+    $m \leftarrow (c - b) \,/\, 2$ \tcp*{bisection step}
+    $\delta \leftarrow \varepsilon_s \, |b|$ \tcp*{absolute tolerance}
+    \If{$|m| \le \delta$ \KwOr $f(b) = 0$}{
+      \Return $b$\;
+    }
+    \uIf{$|e| < \delta$ \KwOr $|f(a)| \le |f(b)|$}{
+      $d \leftarrow m$; \quad $e \leftarrow m$ \tcp*{bisect}
+    }
+    \Else{
+      $s \leftarrow f(b) \,/\, f(a)$\;
+      \uIf{$a = c$}{
+        \tcp{only two distinct points: secant step}
+        $p \leftarrow 2 m s$; \quad $q \leftarrow 1 - s$\;
+      }
+      \Else{
+        \tcp{three distinct points: inverse quadratic interpolation}
+        $q \leftarrow f(a) \,/\, f(c)$; \quad $r \leftarrow f(b) \,/\, f(c)$\;
+        $p \leftarrow s \left( 2 m q \,(q - r) - (b - a)(r - 1) \right)$\;
+        $q \leftarrow (q - 1)(r - 1)(s - 1)$\;
+      }
+      \lIf{$p > 0$}{$q \leftarrow -q$} \lElse{$p \leftarrow -p$}
+      \uIf{$2p < 3 m q - |\delta q|$ \KwAnd $p < |e q / 2|$}{
+        \tcp{interpolated step stays in the bracket and shrinks it fast enough}
+        $e \leftarrow d$; \quad $d \leftarrow p \,/\, q$\;
+      }
+      \Else{
+        $d \leftarrow m$; \quad $e \leftarrow m$ \tcp*{bisect}
+      }
+    }
+    $a \leftarrow b$\;
+    \lIf{$|d| > \delta$}{$b \leftarrow b + d$} \lElse{$b \leftarrow b + \delta \operatorname{sign}(m)$}
+  }
+  \Return $b$\;
+\end{algorithm}
+\end{minipage}
+\end{document}
