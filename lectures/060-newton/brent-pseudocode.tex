@@ -29,8 +29,9 @@
   \Output{estimate $b$ of the root}
   \BlankLine
   \tcp{$b$ is the best estimate, $c$ is on the other side of the root, $a$ is the previous $b$}
-  \tcp{$d$ is the step about to be taken, $e$ is the step before it; both start as the bracket width}
-  $c \leftarrow a$; \quad $d \leftarrow b - a$; \quad $e \leftarrow d$\;
+  $c \leftarrow a$\;
+  \tcp{$d$ is the signed step $b$ will move by, $e$ is the previous step; both start as the bracket width}
+  $d \leftarrow b - a$; \quad $e \leftarrow d$\;
   \Repeat{\upshape converged}{
     \If{$f(b) \cdot f(c) > 0$}{
       \tcp{$b$ and $c$ no longer bracket the root; $a$ does}
