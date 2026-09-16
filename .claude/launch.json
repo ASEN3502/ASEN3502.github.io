@@ -6,6 +6,12 @@
       "runtimeExecutable": "bundle",
       "runtimeArgs": ["exec", "jekyll", "serve", "--port", "4000"],
       "port": 4000
+    },
+    {
+      "name": "static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "demos/newton-raphson"],
+      "port": 8765
     }
   ]
 }
