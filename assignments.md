@@ -17,3 +17,4 @@ Submit your work on [Gradescope](https://www.gradescope.com/courses/1345824). Th
 ## Labs
 
 - Lab 1: [pdf](/assignments/Lab-1.pdf), [zip](/assignments/Lab-1.zip)
+- Lab 2: [pdf](/assignments/Lab-2.pdf)
