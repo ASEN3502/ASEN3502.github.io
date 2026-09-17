@@ -9,4 +9,4 @@ has_children: true
 Everything you need to work through the course.
 
 The textbook is available through
-[Canvas](https://canvas.colorado.edu/courses/143236/external_tools/61941).
+[Canvas](https://canvas.colorado.edu/courses/143236/external_tools/61941?display=borderless).
