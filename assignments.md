@@ -17,4 +17,4 @@ Submit your work on [Gradescope](https://www.gradescope.com/courses/1345824). Th
 ## Labs
 
 - Lab 1: [pdf](/assignments/Lab-1.pdf), [zip](/assignments/Lab-1.zip)
-- Lab 2: [pdf](/assignments/Lab-2.pdf)
+- Lab 2: [pdf](/assignments/Lab-2.pdf), [NACA 1135](https://www.grc.nasa.gov/www/k-12/airplane/Images/naca1135.pdf)
