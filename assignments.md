@@ -6,7 +6,7 @@ nav_order: 2
 
 # Assignments
 
-Submit your work on [Gradescope](https://www.gradescope.com/courses/1345824). The official due date for all assignments is on Gradescope. Approximate due dates are on the [Schedule](). Most assignments are due on Thursday nights.
+Submit your work on [Gradescope](https://www.gradescope.com/courses/1345824). The official due date for all assignments is on Gradescope. Approximate due dates are on the [Schedule](/schedule.html). Most assignments are due on Thursday nights.
 
 ## Homeworks
 
