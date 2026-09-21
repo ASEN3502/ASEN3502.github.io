@@ -53,11 +53,11 @@ The top two plots show the two components of `f` separately as contour maps, wit
 bold curve where `f₁(x, y) = 0` (blue) and where `f₂(x, y) = 0` (orange).  At the current
 iterate, row `j` of the Jacobian, `∇fⱼ`, defines the **tangent plane** to `fⱼ`.  Its
 contours are the dashed straight lines, which match the true contours near the point,
-and the bold dotted line is where the tangent plane is zero.
+and the bold dashed line is where the tangent plane is zero.
 
 The bottom plot puts both zero curves together.  A solution is where they cross.  At
 each iterate (red star), Newton-Raphson replaces each curve by the zero line of its
-tangent plane (dotted); the next iterate is where those two lines cross, so the dotted
+tangent plane (bold dashed); the next iterate is where those two lines cross, so the dashed
 lines show where the algorithm is about to jump.  Solving the linear system
 `J Δx = −f` is exactly finding that crossing.
 
@@ -213,7 +213,7 @@ begin
                 seg = plane_segment(sys.f, x, j, c, box)
                 seg === nothing && continue
                 if c == 0
-                    plot_segment!(plt, seg; color=curvecolors[j], ls=:dot, lw=3)
+                    plot_segment!(plt, seg; color=curvecolors[j], ls=:dash, lw=3)
                 else
                     plot_segment!(plt, seg; color=level_color(c, levels), ls=:dash, lw=1)
                 end
@@ -249,7 +249,7 @@ begin
             for j in 1:2      # the tangent lines at x, whose crossing is the next iterate
                 seg = plane_segment(sys.f, x, j, 0.0, box)
                 seg === nothing && continue
-                plot_segment!(plt, seg; color=curvecolors[j], ls=:dot, lw=3); cnt += 1
+                plot_segment!(plt, seg; color=curvecolors[j], ls=:dash, lw=3); cnt += 1
             end
             push!(groups, ("<g class=\"nr-lin\" data-i=\"$(i-1)\">", cnt))
             if i < length(xs)      # the step from x to the next iterate
