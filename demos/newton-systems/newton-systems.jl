@@ -56,8 +56,9 @@ contours are the dashed straight lines, which match the true contours near the p
 and the bold dotted line is where the tangent plane is zero.
 
 The bottom plot puts both zero curves together.  A solution is where they cross.  At
-each iterate, Newton-Raphson replaces each curve by the zero line of its tangent plane
-(dotted) and jumps to where those two lines cross: solving the linear system
+each iterate (red star), Newton-Raphson replaces each curve by the zero line of its
+tangent plane (dotted); the next iterate is where those two lines cross, so the dotted
+lines show where the algorithm is about to jump.  Solving the linear system
 `J Δx = −f` is exactly finding that crossing.
 
 Drag `x₀` and `y₀` to move the starting point and step through with the iteration
@@ -165,9 +166,16 @@ begin
         g = J[j, :]
         p0 = x + (c - fx[j]) * g / dot(g, g)     # closest point on the line to x
         d = [-g[2], g[1]] / norm(g)
+        all(isfinite, p0) && all(isfinite, d) || return nothing
         return p0 - 100d, p0 + 100d
     end
-    tangent_line(f, x, j) = plane_line(f, x, j)
+
+    # plane_line clipped to the box, or nothing.
+    function plane_segment(f, x, j, c, box)
+        line = plane_line(f, x, j, c)
+        line === nothing && return nothing
+        return clipped(line..., box...)
+    end
 
     # About n evenly spaced "nice" contour levels, including 0, covering the values Z.
     function nice_levels(Z; n=7)
@@ -199,17 +207,18 @@ begin
         contour!(plt, gx, gy, Z; levels=[0.0], color=curvecolors[j], lw=2.5, cbar=false)
         plot!(plt, [xl[1], xl[1]], [yl[1], yl[1]]; color=sentinel, lw=0.5)
         groups = Tuple{String,Int}[]
-        for i in 1:length(xs)-1
-            x = xs[i]
+        for (i, x) in enumerate(xs)
             cnt = 0
             for c in levels
-                c == 0 && continue
-                seg = clipped(plane_line(sys.f, x, j, c)..., box...)
+                seg = plane_segment(sys.f, x, j, c, box)
                 seg === nothing && continue
-                plot_segment!(plt, seg; color=level_color(c, levels), ls=:dash, lw=1); cnt += 1
+                if c == 0
+                    plot_segment!(plt, seg; color=curvecolors[j], ls=:dot, lw=3)
+                else
+                    plot_segment!(plt, seg; color=level_color(c, levels), ls=:dash, lw=1)
+                end
+                cnt += 1
             end
-            plot_segment!(plt, clipped_or_dot(plane_line(sys.f, x, j)..., box...); color=curvecolors[j], ls=:dot, lw=3); cnt += 1
-            scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:black, ms=3); cnt += 1
             push!(groups, ("<g class=\"nr-lin\" data-i=\"$(i-1)\">", cnt))
         end
         for (k, x) in enumerate(xs)
@@ -234,20 +243,26 @@ begin
             contour!(plt, gx, gy, (x, y) -> sys.f([x, y])[j]; levels=[0.0], color=curvecolors[j], lw=2, cbar=false)
         end
         plot!(plt, [xl[1], xl[1]], [yl[1], yl[1]]; color=sentinel, lw=0.5)
-        # Each step adds exactly four SVG elements (two tangent lines, the step, a dot)
-        # and each iterate one star; main_groups below relies on this order.
-        for i in 1:length(xs)-1
-            x, xnext = xs[i], xs[i+1]
-            for j in 1:2
-                plot_segment!(plt, clipped_or_dot(tangent_line(sys.f, x, j)..., box...); color=curvecolors[j], ls=:dot, lw=3)
+        groups = Tuple{String,Int}[]
+        for (i, x) in enumerate(xs)
+            cnt = 0
+            for j in 1:2      # the tangent lines at x, whose crossing is the next iterate
+                seg = plane_segment(sys.f, x, j, 0.0, box)
+                seg === nothing && continue
+                plot_segment!(plt, seg; color=curvecolors[j], ls=:dot, lw=3); cnt += 1
             end
-            plot_segment!(plt, clipped_or_dot(x, xnext, box...); color=:black, lw=1.5)
-            scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:black, ms=3)
+            push!(groups, ("<g class=\"nr-lin\" data-i=\"$(i-1)\">", cnt))
+            if i < length(xs)      # the step from x to the next iterate
+                plot_segment!(plt, clipped_or_dot(x, xs[i+1], box...); color=:black, lw=1.5)
+                scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:black, ms=3)
+                push!(groups, ("<g class=\"nr-step\" data-i=\"$(i-1)\">", 2))
+            end
         end
-        for x in xs
+        for (k, x) in enumerate(xs)
             scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:red, marker=:star5, ms=9)
+            push!(groups, ("<g class=\"nr-star\" data-k=\"$(k-1)\">", 1))
         end
-        return plt, xs
+        return plt, groups, xs
     end
 
     # Split the SVG at the sentinel line: the head (everything up to and including the
@@ -275,19 +290,6 @@ begin
             k += n
         end
         return String(take!(out))
-    end
-
-    function main_groups(xs)
-        n = length(xs) - 1
-        groups = Tuple{String,Int}[]
-        for i in 1:n
-            push!(groups, ("<g class=\"nr-lin\" data-i=\"$(i-1)\">", 2))
-            push!(groups, ("<g class=\"nr-step\" data-i=\"$(i-1)\">", 2))
-        end
-        for k in 0:n
-            push!(groups, ("<g class=\"nr-star\" data-k=\"$k\">", 1))
-        end
-        return groups
     end
 
     function basin_svg(sys, roots)
@@ -339,8 +341,8 @@ begin
             push!(basins, "<div class=\"nr-basin\" data-s=\"$(si-1)\" hidden>$(basin_svg(sys, roots))</div>")
             bgclips = String[]
             for (a, x₀) in enumerate(sys.x₀s), (b, y₀) in enumerate(sys.y₀s)
-                mainplt, xs = newton_figure(sys, [x₀, y₀])
-                plots = [small_figure(sys, 1, xs), small_figure(sys, 2, xs), (mainplt, main_groups(xs))]
+                mainplt, maingroups, xs = newton_figure(sys, [x₀, y₀])
+                plots = [small_figure(sys, 1, xs), small_figure(sys, 2, xs), (mainplt, maingroups)]
                 overlays = String[]
                 for (p, (plt, groups)) in enumerate(plots)
                     head, items, clip = split_svg(plt)
@@ -362,8 +364,9 @@ begin
           <style>
             .nr-widget .nr-controls { display: flex; gap: 1.5em; flex-wrap: wrap; align-items: center; margin-bottom: .5em; }
             .nr-widget .nr-controls input[type=range] { width: 10em; vertical-align: middle; }
-            .nr-widget .nr-row { display: flex; gap: 1em; flex-wrap: wrap; align-items: flex-start; margin-bottom: .5em; }
+            .nr-widget .nr-row { display: flex; gap: 1em; flex-wrap: wrap; justify-content: center; align-items: flex-start; margin-bottom: .5em; }
             .nr-widget .nr-row .nr-bg { flex: 0 1 300px; }
+            .nr-widget .nr-bg[data-p="2"] svg { display: block; margin: 0 auto; }
             .nr-widget .nr-basins { margin-top: 1.5em; }
             .nr-widget .nr-basin { max-width: 380px; }
             .nr-widget svg { max-width: 100%; height: auto; }
@@ -421,7 +424,7 @@ begin
                   overlay.dataset.frame = key;
                 }
                 for (const g of overlay.querySelectorAll(".nr-step")) g.style.display = +g.dataset.i < kk ? "" : "none";
-                for (const g of overlay.querySelectorAll(".nr-lin")) g.style.display = +g.dataset.i === kk - 1 ? "" : "none";
+                for (const g of overlay.querySelectorAll(".nr-lin")) g.style.display = +g.dataset.i === kk ? "" : "none";
                 for (const g of overlay.querySelectorAll(".nr-star")) g.style.display = +g.dataset.k === kk ? "" : "none";
               }
               for (const tr of fr.querySelectorAll("tr[data-i]")) tr.style.visibility = +tr.dataset.i <= kk ? "" : "hidden";
