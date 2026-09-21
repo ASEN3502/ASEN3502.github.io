@@ -10,6 +10,11 @@ Slides and notes are posted here as the semester goes on. The PDF is the
 version annotated in class; anything else that goes with the lecture (source
 slides, code, figures) is under **Materials**.
 
+{% assign all_notes = site.static_files | where: "path", "/lectures/all-notes.pdf" | first %}
+{%- if all_notes %}
+**[All notes so far, in one PDF]({{ "/lectures/all-notes.pdf" | relative_url }})**
+{%- endif %}
+
 {%- comment -%}
   The table is built from the files that are actually in lectures/, so
   publishing a lecture is just a matter of committing files:
@@ -41,6 +46,8 @@ slides, code, figures) is under **Materials**.
   {%- else -%}
     {%- continue -%}
   {%- endif -%}
+  {%- comment -%} all-notes.pdf is the combined file linked above, not a lecture {%- endcomment -%}
+  {%- if id == "all-notes" -%}{%- continue -%}{%- endif -%}
   {%- unless ids contains id -%}{%- assign ids = ids | push: id -%}{%- endunless -%}
 {%- endfor -%}
 {%- assign ids = ids | sort %}
