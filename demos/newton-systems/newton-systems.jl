@@ -49,12 +49,16 @@ end;
 newton(f, [2.0, 2.0]; n=5)
 
 md"""
-In the figure, the two curves are the points where each equation is satisfied:
-`f₁(x, y) = 0` in blue and `f₂(x, y) = 0` in orange.  A solution is where they cross.
+The top two plots show the two components of `f` separately as contour maps, with the
+bold curve where `f₁(x, y) = 0` (blue) and where `f₂(x, y) = 0` (orange).  At the current
+iterate, row `j` of the Jacobian, `∇fⱼ`, defines the **tangent plane** to `fⱼ`.  Its
+contours are the dashed straight lines, which match the true contours near the point,
+and the bold dotted line is where the tangent plane is zero.
 
-At each iterate, Newton-Raphson replaces each curve by its **tangent line** (dashed).
-The two lines cross at a single point, and that point is the next iterate: solving
-the linear system `J Δx = −f` is exactly finding where the two lines cross.
+The bottom plot puts both zero curves together.  A solution is where they cross.  At
+each iterate, Newton-Raphson replaces each curve by the zero line of its tangent plane
+(dotted) and jumps to where those two lines cross: solving the linear system
+`J Δx = −f` is exactly finding that crossing.
 
 Drag `x₀` and `y₀` to move the starting point and step through with the iteration
 slider.  The map at the bottom colors every starting point by which solution it
@@ -72,10 +76,12 @@ begin
 
     systems = [
         (name = "x² + y² = 4,  y = x²",
+         fnames = ("x² + y² − 4", "y − x²"),
          f = x -> [x[1]^2 + x[2]^2 - 4, x[2] - x[1]^2],
          xlims = (-3.0, 3.0), ylims = (-3.0, 3.0),
          x₀s = -2.0:0.5:2.0, y₀s = -2.0:0.5:2.0),
         (name = "x² + xy = 10,  y + 3xy² = 57",
+         fnames = ("x² + xy − 10", "y + 3xy² − 57"),
          f = x -> [x[1]^2 + x[1] * x[2] - 10, x[2] + 3x[1] * x[2]^2 - 57],
          xlims = (-1.0, 6.0), ylims = (-4.0, 5.0),
          x₀s = 0.5:0.5:4.5, y₀s = -1.0:0.5:3.0),
@@ -124,7 +130,7 @@ begin
         return i === nothing ? 0 : i
     end
 
-    # Segment from p to q clipped to the box (xlims, ylims); a dot at the clamped start if empty.
+    # Segment from p to q clipped to the box (xlims, ylims), or nothing if it misses the box.
     function clipped(p, q, xlims, ylims)
         t0, t1 = 0.0, 1.0
         for k in 1:2
@@ -137,18 +143,80 @@ begin
                 t0, t1 = max(t0, ta), min(t1, tb)
             end
         end
-        cl(v) = [clamp(v[1], xlims...), clamp(v[2], ylims...)]
-        t0 <= t1 || return (a = cl(p), b = cl(p))
+        t0 <= t1 || return nothing
         return (a = p + t0 * (q - p), b = p + t1 * (q - p))
     end
 
-    # The tangent line to {fⱼ = 0} at x, i.e. fⱼ(x) + ∇fⱼ(x)·(p − x) = 0, as a long segment.
-    function tangent_line(f, x, j)
+    # Like clipped, but a dot at the clamped start when the segment misses the box, so
+    # that an element is always drawn.
+    function clipped_or_dot(p, q, xlims, ylims)
+        seg = clipped(p, q, xlims, ylims)
+        seg === nothing || return seg
+        c = [clamp(p[1], xlims...), clamp(p[2], ylims...)]
+        return (a = c, b = c)
+    end
+
+    plot_segment!(plt, seg; kw...) = plot!(plt, [seg.a[1], seg.b[1]], [seg.a[2], seg.b[2]]; kw...)
+
+    # The level-c contour of the tangent plane to fⱼ at x, i.e. the straight line
+    # fⱼ(x) + ∇fⱼ(x)·(p − x) = c, as a long segment.  c = 0 is the tangent line to {fⱼ = 0}.
+    function plane_line(f, x, j, c=0.0)
         fx = f(x); J = jacobian(f, x)
         g = J[j, :]
-        p0 = x - fx[j] * g / dot(g, g)     # closest point on the line to x
+        p0 = x + (c - fx[j]) * g / dot(g, g)     # closest point on the line to x
         d = [-g[2], g[1]] / norm(g)
         return p0 - 100d, p0 + 100d
+    end
+    tangent_line(f, x, j) = plane_line(f, x, j)
+
+    # About n evenly spaced "nice" contour levels, including 0, covering the values Z.
+    function nice_levels(Z; n=7)
+        lo, hi = extrema(Z)
+        raw = (hi - lo) / n
+        step = 10.0^floor(log10(raw))
+        step *= raw / step < 1.5 ? 1 : raw / step < 3.5 ? 2 : raw / step < 7.5 ? 5 : 10
+        return step .* (ceil(minimum(Z) / step):floor(maximum(Z) / step))
+    end
+
+    level_color(c, levels) = get(cgrad(:viridis), (c - levels[1]) / max(levels[end] - levels[1], eps()))
+
+    # Contour map of component j of f with the tangent plane at each iterate overlaid.
+    function small_figure(sys, j, xs)
+        xl, yl = sys.xlims, sys.ylims
+        box = (xl[1] + 0.005(xl[2] - xl[1]), xl[2] - 0.005(xl[2] - xl[1])),
+              (yl[1] + 0.005(yl[2] - yl[1]), yl[2] - 0.005(yl[2] - yl[1]))
+        cl(v) = [clamp(v[1], box[1]...), clamp(v[2], box[2]...)]
+        gx = range(xl...; length=100); gy = range(yl...; length=100)
+        Z = [sys.f([x, y])[j] for y in gy, x in gx]
+        levels = nice_levels(Z)
+        plt = plot(; xlims=xl, ylims=yl, legend=false, aspect_ratio=1, size=(300, 300),
+                   xlabel="x", ylabel="y", guidefontsize=8, tickfontsize=7,
+                   title="f$('₀' + j)(x, y) = $(sys.fnames[j])", titlefontsize=10)
+        for c in levels
+            c == 0 && continue
+            contour!(plt, gx, gy, Z; levels=[c], color=level_color(c, levels), lw=1, cbar=false)
+        end
+        contour!(plt, gx, gy, Z; levels=[0.0], color=curvecolors[j], lw=2.5, cbar=false)
+        plot!(plt, [xl[1], xl[1]], [yl[1], yl[1]]; color=sentinel, lw=0.5)
+        groups = Tuple{String,Int}[]
+        for i in 1:length(xs)-1
+            x = xs[i]
+            cnt = 0
+            for c in levels
+                c == 0 && continue
+                seg = clipped(plane_line(sys.f, x, j, c)..., box...)
+                seg === nothing && continue
+                plot_segment!(plt, seg; color=level_color(c, levels), ls=:dash, lw=1); cnt += 1
+            end
+            plot_segment!(plt, clipped_or_dot(plane_line(sys.f, x, j)..., box...); color=curvecolors[j], ls=:dot, lw=3); cnt += 1
+            scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:black, ms=3); cnt += 1
+            push!(groups, ("<g class=\"nr-lin\" data-i=\"$(i-1)\">", cnt))
+        end
+        for (k, x) in enumerate(xs)
+            scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:red, marker=:star5, ms=7)
+            push!(groups, ("<g class=\"nr-star\" data-k=\"$(k-1)\">", 1))
+        end
+        return plt, groups
     end
 
     function newton_figure(sys, x₀)
@@ -167,15 +235,13 @@ begin
         end
         plot!(plt, [xl[1], xl[1]], [yl[1], yl[1]]; color=sentinel, lw=0.5)
         # Each step adds exactly four SVG elements (two tangent lines, the step, a dot)
-        # and each iterate one star; frame_groups below relies on this order.
+        # and each iterate one star; main_groups below relies on this order.
         for i in 1:length(xs)-1
             x, xnext = xs[i], xs[i+1]
             for j in 1:2
-                seg = clipped(tangent_line(sys.f, x, j)..., box...)
-                plot!(plt, [seg.a[1], seg.b[1]], [seg.a[2], seg.b[2]]; color=curvecolors[j], ls=:dash, lw=1.5)
+                plot_segment!(plt, clipped_or_dot(tangent_line(sys.f, x, j)..., box...); color=curvecolors[j], ls=:dot, lw=3)
             end
-            seg = clipped(x, xnext, box...)
-            plot!(plt, [seg.a[1], seg.b[1]], [seg.a[2], seg.b[2]]; color=:black, lw=1.5)
+            plot_segment!(plt, clipped_or_dot(x, xnext, box...); color=:black, lw=1.5)
             scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:black, ms=3)
         end
         for x in xs
@@ -197,19 +263,21 @@ begin
     end
 
     # Wrap consecutive elements in <g> tags.  `groups` is a list of (opening tag, count).
-    # Clip-path references are rewritten to `clip` so the elements can be dropped into
-    # a different SVG (the shared background) than the one they were rendered in.
+    # The elements' clip-path attributes are moved to the group and point at `clip`, so
+    # the elements can be dropped into a different SVG (the shared background) than the
+    # one they were rendered in.
     function grouped(items, groups; clip)
         length(items) == sum(last, groups) || error("unexpected svg structure: $(length(items)) elements, expected $(sum(last, groups))")
         out = IOBuffer(); k = 0
         for (tag, n) in groups
-            print(out, tag, join(replace.(items[k+1:k+n], r"url\(#clip\d+\)" => "url(#$clip)"), "\n"), "</g>\n")
+            print(out, replace(tag, "<g " => "<g clip-path=\"url(#$clip)\" "),
+                  join(replace.(items[k+1:k+n], r" clip-path=\"url\(#clip\d+\)\"" => ""), "\n"), "</g>\n")
             k += n
         end
         return String(take!(out))
     end
 
-    function frame_groups(xs)
+    function main_groups(xs)
         n = length(xs) - 1
         groups = Tuple{String,Int}[]
         for i in 1:n
@@ -259,25 +327,31 @@ begin
     # Every frame is computed here, in Julia, Jacobians included.  The browser
     # only chooses which frame to display, so the controls work in a static export.
     let
-        # The background (axes and the two curves) is the same for every starting point,
-        # so it is emitted once per system with an empty <g class="nr-overlay">, and each
-        # frame holds only the elements JS drops into that group.
+        # Each frame has three plots (p = 0, 1: the two contour maps; p = 2: both zero
+        # curves).  The background of each (axes and contours) is the same for every
+        # starting point, so it is emitted once per system with an empty
+        # <g class="nr-overlay">, and each frame holds only the elements JS drops into it.
         frames = String[]
         basins = String[]
         backgrounds = String[]
         for (si, sys) in enumerate(systems)
             roots = find_roots(sys)
             push!(basins, "<div class=\"nr-basin\" data-s=\"$(si-1)\" hidden>$(basin_svg(sys, roots))</div>")
-            bgclip = ""
+            bgclips = String[]
             for (a, x₀) in enumerate(sys.x₀s), (b, y₀) in enumerate(sys.y₀s)
-                plt, xs = newton_figure(sys, [x₀, y₀])
-                head, items, clip = split_svg(plt)
-                if isempty(bgclip)
-                    bgclip = clip
-                    push!(backgrounds, "<div class=\"nr-bg\" data-s=\"$(si-1)\" hidden>$head<g class=\"nr-overlay\"></g></svg></div>")
+                mainplt, xs = newton_figure(sys, [x₀, y₀])
+                plots = [small_figure(sys, 1, xs), small_figure(sys, 2, xs), (mainplt, main_groups(xs))]
+                overlays = String[]
+                for (p, (plt, groups)) in enumerate(plots)
+                    head, items, clip = split_svg(plt)
+                    if length(bgclips) < p
+                        push!(bgclips, clip)
+                        push!(backgrounds, "<div class=\"nr-bg\" data-s=\"$(si-1)\" data-p=\"$(p-1)\" hidden>$head<g class=\"nr-overlay\"></g></svg></div>")
+                    end
+                    push!(overlays, "<svg data-p=\"$(p-1)\">$(grouped(items, groups; clip=bgclips[p]))</svg>")
                 end
                 push!(frames, """<div class="nr-frame" data-s="$(si-1)" data-a="$(a-1)" data-b="$(b-1)" data-n="$(length(xs)-1)" hidden>
-                    <template><svg>$(grouped(items, frame_groups(xs); clip=bgclip))</svg></template>$(newton_table(sys.f, xs))</div>""")
+                    <template>$(join(overlays))</template>$(newton_table(sys.f, xs))</div>""")
             end
         end
         options = join("<option value=\"$(i-1)\">$(sys.name)</option>" for (i, sys) in enumerate(systems))
@@ -288,6 +362,8 @@ begin
           <style>
             .nr-widget .nr-controls { display: flex; gap: 1.5em; flex-wrap: wrap; align-items: center; margin-bottom: .5em; }
             .nr-widget .nr-controls input[type=range] { width: 10em; vertical-align: middle; }
+            .nr-widget .nr-row { display: flex; gap: 1em; flex-wrap: wrap; align-items: flex-start; margin-bottom: .5em; }
+            .nr-widget .nr-row .nr-bg { flex: 0 1 300px; }
             .nr-widget .nr-basins { margin-top: 1.5em; }
             .nr-widget .nr-basin { max-width: 380px; }
             .nr-widget svg { max-width: 100%; height: auto; }
@@ -303,7 +379,8 @@ begin
             <label>iteration <output class="nr-kval"></output>
               <input class="nr-k" type="range" min="0" max="$nsteps" value="$nsteps"></label>
           </div>
-          $(join(backgrounds))
+          <div class="nr-row">$(join(filter(b -> !occursin("data-p=\"2\"", b), backgrounds)))</div>
+          $(join(filter(b -> occursin("data-p=\"2\"", b), backgrounds)))
           $(join(frames))
           <div class="nr-basins">
             <p><strong>Which solution is found?</strong> Every point in the map is a starting
@@ -325,25 +402,28 @@ begin
             bout.value = y0s[s][brng.value].toFixed(1);
             const k = +krng.value;
             kout.value = k;
-            let overlay;
+            const overlays = {};
             for (const bg of root.querySelectorAll(".nr-bg")) {
               bg.hidden = bg.dataset.s !== sel.value;
-              if (!bg.hidden) overlay = bg.querySelector(".nr-overlay");
+              if (!bg.hidden) overlays[bg.dataset.p] = bg.querySelector(".nr-overlay");
             }
             for (const fr of root.querySelectorAll(".nr-frame")) {
               const key = fr.dataset.s + "," + fr.dataset.a + "," + fr.dataset.b;
               fr.hidden = key !== sel.value + "," + arng.value + "," + brng.value;
               if (fr.hidden) continue;
-              if (overlay.dataset.frame !== key) {
-                // The <svg> wrapper makes the parser treat the fragment as SVG (self-closing tags, namespace).
-                const svg = fr.querySelector("template").content.firstElementChild;
-                overlay.replaceChildren(...[...svg.children].map(c => c.cloneNode(true)));
-                overlay.dataset.frame = key;
-              }
               const n = +fr.dataset.n, kk = Math.min(k, n);   // n = steps actually taken
-              for (const g of overlay.querySelectorAll(".nr-step")) g.style.display = +g.dataset.i < kk ? "" : "none";
-              for (const g of overlay.querySelectorAll(".nr-lin")) g.style.display = +g.dataset.i === kk - 1 ? "" : "none";
-              for (const g of overlay.querySelectorAll(".nr-star")) g.style.display = +g.dataset.k === kk ? "" : "none";
+              // The template holds one <svg data-p> per plot; the <svg> wrapper makes the
+              // parser treat the fragment as SVG (self-closing tags, namespace).
+              for (const svg of fr.querySelector("template").content.children) {
+                const overlay = overlays[svg.dataset.p];
+                if (overlay.dataset.frame !== key) {
+                  overlay.replaceChildren(...[...svg.children].map(c => c.cloneNode(true)));
+                  overlay.dataset.frame = key;
+                }
+                for (const g of overlay.querySelectorAll(".nr-step")) g.style.display = +g.dataset.i < kk ? "" : "none";
+                for (const g of overlay.querySelectorAll(".nr-lin")) g.style.display = +g.dataset.i === kk - 1 ? "" : "none";
+                for (const g of overlay.querySelectorAll(".nr-star")) g.style.display = +g.dataset.k === kk ? "" : "none";
+              }
               for (const tr of fr.querySelectorAll("tr[data-i]")) tr.style.visibility = +tr.dataset.i <= kk ? "" : "hidden";
               fr.querySelector(".nr-note").style.visibility = (n < $nsteps && k >= n) ? "" : "hidden";
             }
