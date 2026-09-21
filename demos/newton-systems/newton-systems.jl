@@ -50,7 +50,7 @@ newton(f, [2.0, 2.0]; n=5)
 
 md"""
 The top two plots show the two components of `f` separately as contour maps, with the
-bold curve where `f₁(x, y) = 0` (blue) and where `f₂(x, y) = 0` (orange).  At the current
+bold curve where `f₁(x₁, x₂) = 0` (blue) and where `f₂(x₁, x₂) = 0` (orange).  At the current
 iterate, row `j` of the Jacobian, `∇fⱼ`, defines the **tangent plane** to `fⱼ`.  Its
 contours are the dashed straight lines, which match the true contours near the point,
 and the bold dashed line is where the tangent plane is zero.
@@ -61,12 +61,12 @@ tangent plane (bold dashed); the next iterate is where those two lines cross, so
 lines show where the algorithm is about to jump.  Solving the linear system
 `J Δx = −f` is exactly finding that crossing.
 
-Drag `x₀` and `y₀` to move the starting point and step through with the iteration
-slider.  The map at the bottom colors every starting point by which solution it
+Drag the starting values of `x₁` and `x₂` to move the starting point and step through
+with the iteration slider.  The map at the bottom colors every starting point by which solution it
 finds (black if it does not find one).  In the circle-parabola system, try starting on
-the `y` axis, where the Jacobian is singular, or anywhere below the `x` axis, where the
-iterates never settle down: `y` heads for `(−1 − √17)/2 ≈ −2.56`, the other root of
-`y² + y − 4 = 0`, which has no real `x`.
+the `x₂` axis (`x₁ = 0`), where the Jacobian is singular, or anywhere below the `x₁` axis,
+where the iterates never settle down: `x₂` heads for `(−1 − √17)/2 ≈ −2.56`, the other
+root of `x₂² + x₂ − 4 = 0`, which has no real `x₁`.
 """
 
 # Everything below is display code: the figure, the basin map, the table, and
@@ -76,13 +76,13 @@ begin
     using Plots
 
     systems = [
-        (name = "x² + y² = 4,  y = x²",
-         fnames = ("x² + y² − 4", "y − x²"),
+        (name = "x₁² + x₂² = 4,  x₂ = x₁²",
+         fnames = ("x₁² + x₂² − 4", "x₂ − x₁²"),
          f = x -> [x[1]^2 + x[2]^2 - 4, x[2] - x[1]^2],
          xlims = (-3.0, 3.0), ylims = (-3.0, 3.0),
          x₀s = -2.0:0.5:2.0, y₀s = -2.0:0.5:2.0),
-        (name = "x² + xy = 10,  y + 3xy² = 57",
-         fnames = ("x² + xy − 10", "y + 3xy² − 57"),
+        (name = "x₁² + x₁x₂ = 10,  x₂ + 3x₁x₂² = 57",
+         fnames = ("x₁² + x₁x₂ − 10", "x₂ + 3x₁x₂² − 57"),
          f = x -> [x[1]^2 + x[1] * x[2] - 10, x[2] + 3x[1] * x[2]^2 - 57],
          xlims = (-1.0, 6.0), ylims = (-4.0, 5.0),
          x₀s = 0.5:0.5:4.5, y₀s = -1.0:0.5:3.0),
@@ -212,8 +212,8 @@ begin
         Z = [sys.f([x, y])[j] for y in gy, x in gx]
         levels = nice_levels(Z)
         plt = plot(; xlims=xl, ylims=yl, legend=false, aspect_ratio=1, size=(300, 300),
-                   xlabel="x", ylabel="y", guidefontsize=8, tickfontsize=7,
-                   title="f$('₀' + j)(x, y) = $(sys.fnames[j])", titlefontsize=10)
+                   xlabel="x₁", ylabel="x₂", guidefontsize=8, tickfontsize=7,
+                   title="f$('₀' + j)(x₁, x₂) = $(sys.fnames[j])", titlefontsize=10)
         for c in levels
             c == 0 && continue
             contour!(plt, gx, gy, Z; levels=[c], color=level_color(c, levels), lw=1, cbar=false)
@@ -251,7 +251,7 @@ begin
               (yl[1] + 0.005(yl[2] - yl[1]), yl[2] - 0.005(yl[2] - yl[1]))
         gx = range(xl...; length=100); gy = range(yl...; length=100)
         plt = plot(; xlims=xl, ylims=yl, legend=false, aspect_ratio=1, size=(440, 440),
-                   xlabel="x", ylabel="y", title=sys.name, titlefontsize=11)
+                   xlabel="x₁", ylabel="x₂", title=sys.name, titlefontsize=11)
         for j in 1:2
             contour!(plt, gx, gy, (x, y) -> sys.f([x, y])[j]; levels=[0.0], color=curvecolors[j], lw=2, cbar=false)
         end
@@ -312,7 +312,7 @@ begin
         palette = [:gray15, :mediumseagreen, :mediumpurple, :goldenrod, :lightskyblue][1:length(roots)+1]
         plt = heatmap(gx, gy, Z; c=cgrad(palette, categorical=true), clims=(-0.5, length(roots) + 0.5), cbar=false,
                       legend=false, aspect_ratio=1, size=(380, 380), xlims=xl, ylims=yl,
-                      xlabel="x₀", ylabel="y₀")
+                      xlabel="x₁ start", ylabel="x₂ start")
         for r in roots
             scatter!(plt, [r[1]], [r[2]]; color=:white, marker=:star5, ms=7)
         end
@@ -335,7 +335,7 @@ begin
         # height does not change with the sliders (JS toggles visibility, not display)
         blank = ["<tr data-i=\"$i\"><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>" for i in length(xs):nsteps]
         note = "<p class=\"nr-note\"><em>Stopped early: the Jacobian was singular (the tangent lines are parallel).</em></p>"
-        """<table><thead><tr><th>i</th><th>x<sub>i</sub></th><th>y<sub>i</sub></th><th>‖f(x<sub>i</sub>)‖</th><th>ε<sub>a</sub></th></tr></thead>
+        """<table><thead><tr><th>i</th><th>x<sub>1,i</sub></th><th>x<sub>2,i</sub></th><th>‖f(x<sub>i</sub>)‖</th><th>ε<sub>a</sub></th></tr></thead>
         <tbody>$(join(rows))$(join(blank))</tbody></table>$note"""
     end
 
@@ -375,7 +375,8 @@ begin
         HTML("""
         <div class="nr-widget">
           <style>
-            .nr-widget .nr-controls { display: flex; gap: 1.5em; flex-wrap: wrap; align-items: center; margin-bottom: .5em; }
+            .nr-widget .nr-controls { margin-bottom: .5em; }
+            .nr-widget .nr-controls .nr-line { display: flex; gap: 1.5em; flex-wrap: wrap; align-items: center; margin-bottom: .3em; }
             .nr-widget .nr-controls input[type=range] { width: 10em; vertical-align: middle; }
             .nr-widget .nr-row { display: flex; gap: 1em; flex-wrap: wrap; justify-content: center; align-items: flex-start; margin-bottom: .5em; }
             .nr-widget .nr-row .nr-bg { flex: 0 1 300px; }
@@ -387,14 +388,20 @@ begin
             .nr-widget td, .nr-widget th { padding: .15em .8em; text-align: right; border-bottom: 1px solid #ddd; }
           </style>
           <div class="nr-controls">
-            <label>System <select class="nr-s">$options</select></label>
-            <label>x₀ = <output class="nr-aval"></output>
-              <input class="nr-a" type="range" min="0" max="$(length(systems[1].x₀s)-1)" value="$(length(systems[1].x₀s)-1)"></label>
-            <label>y₀ = <output class="nr-bval"></output>
-              <input class="nr-b" type="range" min="0" max="$(length(systems[1].y₀s)-1)" value="$(length(systems[1].y₀s)-1)"></label>
-            <label>iteration <output class="nr-kval"></output>
-              <input class="nr-k" type="range" min="0" max="$nsteps" value="$nsteps"></label>
-            <label><input class="nr-tan" type="checkbox" checked> show tangent planes</label>
+            <div class="nr-line">
+              <label>System <select class="nr-s">$options</select></label>
+            </div>
+            <div class="nr-line">
+              <label>x<sub>1,0</sub> = <output class="nr-aval"></output>
+                <input class="nr-a" type="range" min="0" max="$(length(systems[1].x₀s)-1)" value="$(length(systems[1].x₀s)-1)"></label>
+              <label>x<sub>2,0</sub> = <output class="nr-bval"></output>
+                <input class="nr-b" type="range" min="0" max="$(length(systems[1].y₀s)-1)" value="$(length(systems[1].y₀s)-1)"></label>
+            </div>
+            <div class="nr-line">
+              <label>iteration <output class="nr-kval"></output>
+                <input class="nr-k" type="range" min="0" max="$nsteps" value="$nsteps"></label>
+              <label><input class="nr-tan" type="checkbox" checked> show tangent planes</label>
+            </div>
           </div>
           <div class="nr-row">$(join(filter(b -> !occursin("data-p=\"2\"", b), backgrounds)))</div>
           $(join(filter(b -> occursin("data-p=\"2\"", b), backgrounds)))
