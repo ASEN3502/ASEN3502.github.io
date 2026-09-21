@@ -4,14 +4,38 @@
     {
       "name": "jekyll",
       "runtimeExecutable": "bundle",
-      "runtimeArgs": ["exec", "jekyll", "serve", "--port", "4000"],
+      "runtimeArgs": [
+        "exec",
+        "jekyll",
+        "serve",
+        "--port",
+        "4000"
+      ],
       "port": 4000
     },
     {
       "name": "static",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "demos/newton-raphson"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8765",
+        "--directory",
+        "demos/newton-raphson"
+      ],
       "port": 8765
+    },
+    {
+      "name": "newton-systems",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8766",
+        "--directory",
+        "demos/newton-systems"
+      ],
+      "port": 8766
     }
   ]
 }

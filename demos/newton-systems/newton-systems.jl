@@ -1,0 +1,368 @@
+# Newton-Raphson for a system of two equations, with automatic differentiation.
+#
+# This is a plain Julia script written so that Pluto can open it as a notebook
+# (Pluto splits a plain .jl file into one cell per top-level expression):
+#
+#   julia> import Pluto; Pluto.run()          # then open this file in the UI
+#
+# A cell containing a `# hide` comment has its code folded in the export.
+#
+# The interactive figure at the bottom is a set of frames precomputed in Julia
+# and a few lines of JS that pick which frame to show, so it still works in a
+# static HTML export.
+
+md"""
+# Newton-Raphson for systems
+
+For a system of equations `f(x) = 0`, where `x` and `f(x)` are both vectors,
+the derivative becomes the **Jacobian** matrix `J`, with `J[i, j] = ∂fᵢ/∂xⱼ`.
+ForwardDiff computes it exactly from ordinary Julia code.
+"""
+
+using ForwardDiff: jacobian
+
+using LinearAlgebra
+
+f(x) = [x[1]^2 + x[2]^2 - 4,      # a circle of radius 2
+        x[2] - x[1]^2]             # a parabola
+
+jacobian(f, [1.0, 1.0])
+
+md"""
+Each step replaces `f` by its linearization at `xᵢ` and solves that linear system.
+Instead of dividing by the scalar derivative `f′(xᵢ)` as in one dimension, we solve `J Δx = −f(xᵢ)` for the step:
+
+$$J(x_i)\,\Delta x = -f(x_i), \qquad x_{i+1} = x_i + \Delta x$$
+"""
+
+function newton(f, x₀; n=10)
+    xs = [x₀]
+    x = x₀
+    for i in 1:n
+        J = jacobian(f, x)
+        x = x + J \ (-f(x))
+        push!(xs, x)
+    end
+    return xs
+end;
+
+newton(f, [2.0, 2.0]; n=5)
+
+md"""
+In the figure, the two curves are the points where each equation is satisfied:
+`f₁(x, y) = 0` in blue and `f₂(x, y) = 0` in orange.  A solution is where they cross.
+
+At each iterate, Newton-Raphson replaces each curve by its **tangent line** (dashed).
+The two lines cross at a single point, and that point is the next iterate: solving
+the linear system `J Δx = −f` is exactly finding where the two lines cross.
+
+Drag `x₀` and `y₀` to move the starting point and step through with the iteration
+slider.  The map at the bottom colors every starting point by which solution it
+finds (black if it does not find one).  In the circle-parabola system, try starting on
+the `y` axis, where the Jacobian is singular, or anywhere below the `x` axis, where the
+iterates never settle down: `y` heads for `(−1 − √17)/2 ≈ −2.56`, the other root of
+`y² + y − 4 = 0`, which has no real `x`.
+"""
+
+# Everything below is display code: the figure, the basin map, the table, and
+# the widget that switches between precomputed frames.
+# hide
+begin
+    using Plots
+
+    systems = [
+        (name = "x² + y² = 4,  y = x²",
+         f = x -> [x[1]^2 + x[2]^2 - 4, x[2] - x[1]^2],
+         xlims = (-3.0, 3.0), ylims = (-3.0, 3.0),
+         x₀s = -2.0:0.5:2.0, y₀s = -2.0:0.5:2.0),
+        (name = "x² + xy = 10,  y + 3xy² = 57",
+         f = x -> [x[1]^2 + x[1] * x[2] - 10, x[2] + 3x[1] * x[2]^2 - 57],
+         xlims = (-1.0, 6.0), ylims = (-4.0, 5.0),
+         x₀s = 0.5:0.5:4.5, y₀s = -1.0:0.5:3.0),
+    ]
+
+    nsteps = 6
+    curvecolors = (:royalblue, :darkorange)
+    sentinel = RGB(1 / 255, 2 / 255, 3 / 255)   # a line of this color separates the background from the layered elements
+
+    # Newton's method that stops (rather than throwing) when the Jacobian is singular
+    # or an iterate stops being finite.
+    function newton_path(f, x₀; n=nsteps)
+        xs = [x₀]
+        x = x₀
+        for i in 1:n
+            x = try
+                J = jacobian(f, x)
+                x + J \ (-f(x))
+            catch
+                break
+            end
+            all(isfinite, x) || break
+            push!(xs, x)
+        end
+        return xs
+    end
+
+    # Solutions of the system, found by running Newton from every grid start and
+    # keeping the distinct converged points.
+    function find_roots(sys)
+        roots = Vector{Float64}[]
+        for x₀ in sys.x₀s, y₀ in sys.y₀s
+            xs = newton_path(sys.f, [x₀, y₀]; n=40)
+            x = xs[end]
+            norm(sys.f(x)) < 1e-8 || continue
+            any(r -> norm(r - x) < 1e-4, roots) || push!(roots, x)
+        end
+        return sort(roots)
+    end
+
+    # Which root (index) Newton converges to from x₀, or 0 if none within n steps.
+    function basin(sys, roots, x₀; n=30)
+        xs = newton_path(sys.f, x₀; n)
+        x = xs[end]
+        i = findfirst(r -> norm(r - x) < 1e-6, roots)
+        return i === nothing ? 0 : i
+    end
+
+    # Segment from p to q clipped to the box (xlims, ylims); a dot at the clamped start if empty.
+    function clipped(p, q, xlims, ylims)
+        t0, t1 = 0.0, 1.0
+        for k in 1:2
+            l, h = k == 1 ? xlims : ylims
+            d = q[k] - p[k]
+            if d == 0
+                l <= p[k] <= h || (t0 = 1.0; t1 = 0.0)
+            else
+                ta, tb = minmax((l - p[k]) / d, (h - p[k]) / d)
+                t0, t1 = max(t0, ta), min(t1, tb)
+            end
+        end
+        cl(v) = [clamp(v[1], xlims...), clamp(v[2], ylims...)]
+        t0 <= t1 || return (a = cl(p), b = cl(p))
+        return (a = p + t0 * (q - p), b = p + t1 * (q - p))
+    end
+
+    # The tangent line to {fⱼ = 0} at x, i.e. fⱼ(x) + ∇fⱼ(x)·(p − x) = 0, as a long segment.
+    function tangent_line(f, x, j)
+        fx = f(x); J = jacobian(f, x)
+        g = J[j, :]
+        p0 = x - fx[j] * g / dot(g, g)     # closest point on the line to x
+        d = [-g[2], g[1]] / norm(g)
+        return p0 - 100d, p0 + 100d
+    end
+
+    function newton_figure(sys, x₀)
+        xs = newton_path(sys.f, x₀)
+        xl, yl = sys.xlims, sys.ylims
+        # GR drops elements entirely outside the axes, so runaway iterates are clamped
+        # to just inside the edge and lines are clipped.
+        box = (xl[1] + 0.005(xl[2] - xl[1]), xl[2] - 0.005(xl[2] - xl[1])),
+              (yl[1] + 0.005(yl[2] - yl[1]), yl[2] - 0.005(yl[2] - yl[1]))
+        cl(v) = [clamp(v[1], box[1]...), clamp(v[2], box[2]...)]
+        gx = range(xl...; length=100); gy = range(yl...; length=100)
+        plt = plot(; xlims=xl, ylims=yl, legend=false, aspect_ratio=1, size=(440, 440),
+                   xlabel="x", ylabel="y", title=sys.name, titlefontsize=11)
+        for j in 1:2
+            contour!(plt, gx, gy, (x, y) -> sys.f([x, y])[j]; levels=[0.0], color=curvecolors[j], lw=2, cbar=false)
+        end
+        plot!(plt, [xl[1], xl[1]], [yl[1], yl[1]]; color=sentinel, lw=0.5)
+        # Each step adds exactly four SVG elements (two tangent lines, the step, a dot)
+        # and each iterate one star; frame_groups below relies on this order.
+        for i in 1:length(xs)-1
+            x, xnext = xs[i], xs[i+1]
+            for j in 1:2
+                seg = clipped(tangent_line(sys.f, x, j)..., box...)
+                plot!(plt, [seg.a[1], seg.b[1]], [seg.a[2], seg.b[2]]; color=curvecolors[j], ls=:dash, lw=1.5)
+            end
+            seg = clipped(x, xnext, box...)
+            plot!(plt, [seg.a[1], seg.b[1]], [seg.a[2], seg.b[2]]; color=:black, lw=1.5)
+            scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:black, ms=3)
+        end
+        for x in xs
+            scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:red, marker=:star5, ms=9)
+        end
+        return plt, xs
+    end
+
+    # Split the SVG at the sentinel line: the head (everything up to and including the
+    # sentinel), the elements after it, one per line, and the clip-path id of the plot area.
+    function split_svg(plt)
+        io = IOBuffer(); show(io, MIME"image/svg+xml"(), plt); s = String(take!(io))
+        m = findfirst(r"<polyline[^\n]*#010203[^\n]*\n", s)
+        m === nothing && error("sentinel line not found in svg")
+        clip = match(r"url\(#(clip\d+)\)", s[m]).captures[1]
+        head, tail = s[1:last(m)], s[last(m)+1:end]
+        items = filter(l -> !isempty(strip(l)) && !occursin("</svg>", l), split(tail, '\n'))
+        return head, items, clip
+    end
+
+    # Wrap consecutive elements in <g> tags.  `groups` is a list of (opening tag, count).
+    # Clip-path references are rewritten to `clip` so the elements can be dropped into
+    # a different SVG (the shared background) than the one they were rendered in.
+    function grouped(items, groups; clip)
+        length(items) == sum(last, groups) || error("unexpected svg structure: $(length(items)) elements, expected $(sum(last, groups))")
+        out = IOBuffer(); k = 0
+        for (tag, n) in groups
+            print(out, tag, join(replace.(items[k+1:k+n], r"url\(#clip\d+\)" => "url(#$clip)"), "\n"), "</g>\n")
+            k += n
+        end
+        return String(take!(out))
+    end
+
+    function frame_groups(xs)
+        n = length(xs) - 1
+        groups = Tuple{String,Int}[]
+        for i in 1:n
+            push!(groups, ("<g class=\"nr-lin\" data-i=\"$(i-1)\">", 2))
+            push!(groups, ("<g class=\"nr-step\" data-i=\"$(i-1)\">", 2))
+        end
+        for k in 0:n
+            push!(groups, ("<g class=\"nr-star\" data-k=\"$k\">", 1))
+        end
+        return groups
+    end
+
+    function basin_svg(sys, roots)
+        xl, yl = sys.xlims, sys.ylims
+        gx = range(xl...; length=160); gy = range(yl...; length=160)
+        Z = [basin(sys, roots, [x, y]) for y in gy, x in gx]
+        palette = [:gray15, :mediumseagreen, :mediumpurple, :goldenrod, :lightskyblue][1:length(roots)+1]
+        plt = heatmap(gx, gy, Z; c=cgrad(palette, categorical=true), clims=(-0.5, length(roots) + 0.5), cbar=false,
+                      legend=false, aspect_ratio=1, size=(380, 380), xlims=xl, ylims=yl,
+                      xlabel="x₀", ylabel="y₀")
+        for r in roots
+            scatter!(plt, [r[1]], [r[2]]; color=:white, marker=:star5, ms=7)
+        end
+        plot!(plt, [xl[1], xl[1]], [yl[1], yl[1]]; color=sentinel, lw=0.5)
+        pts = [(x₀, y₀) for x₀ in sys.x₀s for y₀ in sys.y₀s]
+        scatter!(plt, first.(pts), last.(pts); color=:red, ms=4, markerstrokecolor=:white)
+        groups = [("<g class=\"nr-start\" data-a=\"$(a-1)\" data-b=\"$(b-1)\">", 1)
+                  for a in eachindex(sys.x₀s) for b in eachindex(sys.y₀s)]
+        head, items, clip = split_svg(plt)
+        return head * grouped(items, groups; clip) * "</svg>\n"
+    end
+
+    function newton_table(f, xs)
+        rows = map(enumerate(xs)) do (i, x)
+            r = norm(f(x))
+            εa = i == 1 ? "" : norm(x) == 0 ? "—" : string(round(norm(x - xs[i-1]) / norm(x) * 100; sigdigits=3), " %")
+            "<tr data-i=\"$(i-1)\"><td>$(i-1)</td><td>$(round(x[1]; sigdigits=7))</td><td>$(round(x[2]; sigdigits=7))</td><td>$(round(r; sigdigits=3))</td><td>$εa</td></tr>"
+        end
+        # pad to a fixed number of rows and always emit the note, so the widget's
+        # height does not change with the sliders (JS toggles visibility, not display)
+        blank = ["<tr data-i=\"$i\"><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>" for i in length(xs):nsteps]
+        note = "<p class=\"nr-note\"><em>Stopped early: the Jacobian was singular (the tangent lines are parallel).</em></p>"
+        """<table><thead><tr><th>i</th><th>x<sub>i</sub></th><th>y<sub>i</sub></th><th>‖f(x<sub>i</sub>)‖</th><th>ε<sub>a</sub></th></tr></thead>
+        <tbody>$(join(rows))$(join(blank))</tbody></table>$note"""
+    end
+
+    # Every frame is computed here, in Julia, Jacobians included.  The browser
+    # only chooses which frame to display, so the controls work in a static export.
+    let
+        # The background (axes and the two curves) is the same for every starting point,
+        # so it is emitted once per system with an empty <g class="nr-overlay">, and each
+        # frame holds only the elements JS drops into that group.
+        frames = String[]
+        basins = String[]
+        backgrounds = String[]
+        for (si, sys) in enumerate(systems)
+            roots = find_roots(sys)
+            push!(basins, "<div class=\"nr-basin\" data-s=\"$(si-1)\" hidden>$(basin_svg(sys, roots))</div>")
+            bgclip = ""
+            for (a, x₀) in enumerate(sys.x₀s), (b, y₀) in enumerate(sys.y₀s)
+                plt, xs = newton_figure(sys, [x₀, y₀])
+                head, items, clip = split_svg(plt)
+                if isempty(bgclip)
+                    bgclip = clip
+                    push!(backgrounds, "<div class=\"nr-bg\" data-s=\"$(si-1)\" hidden>$head<g class=\"nr-overlay\"></g></svg></div>")
+                end
+                push!(frames, """<div class="nr-frame" data-s="$(si-1)" data-a="$(a-1)" data-b="$(b-1)" data-n="$(length(xs)-1)" hidden>
+                    <template><svg>$(grouped(items, frame_groups(xs); clip=bgclip))</svg></template>$(newton_table(sys.f, xs))</div>""")
+            end
+        end
+        options = join("<option value=\"$(i-1)\">$(sys.name)</option>" for (i, sys) in enumerate(systems))
+        x0s = [collect(sys.x₀s) for sys in systems]
+        y0s = [collect(sys.y₀s) for sys in systems]
+        HTML("""
+        <div class="nr-widget">
+          <style>
+            .nr-widget .nr-controls { display: flex; gap: 1.5em; flex-wrap: wrap; align-items: center; margin-bottom: .5em; }
+            .nr-widget .nr-controls input[type=range] { width: 10em; vertical-align: middle; }
+            .nr-widget .nr-basins { margin-top: 1.5em; }
+            .nr-widget .nr-basin { max-width: 380px; }
+            .nr-widget svg { max-width: 100%; height: auto; }
+            .nr-widget table { border-collapse: separate; border-spacing: 0; margin-top: .5em; font-variant-numeric: tabular-nums; }
+            .nr-widget td, .nr-widget th { padding: .15em .8em; text-align: right; border-bottom: 1px solid #ddd; }
+          </style>
+          <div class="nr-controls">
+            <label>System <select class="nr-s">$options</select></label>
+            <label>x₀ = <output class="nr-aval"></output>
+              <input class="nr-a" type="range" min="0" max="$(length(systems[1].x₀s)-1)" value="$(length(systems[1].x₀s)-1)"></label>
+            <label>y₀ = <output class="nr-bval"></output>
+              <input class="nr-b" type="range" min="0" max="$(length(systems[1].y₀s)-1)" value="$(length(systems[1].y₀s)-1)"></label>
+            <label>iteration <output class="nr-kval"></output>
+              <input class="nr-k" type="range" min="0" max="$nsteps" value="$nsteps"></label>
+          </div>
+          $(join(backgrounds))
+          $(join(frames))
+          <div class="nr-basins">
+            <p><strong>Which solution is found?</strong> Every point in the map is a starting
+            guess, colored by the solution Newton-Raphson converges to (stars), black if it does
+            not converge.  The red dot is the current starting point.</p>
+            $(join(basins))
+          </div>
+        </div>
+        <script>
+          const root = currentScript.previousElementSibling;
+          const sel = root.querySelector(".nr-s"), arng = root.querySelector(".nr-a"), brng = root.querySelector(".nr-b"),
+                aout = root.querySelector(".nr-aval"), bout = root.querySelector(".nr-bval"),
+                krng = root.querySelector(".nr-k"), kout = root.querySelector(".nr-kval");
+          const x0s = $x0s, y0s = $y0s;
+          function show() {
+            const s = +sel.value;
+            arng.max = x0s[s].length - 1; brng.max = y0s[s].length - 1;
+            aout.value = x0s[s][arng.value].toFixed(1);
+            bout.value = y0s[s][brng.value].toFixed(1);
+            const k = +krng.value;
+            kout.value = k;
+            let overlay;
+            for (const bg of root.querySelectorAll(".nr-bg")) {
+              bg.hidden = bg.dataset.s !== sel.value;
+              if (!bg.hidden) overlay = bg.querySelector(".nr-overlay");
+            }
+            for (const fr of root.querySelectorAll(".nr-frame")) {
+              const key = fr.dataset.s + "," + fr.dataset.a + "," + fr.dataset.b;
+              fr.hidden = key !== sel.value + "," + arng.value + "," + brng.value;
+              if (fr.hidden) continue;
+              if (overlay.dataset.frame !== key) {
+                // The <svg> wrapper makes the parser treat the fragment as SVG (self-closing tags, namespace).
+                const svg = fr.querySelector("template").content.firstElementChild;
+                overlay.replaceChildren(...[...svg.children].map(c => c.cloneNode(true)));
+                overlay.dataset.frame = key;
+              }
+              const n = +fr.dataset.n, kk = Math.min(k, n);   // n = steps actually taken
+              for (const g of overlay.querySelectorAll(".nr-step")) g.style.display = +g.dataset.i < kk ? "" : "none";
+              for (const g of overlay.querySelectorAll(".nr-lin")) g.style.display = +g.dataset.i === kk - 1 ? "" : "none";
+              for (const g of overlay.querySelectorAll(".nr-star")) g.style.display = +g.dataset.k === kk ? "" : "none";
+              for (const tr of fr.querySelectorAll("tr[data-i]")) tr.style.visibility = +tr.dataset.i <= kk ? "" : "hidden";
+              fr.querySelector(".nr-note").style.visibility = (n < $nsteps && k >= n) ? "" : "hidden";
+            }
+            for (const bs of root.querySelectorAll(".nr-basin")) {
+              bs.hidden = bs.dataset.s !== sel.value;
+              if (bs.hidden) continue;
+              for (const g of bs.querySelectorAll(".nr-start"))
+                g.style.display = (g.dataset.a === arng.value && g.dataset.b === brng.value) ? "" : "none";
+            }
+          }
+          for (const el of [sel, arng, brng, krng]) el.addEventListener("input", show);
+          show();
+        </script>
+        """)
+    end
+end
+
+md"""
+As in one dimension, the iterates converge quadratically once they are close to a
+solution, but the starting point decides *which* solution is found, and the pattern
+of starting points that lead to each solution can be surprisingly intricate.
+"""
