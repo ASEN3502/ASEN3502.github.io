@@ -381,6 +381,7 @@ begin
               <input class="nr-b" type="range" min="0" max="$(length(systems[1].y₀s)-1)" value="$(length(systems[1].y₀s)-1)"></label>
             <label>iteration <output class="nr-kval"></output>
               <input class="nr-k" type="range" min="0" max="$nsteps" value="$nsteps"></label>
+            <label><input class="nr-tan" type="checkbox" checked> show tangent planes</label>
           </div>
           <div class="nr-row">$(join(filter(b -> !occursin("data-p=\"2\"", b), backgrounds)))</div>
           $(join(filter(b -> occursin("data-p=\"2\"", b), backgrounds)))
@@ -396,7 +397,8 @@ begin
           const root = currentScript.previousElementSibling;
           const sel = root.querySelector(".nr-s"), arng = root.querySelector(".nr-a"), brng = root.querySelector(".nr-b"),
                 aout = root.querySelector(".nr-aval"), bout = root.querySelector(".nr-bval"),
-                krng = root.querySelector(".nr-k"), kout = root.querySelector(".nr-kval");
+                krng = root.querySelector(".nr-k"), kout = root.querySelector(".nr-kval"),
+                tan = root.querySelector(".nr-tan");
           const x0s = $x0s, y0s = $y0s;
           function show() {
             const s = +sel.value;
@@ -424,7 +426,7 @@ begin
                   overlay.dataset.frame = key;
                 }
                 for (const g of overlay.querySelectorAll(".nr-step")) g.style.display = +g.dataset.i < kk ? "" : "none";
-                for (const g of overlay.querySelectorAll(".nr-lin")) g.style.display = +g.dataset.i === kk ? "" : "none";
+                for (const g of overlay.querySelectorAll(".nr-lin")) g.style.display = (tan.checked && +g.dataset.i === kk) ? "" : "none";
                 for (const g of overlay.querySelectorAll(".nr-star")) g.style.display = +g.dataset.k === kk ? "" : "none";
               }
               for (const tr of fr.querySelectorAll("tr[data-i]")) tr.style.visibility = +tr.dataset.i <= kk ? "" : "hidden";
@@ -437,7 +439,7 @@ begin
                 g.style.display = (g.dataset.a === arng.value && g.dataset.b === brng.value) ? "" : "none";
             }
           }
-          for (const el of [sel, arng, brng, krng]) el.addEventListener("input", show);
+          for (const el of [sel, arng, brng, krng, tan]) el.addEventListener("input", show);
           show();
         </script>
         """)
