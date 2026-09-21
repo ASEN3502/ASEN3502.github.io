@@ -1,0 +1,47 @@
+% Newton-Raphson for systems: linearize f at x_i and solve for the step that
+% zeros the linearization. Quadratic convergence near a root where the Jacobian
+% is nonsingular, but needs J and can diverge.
+% Uses Chapra's notation: [A] for a matrix, {x} for a vector.
+% Cropped to its own bounding box so it can be dropped onto a Xournal++ page as
+% an image.
+%
+%   latexmk -pdf newton-systems-pseudocode.tex
+\documentclass[border=6pt,varwidth=12cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath,amssymb}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\newcommand{\mat}[1]{[#1]}       % matrix
+\newcommand{\vect}[1]{\{#1\}}    % vector
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Newton-Raphson for Systems}
+  \BlankLine
+  \Input{function $\vect{f}: \mathbb{R}^n \to \mathbb{R}^n$ and its Jacobian
+         $\mat{J}$ (with $J_{ij} = \partial f_i / \partial x_j$),
+         initial guess $\vect{x}_0$, tolerance $\varepsilon_s$,
+         maximum iterations $N$}
+  \Output{estimate $\vect{x}_r$ of the root}
+  \BlankLine
+  $\vect{x}_r \leftarrow \vect{x}_0$\;
+  \For{$i \leftarrow 1$ \KwTo $N$}{
+    $\vect{x}_{r,\text{old}} \leftarrow \vect{x}_r$\;
+    solve $\mat{J}(\vect{x}_{r,\text{old}})\, \vect{\Delta x} = -\vect{f(\vect{x}_{r,\text{old}})}$\;
+    $\vect{x}_r \leftarrow \vect{x}_{r,\text{old}} + \vect{\Delta x}$\;
+    $\varepsilon_a \leftarrow \dfrac{\| \vect{x}_r - \vect{x}_{r,\text{old}} \|}{\| \vect{x}_r \|} \cdot 100\%$\;
+    \If{$\varepsilon_a < \varepsilon_s$}{
+      \Return $\vect{x}_r$\;
+    }
+  }
+  \Return $\vect{x}_r$ \tcp*{did not converge in $N$ iterations}
+\end{algorithm}
+\end{minipage}
+\end{document}

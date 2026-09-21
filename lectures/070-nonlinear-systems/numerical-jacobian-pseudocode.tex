@@ -1,0 +1,42 @@
+% Numerical Jacobian: approximate each column of J by a forward finite
+% difference along a unit vector e_j. Costs n extra evaluations of f.
+% Uses Chapra's notation: [A] for a matrix, {x} for a vector.
+% Cropped to its own bounding box so it can be dropped onto a Xournal++ page as
+% an image.
+%
+%   latexmk -pdf numerical-jacobian-pseudocode.tex
+\documentclass[border=6pt,varwidth=12cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath,amssymb}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\newcommand{\mat}[1]{[#1]}       % matrix
+\newcommand{\vect}[1]{\{#1\}}    % vector
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Numerical Jacobian (forward difference)}
+  \BlankLine
+  \Input{function $\vect{f}: \mathbb{R}^n \to \mathbb{R}^n$, point $\vect{x}$,
+         step size $h$}
+  \Output{approximation $\mat{J}$ of the Jacobian at $\vect{x}$,
+          $J_{ij} \approx \partial f_i / \partial x_j$}
+  \BlankLine
+  $\vect{f}_0 \leftarrow \vect{f(\vect{x})}$\;
+  \For{$j \leftarrow 1$ \KwTo $n$}{
+    $\vect{e_j} \leftarrow$ unit vector in the $j$ direction
+      \tcp*{$j$th column of $\mat{I}$}
+      $\mat{J}[:,j] \leftarrow \dfrac{\vect{f(\vect{x} + h\,\vect{e_j})} - \vect{f}_0}{h}$
+      \tcp*{$j$th column of $\mat{J}$}
+  }
+  \Return $\mat{J}$\;
+\end{algorithm}
+\end{minipage}
+\end{document}
