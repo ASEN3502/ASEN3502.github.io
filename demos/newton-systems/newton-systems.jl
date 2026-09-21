@@ -188,12 +188,26 @@ begin
 
     level_color(c, levels) = get(cgrad(:viridis), (c - levels[1]) / max(levels[end] - levels[1], eps()))
 
+    # Marker for iterate i.  An iterate outside the plot is drawn hollow, where the step
+    # that reached it leaves the plot, to show which way it went; the table has its
+    # actual coordinates.
+    function iterate_marker!(plt, xs, i, box; color, kw...)
+        x = xs[i]
+        c = [clamp(x[1], box[1]...), clamp(x[2], box[2]...)]
+        inside = c == x
+        if !inside && i > 1
+            seg = clipped(xs[i-1], x, box...)
+            seg === nothing || (c = seg.b)
+        end
+        scatter!(plt, [c[1]], [c[2]]; color=inside ? color : :white, markerstrokecolor=color,
+                 markerstrokewidth=inside ? 1 : 1.5, kw...)
+    end
+
     # Contour map of component j of f with the tangent plane at each iterate overlaid.
     function small_figure(sys, j, xs)
         xl, yl = sys.xlims, sys.ylims
         box = (xl[1] + 0.005(xl[2] - xl[1]), xl[2] - 0.005(xl[2] - xl[1])),
               (yl[1] + 0.005(yl[2] - yl[1]), yl[2] - 0.005(yl[2] - yl[1]))
-        cl(v) = [clamp(v[1], box[1]...), clamp(v[2], box[2]...)]
         gx = range(xl...; length=100); gy = range(yl...; length=100)
         Z = [sys.f([x, y])[j] for y in gy, x in gx]
         levels = nice_levels(Z)
@@ -221,8 +235,8 @@ begin
             end
             push!(groups, ("<g class=\"nr-lin\" data-i=\"$(i-1)\">", cnt))
         end
-        for (k, x) in enumerate(xs)
-            scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:red, marker=:star5, ms=7)
+        for k in eachindex(xs)
+            iterate_marker!(plt, xs, k, box; color=:red, marker=:star5, ms=7)
             push!(groups, ("<g class=\"nr-star\" data-k=\"$(k-1)\">", 1))
         end
         return plt, groups
@@ -235,7 +249,6 @@ begin
         # to just inside the edge and lines are clipped.
         box = (xl[1] + 0.005(xl[2] - xl[1]), xl[2] - 0.005(xl[2] - xl[1])),
               (yl[1] + 0.005(yl[2] - yl[1]), yl[2] - 0.005(yl[2] - yl[1]))
-        cl(v) = [clamp(v[1], box[1]...), clamp(v[2], box[2]...)]
         gx = range(xl...; length=100); gy = range(yl...; length=100)
         plt = plot(; xlims=xl, ylims=yl, legend=false, aspect_ratio=1, size=(440, 440),
                    xlabel="x", ylabel="y", title=sys.name, titlefontsize=11)
@@ -254,12 +267,12 @@ begin
             push!(groups, ("<g class=\"nr-lin\" data-i=\"$(i-1)\">", cnt))
             if i < length(xs)      # the step from x to the next iterate
                 plot_segment!(plt, clipped_or_dot(x, xs[i+1], box...); color=:black, lw=1.5)
-                scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:black, ms=3)
+                iterate_marker!(plt, xs, i, box; color=:black, ms=3)
                 push!(groups, ("<g class=\"nr-step\" data-i=\"$(i-1)\">", 2))
             end
         end
-        for (k, x) in enumerate(xs)
-            scatter!(plt, [cl(x)[1]], [cl(x)[2]]; color=:red, marker=:star5, ms=9)
+        for k in eachindex(xs)
+            iterate_marker!(plt, xs, k, box; color=:red, marker=:star5, ms=9)
             push!(groups, ("<g class=\"nr-star\" data-k=\"$(k-1)\">", 1))
         end
         return plt, groups, xs
