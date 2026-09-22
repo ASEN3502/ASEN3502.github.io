@@ -11,4 +11,4 @@ Exams are hand-written and closed book. You will need a scientific (non-graphing
 ## Exam 1
 
 - [Equation sheet](/exams/Exam-1-Equation-Sheet.pdf)
-- Practice exam: coming soon
+- [Practice exam](/exams/Practice-Exam-1.pdf)
