@@ -1,0 +1,23 @@
+% Growth of common complexity classes, with wall-clock times at 1 GFLOP/s to
+% make the exponential/factorial rows concrete. Cropped to its own bounding box
+% so it can be dropped onto a Xournal++ page as an image.
+%
+%   latexmk -pdf growth-table.tex
+\documentclass[border=6pt]{standalone}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+\begin{document}
+\begin{tabular}{r r r r r l r l}
+  \toprule
+  $n$ & $\log_2 n$ & $n$ & $n^3$ & $2^n$ & time & $n!$ & time \\
+  \midrule
+  10 & 3.3 & 10 & $10^3$            & $10^3$    & $\mu$s     & $3.6 \times 10^{6}$  & ms \\
+  20 & 4.3 & 20 & $8 \times 10^3$   & $10^6$    & ms         & $2.4 \times 10^{18}$ & 77 yr \\
+  30 & 4.9 & 30 & $2.7 \times 10^4$ & $10^9$    & 1 s        & $2.7 \times 10^{32}$ & $10^{15}$ yr \\
+  60 & 5.9 & 60 & $2 \times 10^5$   & $10^{18}$ & 36 yr      & $8 \times 10^{81}$   & $10^{65}$ yr \\
+  \bottomrule
+  \multicolumn{8}{l}{\footnotesize Times assume one operation per flop at $10^9$ flop/s.}
+\end{tabular}
+\end{document}

@@ -1,0 +1,47 @@
+% Determinant by Laplace (cofactor) expansion along the first row: the textbook
+% definition turned into an algorithm. Recursive, and deliberately so -- the
+% point in class is that it costs O(n!) operations, versus O(n^3) for getting
+% the determinant out of an LU factorization.
+% Uses Chapra's notation: [A] for a matrix.
+% Cropped to its own bounding box so it can be dropped onto a Xournal++ page as
+% an image.
+%
+%   latexmk -pdf determinant-pseudocode.tex
+\documentclass[border=6pt,varwidth=12cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath,amssymb}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\LinesNumbered
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+\SetKwFunction{Det}{Det}
+\SetKwProg{Fn}{function}{}{}
+
+\newcommand{\mat}[1]{[#1]}       % matrix
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\textbf{Determinant by Laplace Expansion}\par\medskip
+\begin{algorithm}[H]
+  \Input{square matrix $\mat{A}$}
+  \Output{$\det \mat{A}$}
+  \BlankLine
+  \Fn{\Det{$\mat{A}$}}{
+    $n \gets \text{nrows}(\mat{A})$\;
+    \If{$n = 1$}{
+      \Return $a_{11}$
+    }
+    $d \leftarrow 0$\;
+    \For{$j \leftarrow 1$ \KwTo $n$}{
+        $\mat{M} \gets \mat{A}$ with row $1$ and column $j$ deleted\;
+        $d \leftarrow d + (-1)^{1+j}\, a_{1j} \cdot \Det{$\mat{M}$}$\;
+    }
+    \Return $d$\;
+  }
+\end{algorithm}
+\end{minipage}
+\end{document}
