@@ -21,4 +21,5 @@ to find anything quickly.
 - [Assignments](assignments)
 - [Gradescope](https://www.gradescope.com/courses/1345824)
 - [Announcements (Canvas)](https://canvas.colorado.edu/courses/143236/announcements)
+- [Solutions (Canvas)](https://canvas.colorado.edu/courses/143236/files/folder/Solutions)
 - [Learning Resources](learning-resources)

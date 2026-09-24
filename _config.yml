@@ -13,6 +13,8 @@ remote_theme: just-the-docs/just-the-docs@v0.10.1
 nav_external_links:
   - title: Announcements (Canvas)
     url: https://canvas.colorado.edu/courses/143236/announcements
+  - title: Solutions (Canvas)
+    url: https://canvas.colorado.edu/courses/143236/files/folder/Solutions
   - title: Textbook
     url: https://canvas.colorado.edu/courses/143236/external_tools/61941?display=borderless
   - title: Gradescope
