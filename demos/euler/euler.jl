@@ -75,7 +75,10 @@ begin
         tt = range(tspan...; length=400)
         plt = plot(; xlabel="t", ylabel="x", ylims=(-1.0, 1.4), size=(640, 380), legend=:topright,
                    title=@sprintf("h = %.3f,  N = %4d steps", h, length(t)-1), titlefontsize=11)
-        for (k, C) in enumerate(-1.0:0.25:2.5)        # other solutions of the same ODE
+        # other solutions of the same ODE: a few near the exact one (x(0) = C - 0.5 = 0.5, 0, -0.5)
+        # so the slope after the first Euler step has a neighbor, then log-spaced farther out
+        Cs = [1.0, 0.5, 0.0, (s * 3.0 * 10.0^(k / 2) for k in 0:6 for s in (-1, 1))...]
+        for (k, C) in enumerate(Cs)
             plot!(plt, tt, x_general.(C, tt); lw=1, color=:gray, alpha=0.35,
                   label=(k == 1 ? "other solutions" : ""))
         end
