@@ -36,6 +36,18 @@
         "demos/newton-systems"
       ],
       "port": 8766
+    },
+    {
+      "name": "euler",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8767",
+        "--directory",
+        "demos/euler"
+      ],
+      "port": 8767
     }
   ]
 }
