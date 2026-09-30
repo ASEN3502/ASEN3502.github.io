@@ -47,14 +47,6 @@ f(t, x) = -x + sin(t);
 
 x_exact(t) = 1.5exp(-t) + 0.5(sin(t) - cos(t));
 
-md"""
-The faint curves are solutions of the same ODE with other initial conditions,
-$x(t) = C e^{-t} + \tfrac{1}{2}(\sin t - \cos t)$.  There is one through every point
-of the plane, and $f(t, x)$ is its slope there.  An Euler step from $(t_i, x_i)$ follows
-the slope of *the solution through that point*, not the slope of the true solution,
-which is why the error accumulates.
-"""
-
 x_general(C, t) = C * exp(-t) + 0.5(sin(t) - cos(t));
 
 tspan = (0.0, 6.0);
