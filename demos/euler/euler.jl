@@ -178,7 +178,8 @@ begin
         regime = abs(g) < 1 ? (g < 0 ? "stable, oscillating" : "stable") : abs(g) == 1 ? "marginal" : "unstable"
         plt = plot(; xlabel="t", ylabel="x", ylims=(-2, 2), size=(640, 380), legend=:topright,
                    title=@sprintf("a = %.0f,  h = %.3f,  1 − ah = %5.2f:  %s", a, h, g, regime), titlefontsize=11)
-        for (k, C) in enumerate(-2.0:0.25:2.0)        # other solutions of the same ODE
+        Cs = [s * 3.0 * 10.0^k for k in 0:4 for s in (-1, 1)]   # other solutions, log-spaced so some are still on the axes after one big step
+        for (k, C) in enumerate(Cs)
             plot!(plt, tt, C .* exp.(-a .* tt); lw=1, color=:gray, alpha=0.35,
                   label=(k == 1 ? "other solutions" : ""))
         end
