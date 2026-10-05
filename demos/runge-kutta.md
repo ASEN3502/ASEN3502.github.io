@@ -39,6 +39,7 @@ lecture: 100-runge-kutta
     <label>method
       <select id="rk-method">
         <option value="euler" selected>Euler</option>
+        <option value="heun">Heun (1 iteration)</option>
         <option value="midpoint">Midpoint</option>
         <option value="ralston">Ralston</option>
         <option value="rk4">Classical RK4</option>
@@ -54,6 +55,12 @@ lecture: 100-runge-kutta
     \[ \vec{y}_{i+1} = \vec{y}_i + h\,\vec{k}_1, \qquad
        \vec{k}_1 = \vec{f}(t_i, \vec{y}_i) \]
     <p>One slope per step, taken at the start. First order: global error \(O(h)\).</p>
+  </div>
+  <div class="rk-formula" data-m="heun" hidden>
+    \[ \vec{k}_1 = \vec{f}(t_i, \vec{y}_i), \qquad
+       \vec{k}_2 = \vec{f}\!\left(t_i + h,\ \vec{y}_i + h\,\vec{k}_1\right), \qquad
+       \vec{y}_{i+1} = \vec{y}_i + \tfrac{h}{2}\left(\vec{k}_1 + \vec{k}_2\right) \]
+    <p>Predict the end of the step with Euler, then average the slopes at both ends (one corrector iteration). Second order: global error \(O(h^2)\).</p>
   </div>
   <div class="rk-formula" data-m="midpoint" hidden>
     \[ \vec{k}_1 = \vec{f}(t_i, \vec{y}_i), \qquad
@@ -125,6 +132,10 @@ lecture: 100-runge-kutta
   var METHODS = {
     euler:    { name: 'Euler',          order: 1, color: '#1e90ff',
       step: function (t, y, h) { return add(y, h, f(t, y)); } },
+    heun:     { name: 'Heun (1 iter.)', order: 2, color: '#008b8b',
+      step: function (t, y, h) {
+        var k1 = f(t, y), k2 = f(t + h, add(y, h, k1));
+        return [y[0] + h / 2 * (k1[0] + k2[0]), y[1] + h / 2 * (k1[1] + k2[1])]; } },
     midpoint: { name: 'Midpoint',       order: 2, color: '#e07b00',
       step: function (t, y, h) {
         var k1 = f(t, y), k2 = f(t + h / 2, add(y, h / 2, k1));
@@ -140,7 +151,7 @@ lecture: 100-runge-kutta
         return [y[0] + h / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]),
                 y[1] + h / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1])]; } }
   };
-  var ORDER = ['euler', 'midpoint', 'ralston', 'rk4'];
+  var ORDER = ['euler', 'heun', 'midpoint', 'ralston', 'rk4'];
   var HS = [1, 0.5, 0.25, 0.1, 0.05, 0.025, 0.01, 0.005];
 
   // integrate, returning arrays of t, x, v
