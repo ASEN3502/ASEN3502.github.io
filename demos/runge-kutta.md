@@ -28,9 +28,9 @@ lecture: 100-runge-kutta
   <p>Test problem: a damped pendulum,
   \[ \ddot{x} = -\sin x - 0.1\,\dot{x}, \qquad x(0) = 2.5,\quad \dot{x}(0) = 0, \]
   written as a first-order system in the state vector
-  \(\vec{y} = [x,\ \dot{x}]^T\):
-  \[ \dot{\vec{y}} = \vec{f}(t, \vec{y}) =
-     \begin{bmatrix} y_2 \\ -\sin y_1 - 0.1\,y_2 \end{bmatrix}. \]
+  \(\vec{x} = [x,\ \dot{x}]^T\):
+  \[ \dot{\vec{x}} = \vec{f}(t, \vec{x}) =
+     \begin{bmatrix} \dot{x} \\ -\sin x - 0.1\,\dot{x} \end{bmatrix}. \]
   Every method below applies the same update to the whole vector at once.
   There is no closed-form solution, so the "exact" curve is RK4 with
   \(h = 2.5\times10^{-4}\).</p>
@@ -52,36 +52,36 @@ lecture: 100-runge-kutta
   </div>
 
   <div class="rk-formula" data-m="euler">
-    \[ \vec{y}_{i+1} = \vec{y}_i + h\,\vec{k}_1, \qquad
-       \vec{k}_1 = \vec{f}(t_i, \vec{y}_i) \]
+    \[ \vec{x}_{i+1} = \vec{x}_i + h\,\vec{k}_1, \qquad
+       \vec{k}_1 = \vec{f}(t_i, \vec{x}_i) \]
     <p>One slope per step, taken at the start. First order: global error \(O(h)\).</p>
   </div>
   <div class="rk-formula" data-m="heun" hidden>
-    \[ \vec{k}_1 = \vec{f}(t_i, \vec{y}_i), \qquad
-       \vec{k}_2 = \vec{f}\!\left(t_i + h,\ \vec{y}_i + h\,\vec{k}_1\right), \qquad
-       \vec{y}_{i+1} = \vec{y}_i + \tfrac{h}{2}\left(\vec{k}_1 + \vec{k}_2\right) \]
+    \[ \vec{k}_1 = \vec{f}(t_i, \vec{x}_i), \qquad
+       \vec{k}_2 = \vec{f}\!\left(t_i + h,\ \vec{x}_i + h\,\vec{k}_1\right), \qquad
+       \vec{x}_{i+1} = \vec{x}_i + \tfrac{h}{2}\left(\vec{k}_1 + \vec{k}_2\right) \]
     <p>Predict the end of the step with Euler, then average the slopes at both ends (one corrector iteration). Second order: global error \(O(h^2)\).</p>
   </div>
   <div class="rk-formula" data-m="midpoint" hidden>
-    \[ \vec{k}_1 = \vec{f}(t_i, \vec{y}_i), \qquad
-       \vec{k}_2 = \vec{f}\!\left(t_i + \tfrac{h}{2},\ \vec{y}_i + \tfrac{h}{2}\vec{k}_1\right), \qquad
-       \vec{y}_{i+1} = \vec{y}_i + h\,\vec{k}_2 \]
+    \[ \vec{k}_1 = \vec{f}(t_i, \vec{x}_i), \qquad
+       \vec{k}_2 = \vec{f}\!\left(t_i + \tfrac{h}{2},\ \vec{x}_i + \tfrac{h}{2}\vec{k}_1\right), \qquad
+       \vec{x}_{i+1} = \vec{x}_i + h\,\vec{k}_2 \]
     <p>Use the Euler slope to reach the midpoint, then step with the slope there. Second order: global error \(O(h^2)\).</p>
   </div>
   <div class="rk-formula" data-m="ralston" hidden>
-    \[ \vec{k}_1 = \vec{f}(t_i, \vec{y}_i), \qquad
-       \vec{k}_2 = \vec{f}\!\left(t_i + \tfrac{2h}{3},\ \vec{y}_i + \tfrac{2h}{3}\vec{k}_1\right), \qquad
-       \vec{y}_{i+1} = \vec{y}_i + h\left(\tfrac{1}{4}\vec{k}_1 + \tfrac{3}{4}\vec{k}_2\right) \]
+    \[ \vec{k}_1 = \vec{f}(t_i, \vec{x}_i), \qquad
+       \vec{k}_2 = \vec{f}\!\left(t_i + \tfrac{2h}{3},\ \vec{x}_i + \tfrac{2h}{3}\vec{k}_1\right), \qquad
+       \vec{x}_{i+1} = \vec{x}_i + h\left(\tfrac{1}{4}\vec{k}_1 + \tfrac{3}{4}\vec{k}_2\right) \]
     <p>Same cost as midpoint with a different sample point and weights chosen to minimize the truncation error bound. Second order: global error \(O(h^2)\).</p>
   </div>
   <div class="rk-formula" data-m="rk4" hidden>
     \[ \begin{aligned}
-       \vec{k}_1 &= \vec{f}(t_i, \vec{y}_i) &
-       \vec{k}_2 &= \vec{f}\!\left(t_i + \tfrac{h}{2},\ \vec{y}_i + \tfrac{h}{2}\vec{k}_1\right) \\
-       \vec{k}_3 &= \vec{f}\!\left(t_i + \tfrac{h}{2},\ \vec{y}_i + \tfrac{h}{2}\vec{k}_2\right) &
-       \vec{k}_4 &= \vec{f}\!\left(t_i + h,\ \vec{y}_i + h\,\vec{k}_3\right)
+       \vec{k}_1 &= \vec{f}(t_i, \vec{x}_i) &
+       \vec{k}_2 &= \vec{f}\!\left(t_i + \tfrac{h}{2},\ \vec{x}_i + \tfrac{h}{2}\vec{k}_1\right) \\
+       \vec{k}_3 &= \vec{f}\!\left(t_i + \tfrac{h}{2},\ \vec{x}_i + \tfrac{h}{2}\vec{k}_2\right) &
+       \vec{k}_4 &= \vec{f}\!\left(t_i + h,\ \vec{x}_i + h\,\vec{k}_3\right)
        \end{aligned} \]
-    \[ \vec{y}_{i+1} = \vec{y}_i + \tfrac{h}{6}\left(\vec{k}_1 + 2\vec{k}_2 + 2\vec{k}_3 + \vec{k}_4\right) \]
+    \[ \vec{x}_{i+1} = \vec{x}_i + \tfrac{h}{6}\left(\vec{k}_1 + 2\vec{k}_2 + 2\vec{k}_3 + \vec{k}_4\right) \]
     <p>Four slope evaluations per step. Fourth order: global error \(O(h^4)\).</p>
   </div>
 
@@ -94,7 +94,7 @@ lecture: 100-runge-kutta
 
   <svg id="rk-err" viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg"></svg>
   <p class="rk-caption">Global error
-  \(\lVert \vec{y}_N - \vec{y}(t_f) \rVert\) at \(t_f\) against \(h\) on
+  \(\lVert \vec{x}_N - \vec{x}(t_f) \rVert\) at \(t_f\) against \(h\) on
   log-log axes. The slope of each line is the order of the method.</p>
 </div>
 
