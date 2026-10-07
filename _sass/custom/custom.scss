@@ -209,3 +209,28 @@ blockquote.construction::before {
   color: #6b5312; // 8.5:1 on the panel
   letter-spacing: 0.04em;
 }
+
+// ---------------------------------------------------------- syllabus changes
+// Text revised after the semester started is wrapped in
+//   <span class="changed">...</span>        for a phrase
+//   <div class="changed" markdown="1">...</div>   for whole paragraphs or lists
+// and the note at the top of syllabus.md tells readers what the blue means.
+// The PDF build ignores the class, so the wrappers are harmless there.
+// Clear the wrappers out at the start of the next semester.
+
+.changed {
+  background: #dbeaf5; // light blue; dark-blue text is 9.5:1 on it
+  color: #0a3758;
+}
+
+div.changed {
+  border-left: 4px solid #096fae;
+  padding: 0.5rem 0.8rem 0.5rem 1rem;
+  margin: 1rem 0;
+}
+
+// Links inside a highlighted run keep the usual link blue but underline so
+// they stay distinguishable from the surrounding blue text.
+.changed a {
+  text-decoration: underline;
+}

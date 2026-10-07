@@ -6,11 +6,19 @@ nav_order: 1
 # department archives. ./build-pdf.sh strips this front matter and runs pandoc.
 # Keep the body to plain Markdown -- no Liquid, no kramdown attribute lists
 # ({:target="_blank"}) -- or it will leak into the PDF.
+#
+# Mid-semester revisions: wrap changed text in <span class="changed">...</span>
+# (a phrase) or <div class="changed" markdown="1">...</div> (a block). They
+# render blue on the web; the PDF ignores them. The baseline is the git tag
+# syllabus-semester-start; `git diff syllabus-semester-start -- syllabus.md`
+# lists what should be wrapped.
 ---
 
 # Syllabus -- ASEN 3502: Aerospace Computational Methods
 
 **Zachary Sunberg — Fall 2026**
+
+<span class="changed">Note: changes made since the beginning of the semester are highlighted in blue, like this sentence.</span>
 
 ## Prerequisites
 
@@ -57,10 +65,14 @@ Some of the optimization content will come from *Engineering Design Optimization
 Learning is a collaborative effort between the instructor and students. Students
 are expected to attend all lectures and labs (except in cases of illness,
 important travel, or when specifically noted in a Canvas announcement), ask
-questions, and participate in discussions. The course staff will encourage attendance through in-class
-assignments. **If a student needs to miss class occasionally, please do NOT notify
-the course staff.** Several of the lowest in-class assignment scores will be dropped
+questions, and participate in discussions. **If a student needs to miss class <span class="changed">or lab</span> occasionally, please do NOT notify
+the course staff.** The course staff will encourage attendance through in-class
+assignments. Several of the lowest in-class assignment scores will be dropped
 to accommodate absences (see the grade breakdown below).
+
+<div class="changed" markdown="1">
+The labs in this course are a critical part of the **Communication** and **Team** Program Learning Outcomes of the Smead Aerospace curriculum, and, unlike lectures, labs cannot be recorded. Therefore **attending the labs is more important than attending lectures**. Please carefully consider ways to avoid lab absences. The instructor may add additional grade adjustments if a student has unusually low participation in labs (for example, missing multiple weeks in a two or three week lab). The instructor will distribute lab groups via a canvas announcement. If you miss a lab, please contact your other members and contribute to the effort outside of lab time.
+</div>
 
 ## Assignments and Grading
 
