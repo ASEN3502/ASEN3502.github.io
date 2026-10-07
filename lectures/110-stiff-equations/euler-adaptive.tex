@@ -1,0 +1,30 @@
+% Step-halving adaptive Euler with ode45-style inputs and outputs.
+%
+%   latexmk -pdf euler-adaptive.tex
+\documentclass[border=6pt]{standalone}
+
+\usepackage{amsmath}
+\usepackage{algpseudocode}
+
+\begin{document}
+\begin{minipage}{4.6in}
+\begin{algorithmic}[1]
+\Function{euler\_adaptive}{$f, [t_0, t_f], x_0, E_s$}
+  \State $t \gets [t_0]$,\quad $x \gets [x_0]$,\quad $h \gets (t_f - t_0)/100$
+  \While{$t_{\text{end}} < t_f$}
+    \State $h \gets \min(h,\; t_f - t_{\text{end}})$
+    \State $x_{\text{full}} \gets x_{\text{end}} + h\, f(t_{\text{end}}, x_{\text{end}})$ \Comment{or RK4}
+    \State $x_{\text{mid}} \gets x_{\text{end}} + \tfrac{h}{2}\, f(t_{\text{end}}, x_{\text{end}})$
+    \State $x_{\text{half}} \gets x_{\text{mid}} + \tfrac{h}{2}\, f(t_{\text{end}} + \tfrac{h}{2}, x_{\text{mid}})$
+    \State $E_a \gets \lvert x_{\text{half}} - x_{\text{full}} \rvert$
+    \If{$E_a \le E_s$}
+      \State append $t_{\text{end}} + h$ to $t$
+      \State append $x_{\text{half}}$ to $x$
+    \EndIf
+    \State $h \gets 0.9\, h \sqrt{E_s / E_a}$ \Comment{b/c $E_a$ is $O(h^2)$}
+  \EndWhile
+  \State \Return $t, x$
+\EndFunction
+\end{algorithmic}
+\end{minipage}
+\end{document}
