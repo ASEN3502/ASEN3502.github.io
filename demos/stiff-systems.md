@@ -39,7 +39,7 @@ lecture: 110-stiff-equations
         <option value="rk4">RK4, fixed step</option>
         <option value="bs23" selected>BS23, adaptive (ode23)</option>
         <option value="ieuler">Implicit Euler, adaptive</option>
-        <option value="ros23">Rosenbrock 2(3), adaptive (ode23s)</option>
+        <option value="ros23">MATLAB ode23s</option>
       </select>
     </label>
     <label id="st-hlabel" hidden>
@@ -73,7 +73,7 @@ lecture: 110-stiff-equations
     <p>Each step solves a 2×2 nonlinear system for \(\vec{x}_{i+1}\) with Newton's method. Step halving gives the error estimate. First order, so it needs small steps for accuracy, but it is stable for any \(h\) when \(\mathrm{Re}\,\lambda < 0\), so the step size is set by accuracy alone.</p>
   </div>
   <div class="st-formula" data-m="ros23" hidden>
-    <p>A Rosenbrock method, what MATLAB's <code>ode23s</code> uses. Implicit, second order, with a built-in error estimate.</p>
+    <p>The method inside MATLAB's <code>ode23s</code>. Implicit, second order, adaptive with a built-in error estimate.</p>
   </div>
 
   <details class="st-traj" open>
@@ -295,7 +295,7 @@ lecture: 110-stiff-equations
       run: bs23Run },
     ieuler: { name: 'Implicit Euler, adaptive', color: '#2e8b57', fixed: false,
       run: ieulerRun },
-    ros23:  { name: 'Rosenbrock 2(3), adaptive', color: '#c2185b', fixed: false,
+    ros23:  { name: 'MATLAB ode23s', color: '#c2185b', fixed: false,
       run: ros23Run }
   };
   var ORDER = ['euler', 'rk4', 'bs23', 'ieuler', 'ros23'];
