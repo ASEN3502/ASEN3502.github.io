@@ -108,8 +108,12 @@ lecture: 120-boundary-value-problems
   </div>
 
   <div class="bv-wide">
-    <svg id="bv-sh-svg" viewBox="0 0 640 360" role="img"
-         aria-label="shooting method trajectories"></svg>
+    <div class="bv-shrow">
+      <svg id="bv-sh-svg" viewBox="0 0 640 360" role="img"
+           aria-label="shooting method trajectories"></svg>
+      <svg id="bv-zm-svg" viewBox="0 0 300 360" role="img"
+           aria-label="zoom on the end of the rod near the target temperature"></svg>
+    </div>
     <div class="bv-legend">
       <span><i class="bv-sw bv-sw-old"></i> earlier shots</span>
       <span><i class="bv-sw bv-sw-cur"></i> current shot</span>
@@ -189,7 +193,11 @@ lecture: 120-boundary-value-problems
 .bv-demo .bv-panel { flex: 1 1 20rem; min-width: 0; }
 .bv-demo .bv-panel h3 { margin: 0 0 .2rem; }
 .bv-demo .bv-sub { margin: 0 0 .6rem; color: #555; }
-.bv-demo .bv-wide { max-width: 44rem; margin: 0 auto; }
+.bv-demo .bv-wide { max-width: 52rem; margin: 0 auto; }
+.bv-demo .bv-shrow { display: flex; gap: .5rem; align-items: stretch; }
+.bv-demo .bv-shrow #bv-sh-svg { flex: 0 0 68%; }
+.bv-demo .bv-shrow #bv-zm-svg { flex: 1 1 0; min-width: 0; }
+.bv-demo .bv-zoombox { fill: none; stroke: #555; stroke-width: 1.2; stroke-dasharray: 3 3; }
 
 .bv-demo .bv-controls { display: flex; flex-wrap: wrap; gap: .5rem 2.5rem;
                         margin: 1rem 0; }
@@ -507,28 +515,41 @@ lecture: 120-boundary-value-problems
     var r = niceRange(Math.max(lo, -500), Math.min(hi, 1000));
     var a = axes($('bv-sh-svg'), { xmin: 0, xmax: L, ymin: r.ymin, ymax: r.ymax,
                                    xstep: 1, ystep: r.ystep, xlabel: 'x', ylabel: 'T' });
-    a.g.appendChild(el('line', { x1: a.px(0), y1: a.py(TL), x2: a.px(L), y2: a.py(TL), class: 'bv-target' }));
-    for (var i = 0; i <= k; i++) {
-      var pts = hist[i].sol.map(function (p) { return [p[0], p[1][0]]; });
-      var cur = i === k;
-      var path = el('path', { d: pathD(pts, a), class: 'bv-shot' + (cur ? ' bv-shot-cur' : ''),
-                              opacity: cur ? 1 : 0.2 + 0.3 * (i + 1) / (k + 1) });
-      a.g.appendChild(path);
-      // Label the end of each shot with its index.
-      var last = null;
-      for (var j = pts.length - 1; j >= 0; j--) if (isFinite(pts[j][1])) { last = pts[j]; break; }
-      if (last && last[1] >= r.ymin && last[1] <= r.ymax) {
-        a.g.appendChild(el('text', { x: a.px(last[0]) + (last[0] >= L ? -6 : 4),
-                                     y: a.py(last[1]) + (cur ? -8 : 4),
-                                     'text-anchor': last[0] >= L ? 'end' : 'start',
-                                     class: 'bv-lbl', fill: '#7b3fa0',
-                                     'font-weight': cur ? 700 : 400 }, 'z' + sup(i)));
+    // Zoomed view of the last half unit of the rod, around the target.
+    var ZX = 9.5, ZY = 10;
+    var z = axes($('bv-zm-svg'), { xmin: ZX, xmax: L, ymin: TL - ZY, ymax: TL + ZY,
+                                   xticks: [[9.5, '9.5'], [9.75, '9.75'], [10, '10']], ystep: 5,
+                                   xlabel: 'x', ylabel: 'T', ml: 48 });
+    [a, z].forEach(function (ax, which) {
+      var zoom = which === 1;
+      ax.g.appendChild(el('line', { x1: ax.px(0), y1: ax.py(TL), x2: ax.px(L), y2: ax.py(TL), class: 'bv-target' }));
+      for (var i = 0; i <= k; i++) {
+        var pts = hist[i].sol.map(function (p) { return [p[0], p[1][0]]; });
+        var cur = i === k;
+        ax.g.appendChild(el('path', { d: pathD(pts, ax), class: 'bv-shot' + (cur ? ' bv-shot-cur' : ''),
+                                      opacity: cur ? 1 : 0.2 + 0.3 * (i + 1) / (k + 1) }));
+        // Label the end of each shot with its index.
+        var last = null;
+        for (var j = pts.length - 1; j >= 0; j--) if (isFinite(pts[j][1])) { last = pts[j]; break; }
+        var ylo = zoom ? TL - ZY : r.ymin, yhi = zoom ? TL + ZY : r.ymax;
+        if (last && last[1] >= ylo && last[1] <= yhi && (!zoom || last[0] >= ZX)) {
+          ax.g.appendChild(el('text', { x: ax.px(last[0]) + (last[0] >= L ? -6 : 4),
+                                        y: ax.py(last[1]) + (cur ? -8 : 4),
+                                        'text-anchor': last[0] >= L ? 'end' : 'start',
+                                        class: 'bv-lbl', fill: '#7b3fa0',
+                                        'font-weight': cur ? 700 : 400 }, 'z' + sup(i)));
+        }
       }
-    }
-    a.g.appendChild(dot(a, 0, T0, 6, 'bv-bc'));
-    a.g.appendChild(dot(a, L, TL, 6, 'bv-bc'));
-    a.g.appendChild(el('text', { x: a.px(L) - 8, y: a.py(TL) + 18, 'text-anchor': 'end',
-                                 class: 'bv-lbl bv-lbl-amb' }, 'target T(L) = 200'));
+      ax.g.appendChild(dot(ax, 0, T0, 6, 'bv-bc'));
+      ax.g.appendChild(dot(ax, L, TL, 6, 'bv-bc'));
+    });
+    a.g.appendChild(el('text', { x: a.px(0) + 8, y: a.py(TL) - 6, class: 'bv-lbl bv-lbl-amb' },
+                       'target T(L) = 200'));
+    // Show the zoomed region on the main plot.
+    a.g.appendChild(el('rect', { x: a.px(ZX), y: a.py(TL + ZY), width: a.px(L) - a.px(ZX),
+                                 height: a.py(TL - ZY) - a.py(TL + ZY), class: 'bv-zoombox' }));
+    z.g.appendChild(el('text', { x: z.px(L) - 8, y: z.py(TL + ZY) + 16, 'text-anchor': 'end',
+                                 class: 'bv-lbl' }, 'zoom'));
 
     // Table of shots.
     var tbl = $('bv-sh-table');
