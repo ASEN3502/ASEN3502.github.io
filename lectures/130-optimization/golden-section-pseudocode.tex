@@ -1,0 +1,52 @@
+% Golden-section search: shrink a bracket around a maximum by a constant
+% factor R = (sqrt(5)-1)/2 each iteration, placing the interior points so that
+% one of them is reused and only one new function evaluation is needed per
+% iteration.  Follows Chapra (maximization; negate f to minimize).  Cropped to
+% its own bounding box so it can be dropped onto a Xournal++ page as an image.
+%
+%   latexmk -pdf golden-section-pseudocode.tex
+\documentclass[border=6pt,varwidth=11cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Golden-Section Search}
+  \BlankLine
+  \Input{function $f$, bracket $[x_l, x_u]$ containing a single maximum,
+         tolerance $\varepsilon_s$}
+  \Output{estimate $x_{\text{opt}}$ of the maximizer}
+  \BlankLine
+  $R \leftarrow (\sqrt{5} - 1) \,/\, 2$ \tcp*{golden ratio, $\approx 0.618$}
+  $d \leftarrow R\,(x_u - x_l)$\;
+  $x_1 \leftarrow x_l + d$; \quad $x_2 \leftarrow x_u - d$\;
+  $f_1 \leftarrow f(x_1)$; \quad $f_2 \leftarrow f(x_2)$\;
+  \Repeat{$\varepsilon_a < \varepsilon_s$}{
+    $d \leftarrow R\,d$\;
+    \tcp{keep the subinterval with the larger interior value}
+    \uIf{$f_1 > f_2$}{
+      $x_l \leftarrow x_2$\;
+      $x_2 \leftarrow x_1$; \quad $f_2 \leftarrow f_1$\;
+      $x_1 \leftarrow x_l + d$; \quad $f_1 \leftarrow f(x_1)$\;
+      $x_{\text{opt}} \leftarrow x_1$\;
+    }
+    \Else{
+      $x_u \leftarrow x_1$\;
+      $x_1 \leftarrow x_2$; \quad $f_1 \leftarrow f_2$\;
+      $x_2 \leftarrow x_u - d$; \quad $f_2 \leftarrow f(x_2)$\;
+      $x_{\text{opt}} \leftarrow x_2$\;
+    }
+    $\varepsilon_a \leftarrow (1 - R) \left| \dfrac{x_u - x_l}{x_{\text{opt}}} \right| \cdot 100\%$\;
+  }
+  \Return $x_{\text{opt}}$\;
+\end{algorithm}
+\end{minipage}
+\end{document}
