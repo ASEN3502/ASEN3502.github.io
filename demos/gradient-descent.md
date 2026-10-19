@@ -43,8 +43,8 @@ lecture: 140-gradient-descent
   <div class="op-controls">
     <label><span>eigenvalue ratio \(\lambda_1 / \lambda_2\) = <b id="op-grv">1</b></span>
       <input type="range" id="op-gr" min="1" max="25" step="1" value="1"></label>
-    <label><span>step size \(\alpha\) = <b id="op-gav">0.20</b></span>
-      <input type="range" id="op-ga" min="0.05" max="2" step="0.05" value="0.2"></label>
+    <label><span>step size \(\alpha\) = <b id="op-gav">1.00</b></span>
+      <input type="range" id="op-ga" min="0.05" max="2" step="0.05" value="1"></label>
     <label><span>start \(x_0\) = <b id="op-gx0v">2.5</b></span>
       <input type="range" id="op-gx0" min="-3" max="3" step="0.1" value="2.5"></label>
     <label><span>start \(y_0\) = <b id="op-gy0v">1.0</b></span>
