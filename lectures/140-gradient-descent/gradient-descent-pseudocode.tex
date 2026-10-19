@@ -1,0 +1,37 @@
+% Gradient descent with a fixed step size: from the current point, step a
+% fixed multiple of the negative gradient until the gradient is small enough.
+% Symbols follow Alg. 4.5 (steepest descent) in Martins & Ning, Engineering
+% Design Optimization (mdobook.github.io), with Chapra's E_s for the tolerance
+% and a generic norm.
+% Cropped to its own bounding box so it can be dropped onto a Xournal++ page
+% as an image.
+%
+%   latexmk -pdf gradient-descent-pseudocode.tex
+\documentclass[border=6pt,varwidth=11cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Gradient Descent (fixed step size)}
+  \BlankLine
+  \Input{starting point $\vec{x}_0$, step size $\alpha$, tolerance $E_s$}
+  \Output{$\vec{x}^*$, estimate of a local minimizer}
+  \BlankLine
+  $k \leftarrow 0$\;
+  \While{$\|\nabla f(\vec{x}_k)\| > E_s$}{
+    $\vec{x}_{k+1} \leftarrow \vec{x}_k - \alpha\, \nabla f(\vec{x}_k)$ \tcp*{step downhill}
+    $k \leftarrow k + 1$\;
+  }
+  \Return $\vec{x}^* = \vec{x}_k$\;
+\end{algorithm}
+\end{minipage}
+\end{document}
