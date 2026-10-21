@@ -1,0 +1,41 @@
+% Armijo backtracking line search: start from an initial step along a descent
+% direction and halve it until the sufficient decrease condition holds.
+% Symbols follow Alg. 4.2 (backtracking) in Martins & Ning, Engineering Design
+% Optimization (mdobook.github.io): initial step \alpha_init, sufficient
+% decrease factor \mu_1, backtracking factor \rho.
+% Cropped to its own bounding box so it can be dropped onto a Xournal++ page
+% as an image.
+%
+%   latexmk -pdf armijo-pseudocode.tex
+\documentclass[border=6pt,varwidth=11cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Armijo Backtracking Line Search}
+  \BlankLine
+  \Input{current point $\vec{x}_k$, descent direction $\vec{p}_k$,
+         initial step $\alpha_\text{init}$ (1 for Newton),
+         sufficient decrease factor $\mu_1$ (e.g.\ $10^{-4}$),
+         backtracking factor $\rho$ (e.g.\ $0.5$)}
+  \Output{step size $\alpha_k$}
+  \BlankLine
+  $\phi(\alpha) \leftarrow f(\vec{x}_k + \alpha\, \vec{p}_k)$ \tcp*{$f$ along the line}
+  $\phi'(0) \leftarrow \nabla f(\vec{x}_k)^\mathsf{T} \vec{p}_k$ \tcp*{slope at the start, $< 0$}
+  $\alpha \leftarrow \alpha_\text{init}$\;
+  \While{$\phi(\alpha) > \phi(0) + \mu_1\, \alpha\, \phi'(0)$}{
+    $\alpha \leftarrow \rho\, \alpha$ \tcp*{shrink the step}
+  }
+  \Return $\alpha_k = \alpha$\;
+\end{algorithm}
+\end{minipage}
+\end{document}

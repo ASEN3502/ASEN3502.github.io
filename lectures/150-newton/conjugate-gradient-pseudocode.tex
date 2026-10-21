@@ -1,0 +1,48 @@
+% Nonlinear conjugate gradient with the Polak-Ribiere+ update: each new
+% search direction is the negative gradient bent by beta times the previous
+% direction, so that successive directions are (approximately) conjugate and
+% the method does not zig-zag like steepest descent.
+% Symbols follow Alg. 4.7 in Martins & Ning, Engineering Design Optimization
+% (mdobook.github.io), with Chapra's E_s for the tolerance.
+% Cropped to its own bounding box so it can be dropped onto a Xournal++ page
+% as an image.
+%
+%   latexmk -pdf conjugate-gradient-pseudocode.tex
+\documentclass[border=6pt,varwidth=12cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Conjugate Gradient (Polak--Ribi\`ere+)}
+  \BlankLine
+  \Input{starting point $\vec{x}_0$, tolerance $E_s$}
+  \Output{$\vec{x}^*$, estimate of a local minimizer}
+  \BlankLine
+  $k \leftarrow 0$\;
+  $\vec{p}_0 \leftarrow -\nabla f(\vec{x}_0)$ \tcp*{first step is steepest descent}
+  \While{$\|\nabla f(\vec{x}_k)\| > E_s$}{
+    $\alpha_k \leftarrow$ line search along $\vec{p}_k$\;
+    $\vec{x}_{k+1} \leftarrow \vec{x}_k + \alpha_k\, \vec{p}_k$\;
+    $\beta_{k+1} \leftarrow \max\!\left(0,\;
+      \dfrac{\nabla f(\vec{x}_{k+1})^\mathsf{T}\big(\nabla f(\vec{x}_{k+1}) - \nabla f(\vec{x}_k)\big)}
+            {\nabla f(\vec{x}_k)^\mathsf{T}\, \nabla f(\vec{x}_k)}\right)$\;
+    $\vec{p}_{k+1} \leftarrow -\nabla f(\vec{x}_{k+1}) + \beta_{k+1}\, \vec{p}_k$
+      \tcp*{bend by the old direction}
+    \If{$\nabla f(\vec{x}_{k+1})^\mathsf{T} \vec{p}_{k+1} \ge 0$}{
+      $\vec{p}_{k+1} \leftarrow -\nabla f(\vec{x}_{k+1})$ \tcp*{not downhill: restart}
+    }
+    $k \leftarrow k + 1$\;
+  }
+  \Return $\vec{x}^* = \vec{x}_k$\;
+\end{algorithm}
+\end{minipage}
+\end{document}
