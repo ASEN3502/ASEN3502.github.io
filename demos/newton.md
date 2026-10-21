@@ -289,9 +289,10 @@ lecture: 150-newton
     z.forEach(function (r) { r.forEach(function (v) { if (v > zmax) zmax = v; if (v < zmin) zmin = v; }); });
     var showFit = $('op-fq').checked && $('op-mnt').checked;
     var traces = [{ type: 'contour', x: G.xs, y: G.ys, z: z, zmin: zmin, zmax: zmax, showscale: false,
-                    colorscale: showFit ? [[0, '#9ab'], [1, '#9ab']] : 'Blues',
+                    colorscale: showFit ? [[0, '#6b7c8c'], [1, '#6b7c8c']] : [[0, '#a9cbe6'], [1, '#f4f8fc']],
                     contours: { start: zmin, end: zmax, size: (zmax - zmin) / 24, coloring: showFit ? 'lines' : 'fill' },
-                    line: { width: 1 }, hovertemplate: 'x %{x:.2f}, y %{y:.2f}<extra></extra>' }];
+                    line: { width: 1, color: showFit ? '#8a9aa8' : '#5b86b0' },
+                    hovertemplate: 'x %{x:.2f}, y %{y:.2f}<extra></extra>' }];
     var notes = [], methods = ['sd', 'cg', 'nt'].filter(function (m) { return $('op-m' + m).checked; });
 
     methods.forEach(function (m) {
@@ -308,7 +309,6 @@ lecture: 150-newton
 
       if (m === 'nt' && showFit) {
         var H = F.h(cur.x, cur.y), det = H[0] * H[2] - H[1] * H[1];
-        var d = newtonDir(F, cur, g), tx = cur.x + d[0], ty = cur.y + d[1];
         var q = G.ys.map(function (y) { return G.xs.map(function (x) {
           var u = x - cur.x, v = y - cur.y;
           var qv = fv + g[0] * u + g[1] * v + 0.5 * (H[0] * u * u + 2 * H[1] * u * v + H[2] * v * v);
@@ -318,20 +318,18 @@ lecture: 150-newton
                       autocontour: false, colorscale: [[0, COL.nt], [1, COL.nt]],
                       contours: { coloring: 'lines', start: zmin, end: zmax, size: (zmax - zmin) / 24 },   // same levels as f
                       line: { width: 1 }, name: 'fitted quadratic' });
-        traces.push({ type: 'scatter', mode: 'markers', x: [tx], y: [ty], hoverinfo: 'skip', showlegend: false,
-                      marker: { size: 11, symbol: 'circle-open', color: COL.nt, line: { width: 2 } } });
-        notes.push('<div style="color:' + COL.nt + '">fitted quadratic is a ' + kind + '; its stationary point (open circle) is the next Newton iterate</div>');
+        notes.push('<div style="color:' + COL.nt + '">fitted quadratic is a ' + kind + '</div>');
       }
     });
     methods.forEach(function (m) {
       var r = path(F, fn, m, x0, alpha, ls), shown = r.pts.slice(0, K + 1), cur = shown[shown.length - 1];
       traces.push({ type: 'scatter', mode: 'lines+markers', x: shown.map(function (p) { return p.x; }), y: shown.map(function (p) { return p.y; }),
-                    line: { color: COL[m], width: 2 }, marker: { size: 5, color: COL[m] }, hoverinfo: 'skip', showlegend: false });
+                    line: { color: COL[m], width: 3 }, marker: { size: 7, color: COL[m] }, hoverinfo: 'skip', showlegend: false });
       var nxt = r.pts[shown.length];
       if (nxt) traces.push({ type: 'scatter', mode: 'lines', x: [cur.x, nxt.x], y: [cur.y, nxt.y], hoverinfo: 'skip', showlegend: false,
-                             line: { color: COL[m], width: 2, dash: 'dot' } });
+                             line: { color: COL[m], width: 3, dash: 'dot' } });
       traces.push({ type: 'scatter', mode: 'markers', x: [cur.x], y: [cur.y], hoverinfo: 'skip', showlegend: false,
-                    marker: { size: 12, color: COL[m], line: { color: '#fff', width: 1.5 } } });
+                    marker: { size: 14, color: COL[m], line: { color: '#fff', width: 2 } } });
     });
     $('op-note').innerHTML = notes.join('');
 
