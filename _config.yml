@@ -63,4 +63,5 @@ exclude:
   - build-pdf.sh
   - build-lectures.sh
   - README.md
+  - CLAUDE.md
   - LICENSE
