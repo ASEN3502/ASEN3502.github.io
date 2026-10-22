@@ -18,6 +18,7 @@ to find anything quickly.
 
 - [Schedule](schedule)
 - [Syllabus](syllabus)
+- [Lecture Notes](lecture-notes)
 - [Assignments](assignments)
 - [Gradescope](https://www.gradescope.com/courses/1345824)
 - [Announcements (Canvas)](https://canvas.colorado.edu/courses/143236/announcements)
