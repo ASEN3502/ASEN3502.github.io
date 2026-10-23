@@ -29,8 +29,7 @@
   \BlankLine
   $k \leftarrow 0$\;
   \While{$\|\nabla f(\vec{x}_k)\| > E_s$}{
-    $H_k \leftarrow \nabla^2 f(\vec{x}_k)$ \tcp*{Hessian}
-    $\vec{p}_k \leftarrow -H_k \backslash \nabla f(\vec{x}_k)$ \tcp*{fitted quadratic's stationary point}
+    $\vec{p}_k \leftarrow -H(\vec{x}_k) \backslash \nabla f(\vec{x}_k)$ \tcp*{stationary point of quadratic fit}
     \If{$\nabla f(\vec{x}_k)^\mathsf{T} \vec{p}_k \ge 0$}{
       $\vec{p}_k \leftarrow -\nabla f(\vec{x}_k)$ \tcp*{not downhill: use steepest descent}
     }
