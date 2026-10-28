@@ -157,16 +157,19 @@ lecture: 160-constrained-optimization
 
   // Shared figure: f, the infeasible region, x* = 1, plus a method-specific curve and its minimizer.
   // ghosts: [{label, fn}] faint copies of the curve at other parameter values
-  function draw(div, curveName, curveFn, xmin, color, ghosts, extra) {
-    var ys = xs.map(curveFn);
+  // opts.xs: sample grid for the method curve and ghosts (default xs); opts.annotations: extra annotations
+  function draw(div, curveName, curveFn, xmin, color, ghosts, extra, opts) {
+    opts = opts || {};
+    var cxs = opts.xs || xs;
+    var ys = cxs.map(curveFn);
     var traces = (ghosts || []).map(function (gh, i) {
-      return { type: 'scatter', mode: 'lines', x: xs, y: xs.map(gh.fn), line: { color: color, width: 1 },
+      return { type: 'scatter', mode: 'lines', x: cxs, y: cxs.map(gh.fn), line: { color: color, width: 1 },
                opacity: 0.3, name: 'other values', legendgroup: 'ghost', showlegend: i === 0,
                connectgaps: false, hovertemplate: gh.label + '<br>x %{x:.2f}<br>%{y:.2f}<extra></extra>' };
     }).concat([
       { type: 'scatter', mode: 'lines', x: xs, y: FY, line: { color: '#123f63', width: 2 },
         name: 'f(x) = x²', hovertemplate: 'x %{x:.2f}<br>f %{y:.2f}<extra></extra>' },
-      { type: 'scatter', mode: 'lines', x: xs, y: ys, line: { color: color, width: 2.5 },
+      { type: 'scatter', mode: 'lines', x: cxs, y: ys, line: { color: color, width: 2.5 },
         name: curveName, connectgaps: false, hovertemplate: 'x %{x:.2f}<br>%{y:.2f}<extra></extra>' },
       { type: 'scatter', mode: 'markers', x: [xmin], y: [curveFn(xmin)], showlegend: false,
         marker: { size: 12, color: color, line: { color: '#fff', width: 1.5 } }, hoverinfo: 'skip' },
@@ -184,6 +187,7 @@ lecture: 160-constrained-optimization
         { type: 'line', x0: xmin, x1: xmin, y0: -1, y1: curveFn(xmin), line: { color: color, width: 1, dash: 'dot' } }
       ],
       annotations: [{ x: (XL + 1) / 2, y: YT - 0.3, text: 'infeasible, g(x) > 0', showarrow: false, font: { color: '#c02a2a' } }]
+        .concat(opts.annotations || [])
     };
     Plotly.react(div, traces, layout, PLOTOPTS);
   }
@@ -205,15 +209,23 @@ lecture: 160-constrained-optimization
   $('op-em').addEventListener('input', drawExt);
 
   // ---- interior penalty --------------------------------------------------
+  // The barrier only becomes large extremely close to the constraint (−μ ln(x−1) is
+  // about 5μ on the regular grid), so sample densely as x → 1⁺ and end the curve with
+  // the asymptote itself: a point at x = 1 above the top of the plot, since f̂ → +∞.
+  var IXS = [1].concat([1e-12, 1e-10, 1e-8, 1e-6, 1e-5, 1e-4, 1e-3, 3e-3].map(function (d) { return 1 + d; }))
+    .concat(xs.filter(function (x) { return x > 1.003; }));
+  function barrier(m) {
+    return function (x) { return x === 1 ? 10 * YT : x > 1 ? f(x) - m * Math.log(-g(x)) : null; };
+  }
   function drawInt() {
     var mu = Math.pow(10, +$('op-im').value);
     $('op-imv').textContent = mu >= 1 ? fmt(mu, 2) : mu >= 0.01 ? fmt(mu, 3) : fmt(mu, 4);
-    var fh = function (x) { return x > 1 ? f(x) - mu * Math.log(-g(x)) : null; };
+    var fh = barrier(mu);
     var xm = 0.5 * (1 + Math.sqrt(1 + 2 * mu));
     var ghosts = [10, 3, 1, 0.3, 0.1, 0.03, 0.01, 0.003, 0.001].map(function (m) {
-      return { label: 'μ = ' + m, fn: function (x) { return x > 1 ? f(x) - m * Math.log(-g(x)) : null; } };
+      return { label: 'μ = ' + m, fn: barrier(m) };
     });
-    draw('op-iplot', 'f̂(x; μ) = f − μ ln(−g)', fh, xm, '#7b3fa0', ghosts);
+    draw('op-iplot', 'f̂(x; μ) = f − μ ln(−g)', fh, xm, '#7b3fa0', ghosts, [], { xs: IXS });
     $('op-inote').innerHTML = 'minimizer of f̂: x = ½(1 + √(1 + 2μ)) = <b>' + fmt(xm, 4) + '</b>, ' +
       'g(x) = <b>' + fmt(g(xm), 4) + '</b> <span class="op-good">(feasible)</span>, ' +
       'f(x) = <b>' + fmt(f(xm), 4) + '</b> vs f* = 1. Decrease μ to pull it toward x*.';
