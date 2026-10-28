@@ -8,5 +8,5 @@ permalink: /trophy/
 
 ## 2026
 
-- **Lab 1**: Group 5: Danny Montalvo, Luke Jackson, and Tony Cortes
-- **Lab 3**:
+- **Lab 1**: Group 5
+- **Lab 3**: Owen C, Jonas Morelli, Henry Nickless, Jason Hakim

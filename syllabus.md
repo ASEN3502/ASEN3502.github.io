@@ -67,7 +67,7 @@ are expected to attend all lectures and labs (except in cases of illness,
 important travel, or when specifically noted in a Canvas announcement), ask
 questions, and participate in discussions. **If a student needs to miss class <span class="changed">or lab</span> occasionally, please do NOT notify
 the course staff.** The course staff will encourage attendance through in-class
-assignments. Several of the lowest in-class assignment scores will be dropped
+assignments <span class="changed">and recording attendance in labs</span>. Several of the lowest in-class assignment scores will be dropped
 to accommodate absences (see the grade breakdown below).
 
 <div class="changed" markdown="1">
@@ -113,9 +113,9 @@ Grades for the course are earned based on the following criteria:
 ### Grade Breakdown
 
 - **60% Exams** (Lowest midterm: 10%, Other midterms: 15%, Final: 20%)
-- **25% Labs**
+- **25% Labs** <span class="changed">(Including individual adjustments for lack of participation in a particular lab.)</span>
 - **7% Homework** (Lowest dropped)
-- **8% In-Class Assignments** (Lowest 20% dropped)
+- **8% In-Class Assignments <span class="changed">and Lab Attendance</span>** (Lowest 20% <span class="changed">of each category</span> dropped)
 
 *In order to receive a C- or better in the class, you must receive a C- or better on the individual summative assessments, i.e. the Exam portion of the grade.*
 
