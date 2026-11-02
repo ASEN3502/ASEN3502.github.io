@@ -1,0 +1,48 @@
+% Augmented Lagrangian penalty method for a single equality constraint (Eq. 5.46
+% and Alg. 5.2 in Martins & Ning, Engineering Design Optimization,
+% mdobook.github.io). The companion file augmented-lagrangian-pseudocode.tex
+% adds inequalities through the modified constraint vector \bar g.
+% Cropped to its own bounding box so it can be dropped onto a Xournal++ page
+% as an image.
+%
+%   latexmk -pdf augmented-lagrangian-equality-pseudocode.tex
+\documentclass[border=6pt,varwidth=13.5cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Augmented Lagrangian method, one equality constraint $h(\vec{x}) = 0$}
+  \BlankLine
+  \Input{starting point $\vec{x}_0$, initial multiplier $\lambda_0 = 0$,
+         initial penalty $\mu_0 > 0$, penalty increase factor $\rho > 1$, tolerance $E_s$}
+  \Output{$\vec{x}^*$, estimate of the constrained minimizer, and $f(\vec{x}^*)$}
+  \BlankLine
+  \tcp{augmented Lagrangian: Lagrangian plus quadratic penalty}
+  $\hat f(\vec{x};\, \lambda, \mu) = f(\vec{x}) + \lambda\, h(\vec{x})
+      + \dfrac{\mu}{2}\, h(\vec{x})^2$\;
+  \BlankLine
+  $k \leftarrow 0$\;
+  \While{$|h(\vec{x}_k)| > E_s$}{
+    \vspace{3pt}
+    $\vec{x}_k^* \leftarrow \underset{\vec{x}}{\text{minimize}}\; \hat f(\vec{x};\, \lambda_k, \mu_k)$
+      \tcp*{unconstrained solve started from $\vec{x}_k$}
+    \vspace{3pt}
+    $\lambda_{k+1} \leftarrow \lambda_k + \mu_k\, h(\vec{x}_k^*)$
+      \tcp*{update multiplier}
+    $\mu_{k+1} \leftarrow \rho\, \mu_k$ \tcp*{increase penalty}
+    $\vec{x}_{k+1} \leftarrow \vec{x}_k^*$ \tcp*{next starting point}
+    $k \leftarrow k + 1$\;
+  }
+  \Return $\vec{x}^* = \vec{x}_k$, \ $f(\vec{x}^*)$\;
+\end{algorithm}
+\end{minipage}
+\end{document}

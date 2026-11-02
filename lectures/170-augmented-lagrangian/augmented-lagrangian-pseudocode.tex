@@ -1,0 +1,45 @@
+\documentclass[border=6pt,varwidth=13.5cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Augmented Lagrangian penalty method}
+  \BlankLine
+  \Input{starting point $\vec{x}_0$, initial multipliers $\vec{\lambda}_0 = \vec{0}$,
+         initial penalty $\mu_0 > 0$, penalty increase factor $\rho > 1$, tolerance $E_s$}
+  \Output{$\vec{x}^*$, estimate of the constrained minimizer, and $f(\vec{x}^*)$}
+  \BlankLine
+  $\bar g_j(\vec{x}) = \begin{cases}
+      h_j(\vec{x}) & \text{equality constraint } h_j = 0 \\
+      g_j(\vec{x}) & \text{inequality } g_j \le 0 \text{ with } g_j(\vec{x}) \ge -\lambda_j/\mu \\
+      -\lambda_j/\mu & \text{otherwise}
+    \end{cases}$\;
+    \tcp{augmented Lagrangian ($\vec{\lambda}$ contains multipliers for both $\vec{h}$ and $\vec{g}$)}
+  $\hat f(\vec{x};\, \vec{\lambda}, \mu) = f(\vec{x}) + \vec{\lambda}^\mathsf{T} \bar g(\vec{x})
+      + \dfrac{\mu}{2}\, \|\bar g(\vec{x})\|_2^2$\;
+  \BlankLine
+  $k \leftarrow 0$\;
+  \While{$\|\bar g(\vec{x}_k)\| > E_s$}{
+    \vspace{3pt}
+    $\vec{x}_k^* \leftarrow \underset{\vec{x}}{\text{minimize}}\; \hat f(\vec{x};\, \vec{\lambda}_k, \mu_k)$
+      \tcp*{unconstrained solve started from $\vec{x}_k$}
+    \vspace{3pt}
+    $\vec{\lambda}_{k+1} \leftarrow \vec{\lambda}_k + \mu_k\, \bar g(\vec{x}_k^*)$
+      \tcp*{update multipliers}
+    $\mu_{k+1} \leftarrow \rho\, \mu_k$ \tcp*{increase penalty}
+    $\vec{x}_{k+1} \leftarrow \vec{x}_k^*$ \tcp*{next starting point}
+    $k \leftarrow k + 1$\;
+  }
+  \Return $\vec{x}^* = \vec{x}_k$, \ $f(\vec{x}^*)$\;
+\end{algorithm}
+\end{minipage}
+\end{document}
