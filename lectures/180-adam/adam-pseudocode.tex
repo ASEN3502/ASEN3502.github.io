@@ -1,0 +1,48 @@
+\documentclass[border=6pt,varwidth=14.5cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+% Notation follows Kochenderfer & Wheeler, Algorithms for Optimization, Sec. 5.8
+% (Eqs. 5.30-5.34): decaying momentum v, decaying squared gradient s, decay
+% rates gamma_v, gamma_s, step factor alpha; iterates are subscripted (x_k)
+% to match the other handouts.
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{Adam}
+  \BlankLine
+  \Input{starting point $\vec{x}_0$, step factor $\alpha$,
+         decay rates $\gamma_v,\, \gamma_s \in [0, 1)$, small constant $\epsilon$,
+         tolerance $E_s$}
+  \Output{$\vec{x}^*$, estimate of the minimizer, and $f(\vec{x}^*)$}
+  \BlankLine
+  \tcp{defaults from the original paper: $\alpha = 0.001$, $\gamma_v = 0.9$, $\gamma_s = 0.999$, $\epsilon = 10^{-8}$}
+  \tcp{all vector products, square roots, and divisions below are elementwise}
+  $\vec{v}_0 \leftarrow \vec{0}$, \ $\vec{s}_0 \leftarrow \vec{0}$, \ $k \leftarrow 0$\;
+  \While{$\|\nabla f(\vec{x}_k)\|_\infty > E_s$}{
+    \vspace{3pt}
+    $\vec{g}_k \leftarrow \nabla f(\vec{x}_k)$\;
+    $\vec{v}_{k+1} \leftarrow \gamma_v\, \vec{v}_k + (1 - \gamma_v)\, \vec{g}_k$
+      \tcp*{biased decaying momentum}
+    $\vec{s}_{k+1} \leftarrow \gamma_s\, \vec{s}_k + (1 - \gamma_s)\, \big(\vec{g}_k \odot \vec{g}_k\big)$
+      \tcp*{biased decaying sq. gradient}
+    $\hat{\vec{v}}_{k+1} \leftarrow \vec{v}_{k+1} / (1 - \gamma_v^{\,k+1})$
+      \tcp*{corrected decaying momentum}
+    $\hat{\vec{s}}_{k+1} \leftarrow \vec{s}_{k+1} / (1 - \gamma_s^{\,k+1})$
+      \tcp*{corrected decaying sq. gradient}
+    $\vec{x}_{k+1} \leftarrow \vec{x}_k - \alpha\, \hat{\vec{v}}_{k+1} \big/ \big(\epsilon + \sqrt{\hat{\vec{s}}_{k+1}}\big)$
+      \tcp*{next iterate}
+    $k \leftarrow k + 1$\;
+  }
+  \Return $\vec{x}^* = \vec{x}_k$, \ $f(\vec{x}^*)$\;
+\end{algorithm}
+\end{minipage}
+\end{document}
