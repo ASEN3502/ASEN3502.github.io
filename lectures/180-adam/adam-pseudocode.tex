@@ -38,7 +38,8 @@
       \tcp*{corrected decaying momentum}
     $\hat{\vec{s}}_{k+1} \leftarrow \vec{s}_{k+1} / (1 - \gamma_s^{\,k+1})$
       \tcp*{corrected decaying sq. gradient}
-    $\vec{x}_{k+1} \leftarrow \vec{x}_k - \alpha\, \hat{\vec{v}}_{k+1} \big/ \big(\epsilon + \sqrt{\hat{\vec{s}}_{k+1}}\big)$
+    \vspace{4pt}
+    $\vec{x}_{k+1} \leftarrow \vec{x}_k - \dfrac{\alpha}{\epsilon + \sqrt{\hat{\vec{s}}_{k+1}}} \odot \hat{\vec{v}}_{k+1}$
       \tcp*{next iterate}
     $k \leftarrow k + 1$\;
   }

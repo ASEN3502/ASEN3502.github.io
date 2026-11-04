@@ -43,7 +43,7 @@ lecture: 180-adam
      \text{biased decaying sq. gradient:} \quad & \vec{s}_{k+1} = \gamma_s \vec{s}_k + (1 - \gamma_s)\, \big(\vec{g}_k \odot \vec{g}_k\big) \\
      \text{corrected decaying momentum:} \quad & \hat{\vec{v}}_{k+1} = \vec{v}_{k+1} / (1 - \gamma_v^{\,k+1}) \\
      \text{corrected decaying sq. gradient:} \quad & \hat{\vec{s}}_{k+1} = \vec{s}_{k+1} / (1 - \gamma_s^{\,k+1}) \\
-     \text{next iterate:} \quad & \vec{x}_{k+1} = \vec{x}_k - \alpha\, \hat{\vec{v}}_{k+1} \big/ \big(\epsilon + \sqrt{\hat{\vec{s}}_{k+1}}\big)
+     \text{next iterate:} \quad & \vec{x}_{k+1} = \vec{x}_k - \frac{\alpha}{\epsilon + \sqrt{\hat{\vec{s}}_{k+1}}} \odot \hat{\vec{v}}_{k+1}
      \end{aligned} \]
 
   <div class="op-controls">
