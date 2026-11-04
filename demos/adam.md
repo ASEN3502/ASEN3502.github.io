@@ -26,9 +26,10 @@ lecture: 180-adam
     </blockquote>
   </details>
 
-  <p>Figures 4.57 and 4.58 of the
-  <a href="https://mdobook.github.io/html/unconstrained/#sec-lbfgs">MDO book</a>:
-  Rosenbrock's function \(f = (1 - x)^2 + 100\,(y - x^2)^2\) minimized from
+  <p>This reproduces Figures 4.57 and 4.58 from Example 4.18 of
+  <a href="https://mdobook.github.io/html/unconstrained/#sec-lbfgs"><em>Engineering
+  Design Optimization</em></a> by Martins and Ning (CC BY-NC-SA), with Adam
+  added. Rosenbrock's function \(f = (1 - x)^2 + 100\,(y - x^2)^2\) minimized from
   \(\vec{x}_0 = (-1.2,\, 1.0)\) until \(\|\nabla f\|_\infty \le 10^{-6}\),
   by four methods that share the same Armijo backtracking line search
   (\(\mu_1 = 10^{-4}\), \(\rho = 0.5\)), plus Adam, which takes one gradient

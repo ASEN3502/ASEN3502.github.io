@@ -44,7 +44,8 @@ lecture: 170-augmented-lagrangian
 
   <p>Augmented Lagrangian with the inequalities folded in through the
   modified constraints \(\bar g_j\)
-  (<a href="https://mdobook.github.io/html/constrained/#augmented-lagrangian">MDO book</a>,
+  (<a href="https://mdobook.github.io/html/constrained/#augmented-lagrangian"><em>Engineering
+  Design Optimization</em></a> by Martins and Ning, CC BY-NC-SA,
   Eqs. 5.53&ndash;5.54):</p>
   \[ \hat f(\vec{x};\, \vec{\lambda}, \mu) = f(\vec{x}) + \vec{\lambda}^\mathsf{T} \bar g(\vec{x})
        + \frac{\mu}{2}\, \|\bar g(\vec{x})\|_2^2, \qquad
