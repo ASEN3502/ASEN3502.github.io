@@ -30,7 +30,7 @@ lecture: 180-adam
   <a href="https://mdobook.github.io/html/unconstrained/#sec-lbfgs"><em>Engineering
   Design Optimization</em></a> by Martins and Ning (CC BY-NC-SA), with Adam
   added. Rosenbrock's function \(f = (1 - x)^2 + 100\,(y - x^2)^2\) minimized from
-  \(\vec{x}_0 = (-1.2,\, 1.0)\) until \(\|\nabla f\|_\infty \le 10^{-6}\),
+  \(\vec{x}_0 = (-1.2,\, 1.0)\) until \(\|\nabla f\| \le 10^{-6}\),
   by four methods that share the same Armijo backtracking line search
   (\(\mu_1 = 10^{-4}\), \(\rho = 0.5\)), plus Adam, which takes one gradient
   per iteration and no line search. In the notation of
@@ -157,7 +157,7 @@ lecture: 180-adam
              hess: function (x) { return [QA, QB, QD]; } }
   };
   function dot(a, b) { return a[0] * b[0] + a[1] * b[1]; }
-  function ginf(g) { return Math.max(Math.abs(g[0]), Math.abs(g[1])); }
+  function gnorm(g) { return Math.sqrt(g[0] * g[0] + g[1] * g[1]); }
 
   var TOL = 1e-6, KMAX = 20000, MU1 = 1e-4, RHO = 0.5, EPS = 1e-8;
 
@@ -191,11 +191,11 @@ lecture: 180-adam
   function run(F, m, x0, P) {
     var ml = m === 'adam';
     var grad = F.grad, hess = F.hess, x = x0.slice(), g = grad(x), ne = ml ? 1 : 2, status = '';   // f and grad at x0
-    var pts = [{ x: x[0], y: x[1], gn: ginf(g), ne: ne }];
+    var pts = [{ x: x[0], y: x[1], gn: gnorm(g), ne: ne }];
     var dprev = null, gprev = null, aprev = null, V = null;
     var mA = [0, 0], vA = [0, 0];
     for (var k = 0; k < KMAX; k++) {
-      var gn = ginf(g);
+      var gn = gnorm(g);
       if (gn <= TOL) { status = 'converged'; break; }
       var xn, a = null, d = null, note = '';
       if (m === 'adam') {
@@ -240,7 +240,7 @@ lecture: 180-adam
       if (!isFinite(x[0]) || !isFinite(x[1]) || !isFinite(g[0]) || !isFinite(g[1]) || Math.abs(x[0]) > 1e4 || Math.abs(x[1]) > 1e4) {
         status = 'diverged'; break;
       }
-      pts.push({ x: x[0], y: x[1], gn: ginf(g), ne: ne });
+      pts.push({ x: x[0], y: x[1], gn: gnorm(g), ne: ne });
     }
     if (!status) status = 'not converged after ' + KMAX + ' iterations';
     return { pts: pts, status: status };
@@ -287,7 +287,7 @@ lecture: 180-adam
       var done = shown.length === r.pts.length;
       var line = '<span style="color:' + m.col + ';font-weight:600">' + m.name + '</span>: k = ' + (shown.length - 1) +
                  ', ' + cur.ne + ' evaluations,  x = ' + fmt(cur.x, 4) + ',  y = ' + fmt(cur.y, 4) +
-                 ',  f = ' + sci(F.f([cur.x, cur.y])) + ',  ‖∇f‖<sub>∞</sub> = ' + sci(cur.gn);
+                 ',  f = ' + sci(F.f([cur.x, cur.y])) + ',  ‖∇f‖ = ' + sci(cur.gn);
       if (cur.alpha !== null && cur.alpha !== undefined && !m.ml) line += ',  α = ' + fmt(cur.alpha, 4);
       if (cur.note) line += '  <span class="op-bad">' + cur.note + '</span>';
       if (done && r.status === 'converged') line += '  <span class="op-good">converged after ' + n + ' iterations</span>';
@@ -302,11 +302,11 @@ lecture: 180-adam
                  marker: { size: 13, color: m.col, line: { color: '#fff', width: 2 } } });
       var ks = r.pts.map(function (p, i) { return i; });
       conv.push({ type: 'scatter', mode: 'lines', name: m.name, x: ks, y: r.pts.map(function (p) { return p.gn; }),
-                  line: { color: m.col, width: 2 }, hovertemplate: m.name + '<br>k = %{x}, ‖∇f‖∞ = %{y:.2e}<extra></extra>' });
+                  line: { color: m.col, width: 2 }, hovertemplate: m.name + '<br>k = %{x}, ‖∇f‖ = %{y:.2e}<extra></extra>' });
       conv.push({ type: 'scatter', mode: 'markers', x: [shown.length - 1], y: [cur.gn], hoverinfo: 'skip', showlegend: false,
                   marker: { size: 11, color: m.col, line: { color: '#fff', width: 2 } } });
       evs.push({ type: 'scatter', mode: 'lines', name: m.name, x: r.pts.map(function (p) { return p.ne; }), y: r.pts.map(function (p) { return p.gn; }),
-                 line: { color: m.col, width: 2 }, hovertemplate: m.name + '<br>%{x} evaluations, ‖∇f‖∞ = %{y:.2e}<extra></extra>' });
+                 line: { color: m.col, width: 2 }, hovertemplate: m.name + '<br>%{x} evaluations, ‖∇f‖ = %{y:.2e}<extra></extra>' });
       evs.push({ type: 'scatter', mode: 'markers', x: [cur.ne], y: [cur.gn], hoverinfo: 'skip', showlegend: false,
                  marker: { size: 11, color: m.col, line: { color: '#fff', width: 2 } } });
     });
@@ -317,7 +317,7 @@ lecture: 180-adam
                   yaxis: { title: 'y', range: [BOX[2], BOX[3]], dtick: 1 } }, PLOTOPTS);
     function convLayout(xtitle, showLegend) {
       return { margin: { l: 55, r: 10, t: showLegend ? 40 : 10, b: 40 }, paper_bgcolor: 'rgba(0,0,0,0)', showlegend: showLegend,
-               xaxis: { title: xtitle, type: logx ? 'log' : 'linear', rangemode: 'tozero' }, yaxis: { title: '‖∇f‖∞', type: 'log', exponentformat: 'power', dtick: 2 },
+               xaxis: { title: xtitle, type: logx ? 'log' : 'linear', rangemode: 'tozero' }, yaxis: { title: '‖∇f‖', type: 'log', exponentformat: 'power', dtick: 2 },
                legend: { orientation: 'h', x: 0, y: 1.02, xanchor: 'left', yanchor: 'bottom' } };
     }
     Plotly.react('op-conv', conv, convLayout('iteration k', false), PLOTOPTS);

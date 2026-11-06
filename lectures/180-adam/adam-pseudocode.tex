@@ -27,7 +27,7 @@
   \tcp{defaults from the original paper: $\alpha = 0.001$, $\gamma_v = 0.9$, $\gamma_s = 0.999$, $\epsilon = 10^{-8}$}
   \tcp{all vector products, square roots, and divisions below are elementwise}
   $\vec{v}_0 \leftarrow \vec{0}$, \ $\vec{s}_0 \leftarrow \vec{0}$, \ $k \leftarrow 0$\;
-  \While{$\|\nabla f(\vec{x}_k)\|_\infty > E_s$}{
+  \While{$\|\nabla f(\vec{x}_k)\| > E_s$}{
     \vspace{3pt}
     $\vec{g}_k \leftarrow \nabla f(\vec{x}_k)$\;
     $\vec{v}_{k+1} \leftarrow \gamma_v\, \vec{v}_k + (1 - \gamma_v)\, \vec{g}_k$
