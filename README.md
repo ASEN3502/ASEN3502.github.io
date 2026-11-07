@@ -1,2 +1,1 @@
-# ASEN3502.github.io
-Website for CU Boulder ASEN 3502
+Website for ASEN 3502: Computational Methods - Under Construction
