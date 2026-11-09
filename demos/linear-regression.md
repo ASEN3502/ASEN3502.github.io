@@ -45,7 +45,7 @@ lecture: 190-linear-regression
       </div>
     </div>
     <div class="lr-pane">
-      <div class="lr-ptitle">Cost \(J(\theta)\)</div>
+      <div class="lr-ptitle"><span id="lr-ct-cost">Cost \(J(\theta)\)</span><span id="lr-ct-param" hidden>Parameter values \(\theta = (a_0, a_1)\)</span></div>
       <div id="lr-cost" class="lr-plotly"></div>
     </div>
   </div>
@@ -257,6 +257,7 @@ lecture: 190-linear-regression
 
     // -- bottom pane: contours of J with the draggable theta (a1 on x, a0 on y) --
     var showC = $('lr-ct').checked;
+    $('lr-ct-cost').hidden = !showC; $('lr-ct-param').hidden = showC;
     var ct = [
       { type: 'contour', visible: showC, x: cost.as, y: cost.bs, z: cost.z, zmin: cost.zmin, zmax: cost.zmax, showscale: false,
         colorscale: [[0, '#a9cbe6'], [1, '#f4f8fc']], line: { width: 1, color: '#5b86b0' },
