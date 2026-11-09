@@ -15,3 +15,47 @@ Typeset math (demos, pseudocode, handouts) follows, in order of precedence:
    the machine-learning optimizers it covers and the MDO book does not, e.g.
    Adam (`\gamma_v`, `\gamma_s`), but keep the handouts' subscripted iterates
    `\vec{x}_k`, not that book's `\vec{x}^{(k)}`.
+
+## Regression / ML notation
+
+Use these conventions for any regression, nonlinear regression, or machine
+learning material.
+
+- Data: `n` samples, `d` input features, `k` outputs.
+  - Single input: column vector `\vec{x}_i \in \mathbb{R}^d`. Single target:
+    `\vec{y}_i \in \mathbb{R}^k`.
+  - Dataset stacked one sample per row: `X \in \mathbb{R}^{n \times d}`
+    (row `i` is `\vec{x}_i^T`), `Y \in \mathbb{R}^{n \times k}` (row `i` is
+    `\vec{y}_i^T`). This matches scikit-learn, PyTorch, and MATLAB's
+    `trainnet`/`fitlm`. MATLAB's older `train`/`fitnet` use the transpose
+    (one column per sample); call this out whenever those functions appear.
+
+- Model: `\hat{\vec{y}} = m(\vec{x}; \theta)`.
+  - Hat = prediction; no hat = measured target. Residual
+    `\vec{r}_i = \vec{y}_i - \hat{\vec{y}}_i`.
+  - Argument before the semicolon is the input; after it are the parameters.
+  - `\theta` (no arrow, always) is the full collection of model parameters. It
+    may be a vector (linear regression) or a set of matrices/vectors (neural
+    net); treat it as one long vector when convenient. Hyperparameters
+    (learning rate, `\lambda`, polynomial degree, epochs) are NOT part of
+    `\theta`.
+
+- Loss:
+  - Per-sample: `\ell(\hat{\vec{y}}, \vec{y})`, a scalar.
+  - Total cost:
+    `J(\theta) = \frac{1}{n} \sum_{i=1}^n \ell\big( m(\vec{x}_i; \theta), \vec{y}_i \big)`.
+    Write `J(\theta; X, Y)` only when the dataset dependence matters (e.g.
+    `J_\text{train}` vs `J_\text{test}`).
+  - Regularized: `J_\text{reg}(\theta) = J(\theta) + \lambda R(\theta)`, with
+    default `R(\theta) = \|\theta\|^2`.
+  - Never use lowercase `l` or capital `L` for loss.
+
+- Training:
+  - Problem: minimize `J(\theta)` over `\theta`. Solution:
+    `\theta^* = \underset{\theta}{\operatorname{argmin}}\, J(\theta)`.
+    Use both forms; `\theta^*` names the answer.
+
+## Demos
+
+Demos are demos, NOT explanations. A little explanatory text is fine, but a
+demo does not need to explain everything; the lecture and handouts do that.
