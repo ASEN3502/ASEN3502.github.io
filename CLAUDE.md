@@ -40,6 +40,13 @@ learning material.
     (learning rate, `\lambda`, polynomial degree, epochs) are NOT part of
     `\theta`.
 
+- Features (basis functions): `\phi_j` is the function, `z_j = \phi_j(\vec{x})`
+  is its value (Chapra's `z_j`), `j = 0, \dots, m`, usually with `\phi_0 = 1`.
+  - Stacked: `\vec{z} = \vec{\phi}(\vec{x})`. Model linear in the parameters:
+    `\hat{y} = \vec{\phi}(\vec{x})^T \theta`.
+  - The design matrix keeps Chapra's name, `Z_{ij} = \phi_j(\vec{x}_i)`; do not
+    use Bishop's `\Phi`.
+
 - Loss:
   - Per-sample: `\ell(\hat{\vec{y}}, \vec{y})`, a scalar.
   - Total cost:
