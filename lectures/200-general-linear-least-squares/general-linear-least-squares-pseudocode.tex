@@ -1,0 +1,40 @@
+\documentclass[border=6pt,varwidth=14.5cm]{standalone}
+
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+
+\RestyleAlgo{plain}          % no float, no ruled box
+\DontPrintSemicolon
+\SetKwComment{Comment}{// }{}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+% Notation follows Chapra, Applied Numerical Methods with MATLAB, Sec. 15.3
+% (general linear least squares): design matrix Z and coefficient vector a.
+% Course notation where it differs: the basis functions are phi_1..phi_m
+% (z_j = phi_j(x)), vectors carry arrows, and theta is the generic name for
+% the model parameters, here theta = a.
+
+\begin{document}
+\begin{minipage}{\linewidth}
+\begin{algorithm}[H]
+  \textbf{General Linear Least Squares}
+  \BlankLine
+  \Input{data $(\vec{x}_i, y_i)$ for $i = 1, \dots, n$; \
+         basis functions $\phi_1, \dots, \phi_m$}
+  \Output{$\theta^* = \vec{a} = (a_1, \dots, a_m)$, coefficients of
+          $\hat{y} = a_1 \phi_1(\vec{x}) + \cdots + a_m \phi_m(\vec{x})$}
+  \BlankLine
+  \For(\tcp*[f]{build the $n \times m$ matrix $Z$}){$i \leftarrow 1$ \KwTo $n$}{
+    \For{$j \leftarrow 1$ \KwTo $m$}{
+      $Z_{ij} \leftarrow \phi_j(\vec{x}_i)$\;
+    }
+  }
+  \vspace{3pt}
+  solve $\big(Z^T Z\big)\, \vec{a} = Z^T \vec{y}$ for $\vec{a}$
+    \tcp*{normal equations, $m \times m$}
+  \vspace{3pt}
+  \Return $\theta^* = \vec{a}$\;
+\end{algorithm}
+\end{minipage}
+\end{document}

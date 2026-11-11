@@ -41,7 +41,10 @@ learning material.
     `\theta`.
 
 - Features (basis functions): `\phi_j` is the function, `z_j = \phi_j(\vec{x})`
-  is its value (Chapra's `z_j`), `j = 0, \dots, m`, usually with `\phi_0 = 1`.
+  is its value (Chapra's `z_j`).
+  - General linear least squares indexes from 1: `\phi_1, \dots, \phi_m`,
+    `\vec{a} = (a_1, \dots, a_m)`, `Z` is `n \times m`, and `\theta = \vec{a}`.
+    Polynomial regression keeps Chapra's `a_0, \dots, a_m`.
   - Stacked: `\vec{z} = \vec{\phi}(\vec{x})`. Model linear in the parameters:
     `\hat{y} = \vec{\phi}(\vec{x})^T \theta`.
   - The design matrix keeps Chapra's name, `Z_{ij} = \phi_j(\vec{x}_i)`; do not
