@@ -3,7 +3,7 @@ title: Polynomial Regression
 parent: Demos
 grand_parent: Materials
 nav_order: 19
-lecture: 200-general-linear-least-squares
+lecture: 200-polynomial-regression
 ---
 
 # Polynomial Regression: Training and Test Error
