@@ -41,18 +41,24 @@ The most important principle is to **follow the style of the surrounding code**.
 One very important aspect of style is naming things (variables, functions, files, etc.). Naming is one of the hardest problems in computer science. *Clean Code* has an entire chapter on the subject: Meaningful Names.
 Some of the most useful points from this chapter are:
 
-- Use intention-revealing (descriptive) names: e.g. `earth_relative_velocity` or `vE` instead of `vector`
-- The length of a name should correspond to its scope: `r` is good if it is in a 5-line for loop `for r = rows`; if it is returned by a function, it should be `row` or something longer (row of what?).
-- Use pronounceable (and memorable) names: e.g. `fmincon` instead of `fminconstr`
-- Pick one word per concept: e.g. `numel` means total number of elements; `size` is the size of all dimensions in an array
+- **Use intention-revealing (descriptive) names**: e.g. `earth_relative_velocity` or `vE` instead of `v`
+- **The length of a name should correspond to its scope**: `r` is good if it is in a 5-line for loop `for r = rows`; if it is returned by a function, it should be `row` or something longer (row of what?).
+- **Use pronounceable (and memorable) names**: e.g. `fmincon` instead of `fminconstr`
+- **Pick one word per concept**: e.g. `numel` means total number of elements; `size` is the size of all dimensions in an array
 
 It is also very important to know your audience. Every aerospace engineer will know that `flaps` refers to movable surfaces designed to increase lift at low speed, but a computer scientist may think the term includes things like ailerons or elevators.
 
 ## Comments
 
-You have heard that it was said "Comment your code", but I tell you "Comments do not make up for bad code".
+> Comment your code.
+>
+> — Most engineering instructors
+> {: .attribution }
 
-(By "I tell you", I really mean this is repeated from *Clean Code*.)
+> Comments do not make up for bad code.
+>
+> — *Clean Code*
+> {: .attribution }
 
 The problem with comments is that bad comments mislead, and worse comments lie.
 

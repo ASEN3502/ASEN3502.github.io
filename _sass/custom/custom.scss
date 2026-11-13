@@ -169,6 +169,15 @@ blockquote {
   margin-left: 0;
 }
 
+// Byline for a quotation: the last paragraph of the blockquote, tagged with
+//   {: .attribution }
+blockquote .attribution {
+  margin-top: 0.25rem;
+  color: #5c5c5c; // 7:1 on white
+  font-size: 0.85em;
+  text-align: right;
+}
+
 // -------------------------------------------------------------- cover image
 // The home page hero. Full width of the content column, square-ish corners to
 // match the flat CU look, and a caption small enough to stay subordinate to
