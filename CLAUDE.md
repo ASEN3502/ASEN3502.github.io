@@ -47,7 +47,7 @@ learning material.
     Polynomial regression keeps Chapra's `a_0, \dots, a_m`.
   - Stacked: `\vec{z} = \vec{\phi}(\vec{x})`. Model linear in the parameters:
     `\hat{y} = \vec{\phi}(\vec{x})^T \theta`.
-  - The design matrix keeps Chapra's name, `Z_{ij} = \phi_j(\vec{x}_i)`; do not
+  - The feature matrix keeps Chapra's name, `Z_{ij} = \phi_j(\vec{x}_i)`; do not
     use Bishop's `\Phi`.
 
 - Loss:
