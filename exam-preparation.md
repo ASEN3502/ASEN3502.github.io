@@ -20,5 +20,5 @@ Exams are hand-written and closed book. You will need a scientific (non-graphing
 
 ## Exam 3
 
-- [Equation sheet](/exams/Exam-3-Equation-Sheet.pdf) (preliminary: small changes may be made through Sunday, Nov 15)
+- [Equation sheet](/exams/Exam-3-Equation-Sheet.pdf)
 - [Practice Exam Problems](/exams/Exam-3-Practice-Problems.pdf)
