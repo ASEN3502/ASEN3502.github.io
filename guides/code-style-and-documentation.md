@@ -7,6 +7,12 @@ nav_order: 3
 
 # Code Style and Documentation
 
+> "The hardest part of my job so far is probably just interpreting other people's code when I have to go in and make changes and fixes for scripts and drivers that I didn't write."
+>
+> — A recent CU aerospace graduate
+> {: .attribution }
+{: .epigraph }
+
 Code is meant to be read by two entities. The first is by far the easiest to communicate with: the computer. The second, and usually most important and most difficult, is other humans who will need to use and help maintain your code.
 
 I used to have a lot of bad ideas that I generated myself or picked up from engineering professors.

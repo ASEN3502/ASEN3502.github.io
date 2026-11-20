@@ -164,18 +164,36 @@ thead th {
 }
 
 blockquote {
+  background: #f7f7f5;
   border-left: 4px solid $cu-gold;
-  padding-left: 1em;
+  padding: 0.6rem 1em;
   margin-left: 0;
+  margin-right: 0;
+
+  > :first-child {
+    margin-top: 0;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
 }
 
 // Byline for a quotation: the last paragraph of the blockquote, tagged with
 //   {: .attribution }
 blockquote .attribution {
   margin-top: 0.25rem;
-  color: #5c5c5c; // 7:1 on white
+  color: #525252; // 7:1 on the quote panel
   font-size: 0.85em;
   text-align: right;
+}
+
+// A quotation that opens a page: extra room above and below so it stands apart
+// from the title and the first paragraph. Tag the blockquote with
+//   {: .epigraph }
+blockquote.epigraph {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 // -------------------------------------------------------------- cover image
