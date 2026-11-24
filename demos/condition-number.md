@@ -1,7 +1,6 @@
 ---
 title: Condition Number
 parent: Demos
-grand_parent: Materials
 nav_order: 3
 lecture: 040-inverse-and-condition
 ---

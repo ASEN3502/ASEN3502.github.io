@@ -1,10 +1,10 @@
 ---
-title: Learning Resources
-parent: Materials
-nav_order: 4
+title: Get Help
+parent: Learning Resources
+nav_order: 1
 ---
 
-# Learning Resources
+# Get Help
 
 Need help? Confused about something? If you feel behind, our goal is to help you catch up! Here are some resources to help:
 

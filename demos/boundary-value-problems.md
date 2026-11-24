@@ -1,7 +1,6 @@
 ---
 title: Boundary Value Problems
 parent: Demos
-grand_parent: Materials
 nav_order: 10
 lecture: 120-boundary-value-problems
 ---

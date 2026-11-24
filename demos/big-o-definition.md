@@ -1,7 +1,6 @@
 ---
 title: Big-O Definition
 parent: Demos
-grand_parent: Materials
 nav_order: 2
 lecture: 020-algorithms
 ---

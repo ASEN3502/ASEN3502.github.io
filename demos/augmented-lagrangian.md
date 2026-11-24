@@ -1,7 +1,6 @@
 ---
 title: Augmented Lagrangian
 parent: Demos
-grand_parent: Materials
 nav_order: 16
 lecture: 170-augmented-lagrangian
 ---

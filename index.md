@@ -14,13 +14,20 @@ valley walls before converging on the minimum at (1, 1).
 Welcome! Everything for this course lives here. Use the search bar at the top
 to find anything quickly.
 
-## Quick links
+## Site map
 
-- [Schedule](schedule)
-- [Syllabus](syllabus)
-- [Lecture Notes](lecture-notes)
-- [Assignments](assignments)
-- [Gradescope](https://www.gradescope.com/courses/1345824)
-- [Announcements (Canvas)](https://canvas.colorado.edu/courses/143236/announcements)
-- [Solutions (Canvas)](https://canvas.colorado.edu/courses/143236/files/folder/Solutions)
-- [Learning Resources](learning-resources)
+{% comment %}
+Generated from the same front matter (title, parent, nav_order) and
+_config.yml nav_external_links that build the sidebar, so it cannot drift.
+Top level only.
+{% endcomment %}
+{%- assign pages = site.html_pages | where_exp: "p", "p.title" | where_exp: "p", "p.nav_exclude != true" | sort: "nav_order" -%}
+<ul>
+{%- for p in pages -%}
+{%- if p.parent or p.url == page.url -%}{%- continue -%}{%- endif -%}
+<li><a href="{{ p.url | relative_url }}">{{ p.title }}</a></li>
+{%- endfor -%}
+{%- for l in site.nav_external_links -%}
+<li><a href="{{ l.url }}">{{ l.title }}</a></li>
+{%- endfor -%}
+</ul>

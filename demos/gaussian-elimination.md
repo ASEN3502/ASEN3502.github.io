@@ -1,7 +1,6 @@
 ---
 title: Gaussian Elimination
 parent: Demos
-grand_parent: Materials
 nav_order: 1
 lecture: 010-gauss-elimination
 ---

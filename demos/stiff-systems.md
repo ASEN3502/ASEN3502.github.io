@@ -1,7 +1,6 @@
 ---
 title: Stiff Systems
 parent: Demos
-grand_parent: Materials
 nav_order: 9
 lecture: 110-stiff-equations
 ---

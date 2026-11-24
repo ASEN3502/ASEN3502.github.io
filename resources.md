@@ -1,12 +1,12 @@
 ---
-title: Materials
-nav_order: 3
+title: Learning Resources
+nav_order: 7
 has_children: true
 ---
 
-# Materials
+# Learning Resources
 
-Everything you need to work through the course.
+Where to get help and how to prepare for exams.
 
 The textbook is available through
 [Canvas](https://canvas.colorado.edu/courses/143236/external_tools/61941?display=borderless).

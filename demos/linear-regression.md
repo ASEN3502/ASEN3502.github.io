@@ -1,7 +1,6 @@
 ---
 title: Linear Regression
 parent: Demos
-grand_parent: Materials
 nav_order: 18
 lecture: 190-linear-regression
 ---

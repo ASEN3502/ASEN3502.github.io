@@ -1,7 +1,7 @@
 ---
 title: Exam Preparation
-parent: Materials
-nav_order: 3
+parent: Learning Resources
+nav_order: 2
 ---
 
 # Exam Preparation

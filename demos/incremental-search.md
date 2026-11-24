@@ -1,7 +1,6 @@
 ---
 title: Incremental Search
 parent: Demos
-grand_parent: Materials
 nav_order: 4
 lecture: 050-bisection
 ---

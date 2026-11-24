@@ -1,7 +1,6 @@
 ---
 title: General Linear Least Squares
 parent: Demos
-grand_parent: Materials
 nav_order: 20
 lecture: 210-nonlinear-regression
 ---

@@ -1,7 +1,6 @@
 ---
 title: Newton-Raphson for Systems
 parent: Demos
-grand_parent: Materials
 nav_order: 6
 lecture: 070-nonlinear-systems
 ---

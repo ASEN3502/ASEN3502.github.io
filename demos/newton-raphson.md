@@ -1,7 +1,6 @@
 ---
 title: Newton-Raphson
 parent: Demos
-grand_parent: Materials
 nav_order: 5
 lecture: 060-newton
 ---

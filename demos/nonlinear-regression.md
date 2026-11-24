@@ -1,7 +1,6 @@
 ---
 title: Nonlinear Regression
 parent: Demos
-grand_parent: Materials
 nav_order: 22
 lecture: 210-nonlinear-regression
 ---

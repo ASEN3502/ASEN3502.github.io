@@ -1,7 +1,6 @@
 ---
 title: Polynomial Regression
 parent: Demos
-grand_parent: Materials
 nav_order: 19
 lecture: 200-polynomial-regression
 ---

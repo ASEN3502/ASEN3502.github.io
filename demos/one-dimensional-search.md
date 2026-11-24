@@ -1,7 +1,6 @@
 ---
 title: One-Dimensional Search
 parent: Demos
-grand_parent: Materials
 nav_order: 12
 lecture: 140-gradient-descent
 ---

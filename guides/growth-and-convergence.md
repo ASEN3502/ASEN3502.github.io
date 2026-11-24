@@ -1,7 +1,6 @@
 ---
 title: Function Growth and Convergence
 parent: Guides
-grand_parent: Materials
 nav_order: 1
 ---
 

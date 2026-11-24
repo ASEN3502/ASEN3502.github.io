@@ -1,7 +1,6 @@
 ---
 title: Constrained Optimization
 parent: Demos
-grand_parent: Materials
 nav_order: 15
 lecture: 160-constrained-optimization
 ---

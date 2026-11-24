@@ -1,7 +1,6 @@
 ---
 title: Runge-Kutta Methods
 parent: Demos
-grand_parent: Materials
 nav_order: 8
 lecture: 100-runge-kutta
 ---

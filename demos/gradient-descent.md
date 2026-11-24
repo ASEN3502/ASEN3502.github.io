@@ -1,7 +1,6 @@
 ---
 title: Gradient Descent
 parent: Demos
-grand_parent: Materials
 nav_order: 13
 lecture: 140-gradient-descent
 ---

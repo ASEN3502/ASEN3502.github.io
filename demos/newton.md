@@ -1,7 +1,6 @@
 ---
 title: Newton's Method and Conjugate Gradient
 parent: Demos
-grand_parent: Materials
 nav_order: 14
 lecture: 150-newton
 ---

@@ -1,7 +1,6 @@
 ---
 title: Multiple Linear Regression
 parent: Demos
-grand_parent: Materials
 nav_order: 21
 lecture: 210-nonlinear-regression
 ---

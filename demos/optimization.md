@@ -1,7 +1,6 @@
 ---
 title: Optimization
 parent: Demos
-grand_parent: Materials
 nav_order: 11
 lecture: 130-optimization
 ---

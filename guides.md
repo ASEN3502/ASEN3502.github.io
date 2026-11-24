@@ -1,6 +1,5 @@
 ---
 title: Guides
-parent: Materials
 nav_order: 6
 has_children: true
 ---

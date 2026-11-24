@@ -1,7 +1,6 @@
 ---
 title: Lecture Notes
-parent: Materials
-nav_order: 1
+nav_order: 3
 ---
 
 # Lecture Notes

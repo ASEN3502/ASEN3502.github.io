@@ -1,7 +1,6 @@
 ---
 title: Code Style and Documentation
 parent: Guides
-grand_parent: Materials
 nav_order: 3
 ---
 

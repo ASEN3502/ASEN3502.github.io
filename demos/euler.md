@@ -1,7 +1,6 @@
 ---
 title: Euler's Method
 parent: Demos
-grand_parent: Materials
 nav_order: 7
 lecture: 090-euler
 ---

@@ -1,7 +1,6 @@
 ---
 title: Adam
 parent: Demos
-grand_parent: Materials
 nav_order: 17
 lecture: 180-adam
 ---
