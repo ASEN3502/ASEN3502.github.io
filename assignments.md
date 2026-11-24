@@ -18,6 +18,7 @@ Submit your work on [Gradescope](https://www.gradescope.com/courses/1345824). Th
 - Homework 5: [pdf](/assignments/Homework-5.pdf)
 - Homework 6: [pdf](/assignments/Homework-6.pdf)
 - Homework 7: [pdf](/assignments/Homework-7.pdf)
+- Homework 8: [pdf](/assignments/Homework-8.pdf)
 
 ## Labs
 
